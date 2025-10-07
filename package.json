@@ -1,6 +1,6 @@
 {
-  "name": "asjej",
-  "displayName": "ASJEJ",
+  "name": "aseje",
+  "displayName": "ASEJE",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -9,13 +9,20 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+  ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "asjej.helloWorld",
+    "commands": [
+      {
+      "command": "aseje.helloWorld",
       "title": "Hello World"
-    }]
+    },
+    {
+      "command": "aseje.textChange",
+      "title": "textChange"
+    }
+  ]
   },
   "scripts": {
     "lint": "eslint .",
