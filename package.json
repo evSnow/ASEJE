@@ -13,14 +13,24 @@
   ],
   "main": "./extension.js",
   "contributes": {
+    "configuration": {
+      "title": "settings",
+        "properties": {
+          "aseje.fontSize": {
+            "type": "number",
+            "default": 14,
+            "description": "The font size used in both setting and terminal"
+      }
+    }
+  },
     "commands": [
       {
       "command": "aseje.helloWorld",
       "title": "Hello World"
     },
     {
-      "command": "aseje.textChange",
-      "title": "textChange"
+      "command": "aseje.textSetting",
+      "title": "text Setting"
     }
   ]
   },
