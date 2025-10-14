@@ -9,7 +9,11 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
+  "activationEvents":[
+     "onCommand:aseje.helloWorld",
+    "onCommand:aseje.textChange",
+    "onCommand:aseje.toggleBeginnerMode",
+    "onStartupFinished" 
   ],
   "main": "./extension.js",
   "contributes": {
@@ -31,8 +35,88 @@
     {
       "command": "aseje.textSetting",
       "title": "text Setting"
+    },
+    {
+      "command": "aseje.textChange",
+      "title": "textChange"
+    },
+    {
+        "command": "aseje.toggleBeginnerMode",
+        "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
+        "category": "ASEJE"
+    },
+    {
+        "command": "aseje.showWalkthrough",
+        "title": "$(book) Start ASEJE Guided Walkthrough",
+        "category": "ASEJE"
+    },
+    {
+        "command": "aseje.createStarterProject",
+        "title": "$(new-file) Create Starter Project",
+        "category": "ASEJE"
+      }
+  ],
+  "menus": {
+      "editor/title": [
+        {
+          "command": "aseje.toggleBeginnerMode",
+          "group": "navigation",
+          "when": "editorFocus"
+        }
+      ],
+    "commandPalette": [
+        {
+            "command": "aseje.toggleBeginnerMode"
+        },
+        {
+            "command": "aseje.showWalkthrough"
+        },
+        {
+            "command": "aseje.createStarterProject"
+        }
+    ]
+},
+
+"views": {
+    "activitybar": [
+        {
+            "id": "workbench.view.scm", 
+            "when": "!aseje.isBeginnerMode" 
+        },
+        {
+             "id": "workbench.view.debug",
+            "when": "!aseje.isBeginnerMode" 
+        },
+        {
+             "id": "workbench.view.extensions",
+            "when": "!aseje.isBeginnerMode" 
+        }
+    ]
+},
+
+"walkthroughs": [
+    {
+        "id": "aseje.myFirstWalkthrough", 
+        "title": "Start Coding with ASEJE",
+        "description": "Your guided tour to a simpler VS Code experience.",
+        "steps": [
+            {
+                "id": "aseje.walkthrough.step1.intro",
+                "title": "Welcome to Simplified Coding",
+                "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI. You can link to a Markdown file here.",
+                "completionEvents": [
+                    "onCommand:aseje.toggleBeginnerMode" 
+                ]
+            },
+            {
+                "id": "aseje.walkthrough.step2.project",
+                "title": "Create Your First Project",
+                "description": "Click the 'Create Starter Project' command below to begin a sample file.",
+                "command": "aseje.createStarterProject" 
+            }
+        ]
     }
-  ]
+]
   },
   "scripts": {
     "lint": "eslint .",
