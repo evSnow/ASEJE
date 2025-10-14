@@ -132,7 +132,7 @@ function getWebviewContent(fontSize) {
     <label><input type="radio" id="hidden" name="option" value="hidden"> Hidden</label><br>
   </form>
 
-  <button id="changeActivityBar" type="button">Test</button>
+  <button id="changeActivityBar" type="button">Change</button>
 
   <h2> side bar location </h2>
   <form id="sideBar">
@@ -140,7 +140,7 @@ function getWebviewContent(fontSize) {
     <label><input type="radio" id="right" name="optionS" value="right"> right </label><br>
   </form>
 
-  <button id="changeSideBar" type="button">Test</button>
+  <button id="changeSideBar" type="button">Change</button>
 
     
 
