@@ -21,5 +21,6 @@ function showGuidedWalkthrough() {
 }
 
 module.exports = {
-    registerUIHelperCommands
+    registerUIHelperCommands,
+    showGuidedWalkthrough
 }

@@ -2,6 +2,9 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const { registerTextSetting} = require('./source/TextSetting');
+const {registerUIHelperCommands} = require('./source/UIHelper')
+const {showGuidedWalkthrough} = require('./source/UIHelper')
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -15,7 +18,8 @@ function activate(context) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "aseje" is now active!');
 	registerTextSetting(context);
-
+	registerUIHelperCommands(context);
+	showGuidedWalkthrough(context);
 	
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
