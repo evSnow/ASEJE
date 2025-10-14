@@ -15,6 +15,8 @@ const vscode = require('vscode');
         panel.webview.html = getWebviewContent(fontSize);
 
         panel.webview.onDidReceiveMessage(async (message) =>{
+          console.log(message.value);
+          const configW = vscode.workspace.getConfiguration('workbench');
             if (message.command === 'fontSizeChange') {
                 const newSize = Number(message.value);
                 if (isNaN(newSize) || newSize <= 6 || newSize >= 72) {
@@ -26,11 +28,71 @@ const vscode = require('vscode');
                 await config.update('editor.fontSize', newSize, vscode.ConfigurationTarget.Global);
                 await config.update('aseje.fontSize', newSize, vscode.ConfigurationTarget.Global);
                 } catch (err) {
-                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                    vscode.window.showErrorMessage('Failed to update font size in editor and aseje: ${err.message}');
                 }
                 
                 panel.webview.html = getWebviewContent(newSize);
-                vscode.window.showInformationMessage(`Suecess in setting Font size  to ${newSize}px`);
+                vscode.window.showInformationMessage('Suecess in setting Font size  to ${newSize}px');
+            }
+            if (message.command === 'changeActivityBar') {
+              console.log(message.command)
+              if (message.value === "default"){
+                try{
+                await configW.update('activityBar.location', "default" , vscode.ConfigurationTarget.Global);
+                } catch (err) {
+                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                };
+                panel.webview.postMessage({command: 'activityBarChanged', value: "default"});
+                vscode.window.showInformationMessage('Suecess in setting activity bar left');
+              }
+              else if (message.value === "top"){
+                try{
+                await configW.update('activityBar.location', "top", vscode.ConfigurationTarget.Global);
+                } catch (err) {
+                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                };
+                panel.webview.postMessage({command: 'activityBarChanged', value: "top"});
+                vscode.window.showInformationMessage('Suecess in setting activity bar top');
+              }
+              else if (message.value === "bottom"){
+                try{
+                await configW.update('activityBar.location', "bottom", vscode.ConfigurationTarget.Global);
+                } catch (err) {
+                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                };
+                panel.webview.postMessage({command: 'activityBarChanged', value: "bottom"});
+                vscode.window.showInformationMessage('Suecess in setting activity bar bottom');
+              }
+              else if (message.value === "hidden"){
+                try{
+                await configW.update('activityBar.location', "hidden", vscode.ConfigurationTarget.Global);
+                } catch (err) {
+                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                };
+                panel.webview.postMessage({command: 'activityBarChanged', value: "hidden"});
+                vscode.window.showInformationMessage('Suecess in setting activity bar to be hidden');
+              }
+            }
+            if (message.command ==='changeSideBar'){
+                console.log("hi");
+                if(message.value==='left'){
+                try{
+                await configW.update('sideBar.location', "left", vscode.ConfigurationTarget.Global);
+                } catch (err) {
+                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                };
+                panel.webview.postMessage({command: 'activityBarChanged', value: "left"});
+                vscode.window.showInformationMessage('Suecess in setting side bar left');
+                }
+                else if(message.value === 'right'){
+                try{
+                await configW.update('sideBar.location', "right", vscode.ConfigurationTarget.Global);
+                } catch (err) {
+                    vscode.window.showErrorMessage(`Failed to update font size in editor and aseje: ${err.message}`);
+                };
+                panel.webview.postMessage({command: 'activityBarChanged', value: "right"}); 
+                vscode.window.showInformationMessage('Suecess in setting side bar right');                
+                }
             }
           return;
         });
@@ -57,17 +119,57 @@ function getWebviewContent(fontSize) {
     </style>
 </head>
 <body>
-    <h1>Font Size: ${fontSize}px</h1>
-    <input type="number" id="sizeInput" min="5" max="50"/>
-    <button onclick="changeSize()">Change Font Size</button>
+  <h2>Change Font Size</h2>
+  <input id="sizeInput" type="number" placeholder="Enter font size" />
+  <button id="changeButton">Change</button>
+
+  <h2> Activity bar location </h2>
+
+  <form id="Activity Bar locatgion">
+    <label><input type="radio" id="default" name="option" value="default" checked> Default (left)</label><br>
+    <label><input type="radio" id="top" name="option" value="top"> Top</label><br>
+    <label><input type="radio" id="bottom" name="option" value="bottom"> Bottom</label><br>
+    <label><input type="radio" id="hidden" name="option" value="hidden"> Hidden</label><br>
+  </form>
+
+  <button id="changeActivityBar" type="button">Test</button>
+
+  <h2> side bar location </h2>
+  <form id="sideBar">
+    <label><input type="radio" id="left" name="optionS" value="left" checked> left</label><br>
+    <label><input type="radio" id="right" name="optionS" value="right"> right </label><br>
+  </form>
+
+  <button id="changeSideBar" type="button">Test</button>
+
+    
 
     <script>
       const vscode = acquireVsCodeApi();
-      function changeSize() {
-        const value = document.getElementById('sizeInput').value;
-        vscode.postMessage({ command: 'fontSizeChange', value: value });
-      }
-    </script>   
+      document.getElementById('changeButton').addEventListener('click', () => {
+        const x = document.getElementById('sizeInput').value;
+        vscode.postMessage({
+          command: 'fontSizeChange',
+          value: x
+        });
+      });
+
+      document.getElementById('changeActivityBar').addEventListener('click', () => {
+      const selected = document.querySelector('input[name="option"]:checked');
+        const y=selected.value;
+        vscode.postMessage({ 
+        command: 'changeActivityBar', 
+        value: y });
+      });
+      document.getElementById('changeSideBar').addEventListener('click', () => {
+      const selected = document.querySelector('input[name="optionS"]:checked');
+        const y=selected.value;
+        vscode.postMessage({ 
+        command: 'changeSideBar', 
+        value: y });
+      });
+    </script>
+  
 </body>
 </html>`;
 }
