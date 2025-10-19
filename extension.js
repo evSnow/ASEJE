@@ -4,40 +4,68 @@ const vscode = require('vscode');
 const { registerTextSetting} = require('./source/TextSetting');
 const {registerUIHelperCommands} = require('./source/UIHelper')
 const {showGuidedWalkthrough} = require('./source/UIHelper')
+const { TemplateLibrary } = require('./source/TemplateLibrary');
 
+// Variable to track the current mode state
+let isBeginnerMode = false;
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+/**
+ * Toggles the ASEJE Beginner Mode by setting the 'aseje.isBeginnerMode' context key.
+ */
+function toggleBeginnerMode() {
+    isBeginnerMode = !isBeginnerMode;
+
+    vscode.commands.executeCommand(
+        'setContext',
+        'aseje.isBeginnerMode',
+        isBeginnerMode
+    );
+
+    const message = isBeginnerMode
+        ? '✅ ASEJE Beginner Mode: ON. The VS Code UI has been simplified.'
+        : '❌ ASEJE Beginner Mode: OFF. Full VS Code UI restored.';
+
+    vscode.window.showInformationMessage(message);
+
+    if (isBeginnerMode) {
+        vscode.commands.executeCommand('workbench.action.toggleSidebarVisibility');
+    }
+}
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "aseje" is now active!');
+	vscode.commands.executeCommand('setContext', 'aseje.isBeginnerMode', isBeginnerMode);
+	
+	const templateLibrary = new TemplateLibrary();
+
+
 	registerTextSetting(context);
 	registerUIHelperCommands(context);
 	showGuidedWalkthrough(context);
-	
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	/*
-	const disposable = vscode.commands.registerCommand('aseje.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from ASJEJ!');
+
+	const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
+        toggleBeginnerMode();
+    });
+	
+	const templateDisposable = vscode.commands.registerCommand('aseje.createStarterProject', () => {
+        templateLibrary.createStarterProject();
+    });
+
+	const helloWorldDisposable = vscode.commands.registerCommand('aseje.helloWorld', function () {
+		vscode.window.showInformationMessage('Hello World from ASEJE!');
 	});
-	
 
-	context.subscriptions.push(disposable);
-	*/
+context.subscriptions.push(
+        toggleModeDisposable, 
+        templateDisposable,
+        helloWorldDisposable
+	);
 }
 
-// This method is called when your extension is deactivated
 function deactivate() {}
 
 module.exports = {
