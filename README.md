@@ -1,16 +1,10 @@
 # asjej README
 
-This is the README for your extension "asjej". After writing up a brief description, we recommend including the following sections.
+asjej is a plug in for VScode that rehauls the plug in to be more beginner and student friendly.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Retools settings to be more user friendly and compiles the most important setting together.
 
 ## Requirements
 
