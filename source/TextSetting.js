@@ -32,7 +32,7 @@ const vscode = require('vscode');
                 }
                 
                 panel.webview.html = getWebviewContent(newSize);
-                vscode.window.showInformationMessage('Suecess in setting Font size  to ${newSize}px');
+                vscode.window.showInformationMessage(`Suecess in setting Font size  to ${newSize}px`);
             }
             if (message.command === 'changeActivityBar') {
               console.log(message.command)
