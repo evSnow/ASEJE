@@ -3,7 +3,6 @@
 const vscode = require('vscode');
 const { registerTextSetting} = require('./source/TextSetting');
 const {registerUIHelperCommands} = require('./source/UIHelper')
-const {showGuidedWalkthrough} = require('./source/UIHelper')
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 
 // Variable to track the current mode state
@@ -44,7 +43,6 @@ function activate(context) {
 
 	registerTextSetting(context);
 	registerUIHelperCommands(context);
-	showGuidedWalkthrough(context);
 
 
 	const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
