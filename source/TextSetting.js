@@ -1,24 +1,34 @@
 const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
 
  function registerTextSetting(context){
     const disposable = vscode.commands.registerCommand('aseje.textSetting', () => {
         const config = vscode.workspace.getConfiguration();
-        const fontSize = config.get('aseje.fontSize') || 14;
-        console.log(fontSize)
+        let fontSize = (config.get('aseje.fontSize') || 14);
+        console.log(fontSize);
         //const font = config.get('aseje.fontType') || 'Consolas, \'Courier New\', monospace';
         const panel = vscode.window.createWebviewPanel(
             'textSetting',
             'text setting',
             vscode.ViewColumn.One,
-            {enableScripts: true}
-        )
-        panel.webview.html = getWebviewContent(fontSize);
-
+            {enableScripts: true,
+             localResourceRoots: [
+              vscode.Uri.file(path.join(context.extensionPath, 'view'))
+             ]
+            }
+        );
+        const onDiskPath = path.join(context.extensionPath, 'view');
+        let html = fs.readFileSync(path.join(onDiskPath, 'textSetting.html'), 'utf8');
+        html = html.replace(/\$\{\s*fontSize\s*\}/g, fontSize.toString() + 'px');
+        console.log(html)
+        panel.webview.html = html;
+        
         panel.webview.onDidReceiveMessage(async (message) =>{
           console.log(message.value);
           const configW = vscode.workspace.getConfiguration('workbench');
             if (message.command === 'fontSizeChange') {
-                const newSize = Number(message.value);
+                let newSize = Number(message.value);
                 if (isNaN(newSize) || newSize <= 6 || newSize >= 72) {
                     vscode.window.showErrorMessage('Font size is invalid plese pick a  size (6 – 72).');
                     return;
@@ -30,9 +40,14 @@ const vscode = require('vscode');
                 } catch (err) {
                     vscode.window.showErrorMessage('Failed to update font size in editor and aseje: ${err.message}');
                 }
-                
-                panel.webview.html = getWebviewContent(newSize);
+                console.log(fontSize.toString() + 'px')
+                html=html.replace(fontSize.toString() + 'px', newSize.toString()+'px');
+                html=html.replace(fontSize.toString() + 'px', newSize.toString()+'px');
+                fontSize=newSize;
+                console.log(html)
+                panel.webview.html = html;
                 vscode.window.showInformationMessage(`Suecess in setting Font size  to ${newSize}px`);
+                
             }
             if (message.command === 'changeActivityBar') {
               console.log(message.command)
@@ -101,7 +116,7 @@ const vscode = require('vscode');
     context.subscriptions.push(disposable);
 
 }
-
+/*
 function getWebviewContent(fontSize) {
   return `
 <!DOCTYPE html>
@@ -173,7 +188,7 @@ function getWebviewContent(fontSize) {
 </body>
 </html>`;
 }
-
+*/
 module.exports = {
     registerTextSetting
 } 

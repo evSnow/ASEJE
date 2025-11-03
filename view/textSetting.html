@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>text change</title>
+    <style>
+      :root{
+        --font-size: ${fontSize};
+      }
+      body {
+        font-size: var(--font-size);
+        font-family: monospace;
+        padding: 20px;
+        }
+    </style>
+</head>
+<body>
+  <h2>Change Font Size</h2>
+  <p>Current ${fontSize} </p>
+  <input id="sizeInput" type="number" placeholder="Enter font size" />
+  <button id="changeButton">Change</button>
+
+  <h2> Activity bar location </h2>
+
+  <form id="Activity Bar locatgion">
+    <label><input type="radio" id="default" name="option" value="default" checked> Default (left)</label><br>
+    <label><input type="radio" id="top" name="option" value="top"> Top</label><br>
+    <label><input type="radio" id="bottom" name="option" value="bottom"> Bottom</label><br>
+    <label><input type="radio" id="hidden" name="option" value="hidden"> Hidden</label><br>
+  </form>
+
+  <button id="changeActivityBar" type="button">Change</button>
+
+  <h2> side bar location </h2>
+  <form id="sideBar">
+    <label><input type="radio" id="left" name="optionS" value="left" checked> left</label><br>
+    <label><input type="radio" id="right" name="optionS" value="right"> right </label><br>
+  </form>
+
+  <button id="changeSideBar" type="button">Change</button>
+
+    
+
+    <script>
+      const vscode = acquireVsCodeApi();
+      document.getElementById('changeButton').addEventListener('click', () => {
+        const x = document.getElementById('sizeInput').value;
+        vscode.postMessage({
+          command: 'fontSizeChange',
+          value: x
+        });
+      });
+
+      document.getElementById('changeActivityBar').addEventListener('click', () => {
+      const selected = document.querySelector('input[name="option"]:checked');
+        const y=selected.value;
+        vscode.postMessage({ 
+        command: 'changeActivityBar', 
+        value: y });
+      });
+      document.getElementById('changeSideBar').addEventListener('click', () => {
+      const selected = document.querySelector('input[name="optionS"]:checked');
+        const y=selected.value;
+        vscode.postMessage({ 
+        command: 'changeSideBar', 
+        value: y });
+      });
+    </script>
+  
+</body>
+</html>
