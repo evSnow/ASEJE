@@ -11,7 +11,7 @@ function toggleUI(context){
 
         vscode.commands.executeCommand('workbench.action.toggleSidebarVisibility');
         vscode.commands.executeCommand('workbench.action.togglePanel');
-        vscode.window.showInformationMessage(isHidden ? 'UI Restored ✨' : 'UI Hidden 🧘');
+        
     })
 
   context.subscriptions.push(disposables);
