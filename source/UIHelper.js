@@ -24,9 +24,15 @@ function showGuidedWalkthrough(context) {
   );
   //let fontSize = (config.get('aseje.fontSize') || 14);
   const htmlPath = path.join(context.extensionPath, 'view', 'walkthrough.html');
-  const html = fs.readFileSync(htmlPath, 'utf8');
+  let html = fs.readFileSync(htmlPath, 'utf8');
   //html = html.replace(/\$\{\s*fontSize\s*\}/g, fontSize.toString() + 'px');
+  const config = vscode.workspace.getConfiguration();
+  let fontSize = (config.get('aseje.fontSize') || 14);  
+  console.log(fontSize)
+  html=html.replace(/(\d+)px/,`${fontSize}px`);
+  console.log(html)
   panel.webview.html = html;
+
 
   // Handle button clicks from HTML
   panel.webview.onDidReceiveMessage(async (message) => {
