@@ -37,6 +37,10 @@
       "title": "text Setting"
     },
     {
+       "command": "aseje.stepOne",
+       "title": "step one"
+    },
+    {
       "command": "aseje.textChange",
       "title": "textChange"
     },

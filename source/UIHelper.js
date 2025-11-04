@@ -22,19 +22,25 @@ function showGuidedWalkthrough(context) {
     vscode.ViewColumn.One,
     { enableScripts: true }
   );
-
+  //let fontSize = (config.get('aseje.fontSize') || 14);
   const htmlPath = path.join(context.extensionPath, 'view', 'walkthrough.html');
   const html = fs.readFileSync(htmlPath, 'utf8');
+  //html = html.replace(/\$\{\s*fontSize\s*\}/g, fontSize.toString() + 'px');
   panel.webview.html = html;
 
   // Handle button clicks from HTML
   panel.webview.onDidReceiveMessage(async (message) => {
+    console.log(message.command)
     if (message.command === 'createProject') {
       vscode.commands.executeCommand('aseje.createStarterProject');
     }
     if (message.command === 'openTextSettings') {
       vscode.commands.executeCommand('aseje.textSetting');
     }
+    if (message.command === 'beginning') {
+          vscode.commands.executeCommand('aseje.stepOne');
+    }
+    
   });
 }
 

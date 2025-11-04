@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <title>Welcome to ASEJE</title>
   <style>
+
     body {
       font-family: "Segoe UI", Arial, sans-serif;
       background-color: #fafafa;
       color: #222;
       padding: 2rem;
       line-height: 1.6;
+      
     }
 
     h1, h2 {
@@ -104,8 +106,8 @@
     </div>
 
     <div class="section">
-      <h2>The ASEJE Textbook</h2>
-      <p>Our built-in textbook gives you short lessons on essential programming concepts like:</p>
+      <h2>The ASEJE walkthrough</h2>
+      <p>Our built-in walkthrough gives you short lessons on essential programming concepts like:</p>
       <ul>
         <li>Printing output (<code>print()</code>, <code>console.log()</code>)</li>
         <li>Variables and data types</li>
@@ -120,7 +122,7 @@
       <p>Click below to open your first project template or explore settings.</p>
       <a class="btn" id="createBtn">Create a Starter Project</a>
       <a class="btn" id="settingsBtn">Open Text Settings</a>
-      <a class="btn" id="settingsBtn">Start Tutorial</a>
+      <a class="btn" id="beginning">Start Tutorial</a>
     </div>
   </div>
 
@@ -131,6 +133,9 @@
     });
     document.getElementById('settingsBtn').addEventListener('click', () => {
       vscode.postMessage({ command: 'openTextSettings' });
+    });
+        document.getElementById('beginning').addEventListener('click', () => {
+      vscode.postMessage({ command: 'beginning' });
     });
   </script>
 </body>

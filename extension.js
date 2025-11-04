@@ -6,6 +6,7 @@ const {registerUIHelperCommands} = require('./source/UIHelper');
 const {showGuidedWalkthrough} = require('./source/UIHelper');
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
+const {stepsOne} = require('./source/steps')
 //const { introPage } = require('./source/introWalkthrough');
 // Variable to track the current mode state
 //let isBeginnerMode = false;
@@ -17,7 +18,7 @@ const { toggleUI } = require('./source/UISimple');
 function activate(context) {
     showGuidedWalkthrough(context);
 	console.log('Congratulations, your extension "aseje" is now active!');
-	vscode.commands.executeCommand('setContext', 'aseje.isBeginnerMode', isBeginnerMode);
+	//vscode.commands.executeCommand('setContext', 'aseje.isBeginnerMode', isBeginnerMode);
 	
 	const templateLibrary = new TemplateLibrary();
 
@@ -25,7 +26,7 @@ function activate(context) {
 	registerTextSetting(context);
 	registerUIHelperCommands(context);
     toggleUI(context);
-
+	stepsOne(context);
 	const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
         toggleBeginnerMode();
     });
