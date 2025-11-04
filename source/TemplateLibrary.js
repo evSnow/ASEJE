@@ -30,6 +30,20 @@ print("Hello, new coder!")`
     <p>This is your first HTML document. Edit me!</p>
 </body>
 </html>`
+            },
+
+            {
+                label: '$(file-code) C Starter', 
+                description: 'A basic "Hello World" C program.',
+                language: 'c',
+                content:
+`#include <stdio.h>
+
+int main() {
+    // Print a simple greeting to the console
+    printf("Hello, C World from ASEJE!\n");
+    return 0;
+}`
             }
         ];
     }
