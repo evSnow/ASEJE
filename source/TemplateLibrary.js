@@ -44,6 +44,18 @@ int main() {
     printf("Hello, C World from ASEJE!\n");
     return 0;
 }`
+            },
+            {
+
+                label: '$(zap) JavaScript Starter', 
+                description: 'A basic program for console execution.',
+                language: 'javascript',
+                content:
+`// Starter Project: Hello World in JavaScript
+
+// This code will print a greeting to the console.
+console.log("Hello, JavaScript World from ASEJE!");`
+        
             }
         ];
     }
