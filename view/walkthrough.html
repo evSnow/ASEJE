@@ -129,10 +129,16 @@
   <script>
     const vscode = acquireVsCodeApi();
     document.getElementById('createBtn').addEventListener('click', () => {
-      vscode.postMessage({ command: 'createProject' });
+      vscode.postMessage({ 
+        command: 'createProject' 
+        action: 'openTemplateMenu'
+      });
     });
     document.getElementById('settingsBtn').addEventListener('click', () => {
-      vscode.postMessage({ command: 'openTextSettings' });
+      vscode.postMessage({ 
+          command: 'openTextSettings'
+          action: 'openTextSettings'
+         });
     });
         document.getElementById('beginning').addEventListener('click', () => {
       vscode.postMessage({ command: 'beginning' });

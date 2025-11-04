@@ -35,7 +35,10 @@ function showGuidedWalkthrough(context) {
       vscode.commands.executeCommand('aseje.createStarterProject');
     }
     if (message.command === 'openTextSettings') {
-      vscode.commands.executeCommand('aseje.textSetting');
+      vscode.commands.executeCommand(
+        'workbench.action.openSettings', 
+        '.aseje fontSize'
+      )
     }
     if (message.command === 'beginning') {
           vscode.commands.executeCommand('aseje.stepOne');
