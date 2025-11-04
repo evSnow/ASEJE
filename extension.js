@@ -27,9 +27,6 @@ function activate(context) {
 	registerUIHelperCommands(context);
     toggleUI(context);
 	stepsOne(context);
-	const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
-        toggleBeginnerMode();
-    });
 	
 	const templateDisposable = vscode.commands.registerCommand('aseje.createStarterProject', () => {
         templateLibrary.createStarterProject();
