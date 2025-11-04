@@ -37,7 +37,7 @@ function showGuidedWalkthrough(context) {
     if (message.command === 'openTextSettings') {
       vscode.commands.executeCommand(
         'workbench.action.openSettings', 
-        '.aseje fontSize'
+        '@ext:aseje fontSize'
       )
     }
     if (message.command === 'beginning') {
