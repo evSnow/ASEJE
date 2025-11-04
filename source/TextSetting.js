@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
  function registerTextSetting(context){
-    const disposable = vscode.commands.registerCommand('aseje.textSetting', () => {
+    const disposable = vscode.commands.registerCommand('aseje.textSetting', () => {  // create a function for storing the regigster
         const config = vscode.workspace.getConfiguration();
         let fontSize = (config.get('aseje.fontSize') || 14);
         console.log(fontSize);

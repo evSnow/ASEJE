@@ -13,7 +13,7 @@
      "onCommand:aseje.helloWorld",
     "onCommand:aseje.textChange",
     "onCommand:aseje.toggleBeginnerMode",
-    "onStartupFinished" 
+    "onStartupFinished"
   ],
   "main": "./extension.js",
   "contributes": {
