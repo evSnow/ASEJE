@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to ASEJE</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #fafafa;
+      color: #222;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    h1, h2 {
+      color: #007acc;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .welcome-box {
+      background: #e6f3ff;
+      border-left: 6px solid #007acc;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+    }
+
+    .section {
+      margin-top: 1.5rem;
+    }
+
+    .note {
+      background: #e6f3ff;        
+      border-left: 6px solid #007acc; 
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      color: #003b66;               
+    }
+
+    .btn {
+      display: inline-block;
+      background: #007acc;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background: #005fa3;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="welcome-box">
+      <h1>Welcome to ASEJE</h1>
+      <p>We’re excited to have you here! ASEJE is your beginner-friendly assistant for Visual Studio Code(Extension)
+      designed to make learning, coding, and personalizing your workspace simple and fun.</p>
+      <p>Let’s take a quick tour!</p>
+    </div>
+
+    <div class="section">
+      <h2>What is ASEJE?</h2>
+      <p>ASEJE stands for <em>Adaptive Starter Extension for Junior Engineers</em>. 
+      It helps new programmers feel comfortable in VS Code by simplifying the interface and 
+      providing quick-start coding templates for popular languages.</p>
+    </div>
+
+    <div class="section">
+      <h2>Key Features</h2>
+      <ul>
+        <li><strong>Beginner Mode:</strong> Simplifies the VS Code UI with one click.</li>
+        <li><strong>Starter Templates:</strong> Instantly create “Hello World” projects in Python, HTML, and more.</li>
+        <li><strong>Text Settings:</strong> Customize font size, theme, and layout visually.</li>
+        <li><strong>Guided Walkthroughs:</strong> Learn coding fundamentals directly inside VS Code.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Getting Started</h2>
+      <p>To begin exploring ASEJE:</p>
+      <ol>
+        <li>Press <code>Ctrl + Shift + P</code> (or <code>Cmd + Shift + P</code> on Mac).</li>
+        <li>Type <code>ASEJE</code> to see available commands.</li>
+        <li>Start with <strong>“Toggle Beginner Mode (ASEJE)”</strong> to simplify your editor.</li>
+      </ol>
+      <div class="note">
+        Tip: You can change font size in ASEJE’s Text Settings panel!
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>The ASEJE Textbook</h2>
+      <p>Our built-in textbook gives you short lessons on essential programming concepts like:</p>
+      <ul>
+        <li>Printing output (<code>print()</code>, <code>console.log()</code>)</li>
+        <li>Variables and data types</li>
+        <li>Loops and conditionals</li>
+        <li>Basic file handling</li>
+      </ul>
+      <p>More topics will appear as ASEJE updates!</p>
+    </div>
+
+    <div class="section">
+      <h2>Ready to Start?</h2>
+      <p>Click below to open your first project template or explore settings.</p>
+      <a class="btn" id="createBtn">Create a Starter Project</a>
+      <a class="btn" id="settingsBtn">Open Text Settings</a>
+    </div>
+  </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    document.getElementById('createBtn').addEventListener('click', () => {
+      vscode.postMessage({ command: 'createProject' });
+    });
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+      vscode.postMessage({ command: 'openTextSettings' });
+    });
+  </script>
+</body>
+</html>
