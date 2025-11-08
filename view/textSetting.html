@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>text change</title>
     <style>
-      :root{
-        --font-size: ${fontSize};
-      }
       body {
       font-family: "Segoe UI", Arial, sans-serif;
       background-color: #fafafa;
       color: #222;
       padding: 2rem;
       line-height: 1.6;
-      font-size: var(--font-size);
+      font-size: ${fontSize};
       
     }
 
@@ -68,32 +65,122 @@
       padding: 0.2rem 0.4rem;
       border-radius: 4px;
     }
+    .list{
+      gap:20px;
+      display:flex;
+      flex-direction: column; 
+      align-items: flex-start;
+      gap:20px
+    }
+    .container {
+      position: relative;
+      width: 250px;
+      float:left;
+      margin:20px 0;
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .size-List {
+      position: absolute;
+      top: 100%; /* dropdown below input */
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 150px;
+      overflow-y: auto;
+      display: none;
+      z-index: 10;
+    }
+
+    .size-List div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .size-List div:hover {
+      background-color: #f0f0f0;
+    }  
     </style>
 </head>
 <body>
-  <h2>Change Font Size</h2>
-  <p>Current ${fontSize} </p>
-  <input id="sizeInput" type="number" placeholder="Enter font size" />
+<div class="list">
+  <div class="section">
+      <a class="btn" id="createBtn">Go back to homepage</a>
+  </div>
+  <div class = "container"> 
+   <h2>Change Font Size</h2>
+  <input id="sizeInput" type="number" placeholder="Enter font size" min="1" max="99"/>
+  <div id="sizeList" class="size-List">
+    <div>8</div>
+    <div>10</div>
+    <div>12</div>
+    <div>14</div>
+    <div>16</div>
+  </div>
   <button id="changeButton">Change</button>
+</div>
+  <script>
+    const input = document.getElementById('sizeInput');
+    const dropdown = document.getElementById('sizeList');
+        input.addEventListener('focus', () => {
+      dropdown.style.display = 'block';
+    });
 
-  <h2> Activity bar location </h2>
+    document.addEventListener('click', (eve) => {
+      if (!eve.target.closest('.container')) {
+        dropdown.style.display = 'none';
+      }
+    });
+    
+        // Filter options based on input value
+    input.addEventListener('input', () => {
+      const value = input.value;
+      for (const option of dropdown.children) {
+        option.style.display = option.textContent.startsWith(value) || value === ''
+          ? 'block'
+          : 'none';
+      }
+    });
 
-  <form id="Activity Bar locatgion">
+    // Click on an option fills the input
+    for (const option of dropdown.children) {
+      option.addEventListener('click', () => {
+        input.value = option.textContent;
+        dropdown.style.display = 'none';
+      });
+    }
+    window.addEventListener('message', event => {
+    const message = event.data;
+    if (message.command === 'updateFontSize') {
+        document.body.style.fontSize = message.value + 'px';
+        document.getElementById('fontInput').value = message.value;
+        document.getElementById('currentFont').value=message.value;
+    }
+});
+  </script>
+
+  <form class = "container" id="Activity Bar locatgion">
+    <h2>Activity bar location </h2>
     <label><input type="radio" id="default" name="option" value="default" checked> Default (left)</label><br>
     <label><input type="radio" id="top" name="option" value="top"> Top</label><br>
     <label><input type="radio" id="bottom" name="option" value="bottom"> Bottom</label><br>
     <label><input type="radio" id="hidden" name="option" value="hidden"> Hidden</label><br>
+    <button id="changeActivityBar" type="button">Change</button>
   </form>
 
-  <button id="changeActivityBar" type="button">Change</button>
-
-  <h2> side bar location </h2>
   <form id="sideBar">
+     <h2> side bar location </h2>
     <label><input type="radio" id="left" name="optionS" value="left" checked> left</label><br>
     <label><input type="radio" id="right" name="optionS" value="right"> right </label><br>
+    <button id="changeSideBar" type="button">Change</button>
   </form>
-
-  <button id="changeSideBar" type="button">Change</button>
 
     
 
@@ -106,7 +193,6 @@
           value: x
         });
       });
-
       document.getElementById('changeActivityBar').addEventListener('click', () => {
       const selected = document.querySelector('input[name="option"]:checked');
         const y=selected.value;
@@ -121,7 +207,12 @@
         command: 'changeSideBar', 
         value: y });
       });
+          document.getElementById('createBtn').addEventListener('click', () => {
+      vscode.postMessage({ 
+        command: 'go_Home', 
+        action: 'openWalkthrough' });
+      });
     </script>
-  
+  </div>
 </body>
 </html>
