@@ -29,8 +29,8 @@ const path = require('path');
           const configW = vscode.workspace.getConfiguration('workbench');
             if (message.command === 'fontSizeChange') {
                 let newSize = Number(message.value);
-                if (isNaN(newSize) || newSize <= 0 || newSize >= 100) {
-                    vscode.window.showErrorMessage('Font size is invalid plese pick a  size (0 – 100).');
+                if (isNaN(newSize) || newSize <= 0) {
+                    vscode.window.showErrorMessage('Font size is invalid plese pick a number greater then 0.');
                     return;
                 }
                 if(newSize == fontSize){
