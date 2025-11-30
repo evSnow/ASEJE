@@ -7,60 +7,59 @@
     "vscode": "^1.104.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Debuggers"
   ],
-  "activationEvents":[
-     "onCommand:aseje.helloWorld",
-    "onCommand:aseje.textChange",
-    "onCommand:aseje.toggleBeginnerMode",
-    "onStartupFinished"
+  "activationEvents": [
+    "onStartupFinished",
+    "onDebug:mockDebug"
   ],
   "main": "./extension.js",
   "contributes": {
     "configuration": {
       "title": "settings",
-        "properties": {
-          "aseje.fontSize": {
-            "type": "number",
-            "default": 14,
-            "description": "The font size used in both setting and terminal"
+      "properties": {
+        "aseje.fontSize": {
+          "type": "number",
+          "default": 14,
+          "description": "The font size used in both setting and terminal"
+        }
       }
-    }
-  },
+    },
     "commands": [
       {
-      "command": "aseje.helloWorld",
-      "title": "Hello World"
-    },
-    {
-      "command": "aseje.textSetting",
-      "title": "text Setting"
-    },
-    {
-       "command": "aseje.stepOne",
-       "title": "step one"
-    },
-    {
-      "command": "aseje.textChange",
-      "title": "textChange"
-    },
-    {
+        "command": "aseje.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "aseje.textSetting",
+        "title": "text Setting"
+      },
+      {
+        "command": "aseje.stepOne",
+        "title": "step one"
+      },
+      {
+        "command": "aseje.textChange",
+        "title": "textChange"
+      },
+      {
         "command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
         "category": "ASEJE"
-    },
-    {
+      },
+      {
         "command": "aseje.showWalkthrough",
         "title": "$(book) Start ASEJE Guided Walkthrough",
         "category": "ASEJE"
-    },
-    {
+      },
+      {
         "command": "aseje.createStarterProject",
         "title": "$(new-file) Create Starter Project",
         "category": "ASEJE"
       }
-  ],
-  "menus": {
+    ],
+    "menus": {
       "editor/title": [
         {
           "command": "aseje.toggleBeginnerMode",
@@ -68,62 +67,81 @@
           "when": "editorFocus"
         }
       ],
-    "commandPalette": [
+      "commandPalette": [
         {
-            "command": "aseje.toggleBeginnerMode"
+          "command": "aseje.toggleBeginnerMode"
         },
         {
-            "command": "aseje.showWalkthrough"
+          "command": "aseje.showWalkthrough"
         },
         {
-            "command": "aseje.createStarterProject"
+          "command": "aseje.createStarterProject"
         }
-    ]
-},
-
-"views": {
-    "activitybar": [
+      ]
+    },
+    "debuggers": [
+      {
+      "type": "mockDebug",
+      "label": "JS debug",
+      "languages": ["javascript"],
+       "configurationAttributes": {
+        "launch": {
+          "required": ["program"],
+          "properties": {
+            "program": {
+              "type": "string",
+              "description": "Debug start"}}}},
+      "initialConfigurations": [
+      {
+        "type": "mockDebug",
+        "request": "launch",
+        "name": "JS debug",
+        "program": "${file}"
+    }]
+      }
+    ],
+    "views": {
+      "activitybar": [
         {
-            "id": "workbench.view.scm", 
-            "when": "!aseje.isBeginnerMode" 
+          "id": "workbench.view.scm",
+          "when": "!aseje.isBeginnerMode"
         },
         {
-             "id": "workbench.view.debug",
-            "when": "!aseje.isBeginnerMode" 
+          "id": "workbench.view.debug",
+          "when": "!aseje.isBeginnerMode"
         },
         {
-             "id": "workbench.view.extensions",
-            "when": "!aseje.isBeginnerMode" 
+          "id": "workbench.view.extensions",
+          "when": "!aseje.isBeginnerMode"
         }
-    ]
-},
-
-"walkthroughs": [
-    {
-        "id": "aseje.myFirstWalkthrough", 
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "aseje.myFirstWalkthrough",
         "title": "Start Coding with ASEJE",
         "description": "Your guided tour to a simpler VS Code experience.",
         "steps": [
-            {
-                "id": "aseje.walkthrough.step1.intro",
-                "title": "Welcome to Simplified Coding",
-                "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI. You can link to a Markdown file here.",
-                "completionEvents": [
-                    "onCommand:aseje.toggleBeginnerMode" 
-                ]
-            },
-            {
-                "id": "aseje.walkthrough.step2.project",
-                "title": "Create Your First Project",
-                "description": "Click the 'Create Starter Project' command below to begin a sample file.",
-                "command": "aseje.createStarterProject",
-                "completionEvents": [
-                  "onCommand:aseje.createStarterProject"
-                ]
-              }
+          {
+            "id": "aseje.walkthrough.step1.intro",
+            "title": "Welcome to Simplified Coding",
+            "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI. You can link to a Markdown file here.",
+            "completionEvents": [
+              "onCommand:aseje.toggleBeginnerMode"
+            ]
+          },
+          {
+            "id": "aseje.walkthrough.step2.project",
+            "title": "Create Your First Project",
+            "description": "Click the 'Create Starter Project' command below to begin a sample file.",
+            "command": "aseje.createStarterProject",
+            "completionEvents": [
+              "onCommand:aseje.createStarterProject"
+            ]
+          }
         ]
-    }
-]
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
@@ -131,11 +149,14 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.104.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "eslint": "^9.34.0",
+    "@types/vscode": "^1.104.0",
     "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.34.0"
+  },
+  "dependencies": {
+    "@vscode/debugadapter": "^1.68.0"
   }
 }

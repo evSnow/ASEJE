@@ -6,11 +6,20 @@ const {registerUIHelperCommands} = require('./source/UIHelper');
 const {showGuidedWalkthrough} = require('./source/UIHelper');
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
-const {stepsOne} = require('./source/steps')
+const {stepsOne} = require('./source/steps');
+const path = require('path');
 //const { introPage } = require('./source/introWalkthrough');
 // Variable to track the current mode state
 //let isBeginnerMode = false;
-
+/*
+class jsDebugAdapterFactory {
+    createDebugAdapterDescriptor(_session) {
+	   const adapterPath = path.join(__dirname,'debugger', 'jsDebuggerStart.js');
+		console.log(adapterPath);
+       return new vscode.DebugAdapterExecutable('node', [adapterPath]);
+    }
+}
+*/
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -35,12 +44,29 @@ function activate(context) {
 	const helloWorldDisposable = vscode.commands.registerCommand('aseje.helloWorld', function () {
 		vscode.window.showInformationMessage('Hello World from ASEJE!');
 	});
+console.log("before")
+const factory={ 
+	createDebugAdapterDescriptor(_session) {
+	   console.log("QQQQQ");
+	   const adapterPath = path.join(__dirname,'debugger', 'jsDebuggerStart.js');
+		console.log(adapterPath);
+       let a= new vscode.DebugAdapterExecutable('node', [adapterPath]);
+	   console.log(a.command, a.args);
+	   return a
+}
+};
+console.log("After");
+context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory("mockDebug", factory));
 
 context.subscriptions.push(
         toggleModeDisposable, 
         templateDisposable,
         helloWorldDisposable
 	);
+    vscode.debug.onDidStartDebugSession(session => {
+        console.log("DEBUG SESSION STARTED:", session.type);
+    });
+
 }
 
 function deactivate() {}
@@ -48,4 +74,4 @@ function deactivate() {}
 module.exports = {
 	activate,
 	deactivate
-}
+};

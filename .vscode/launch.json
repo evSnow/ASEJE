@@ -12,6 +12,13 @@
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			]
+		},
+		{ 
+			"name": "JS debug",
+			"type": "mockDebug",
+			"request": "launch",
+			"program": "${file}",
+			"trace": true
 		}
 	]
 }
