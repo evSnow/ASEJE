@@ -20,7 +20,9 @@ function showGuidedWalkthrough(context) {
     'asejeWalkthrough',
     'Welcome to ASEJE',
     vscode.ViewColumn.One,
-    { enableScripts: true }
+    { enableScripts: true,
+      retainContextWhenHidden: true  
+     }
   );
   //let fontSize = (config.get('aseje.fontSize') || 14);
   const htmlPath = path.join(context.extensionPath, 'view', 'walkthrough.html');

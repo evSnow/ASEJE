@@ -7,6 +7,7 @@
       <style>
 
     body {
+      font-size: 14px;
       font-family: "Segoe UI", Arial, sans-serif;
       background-color: #fafafa;
       color: #222;
@@ -89,4 +90,20 @@
     </div>
     <h2><div>Extension</div></h2>
     <p>Finally is the extension function which open the marketplace were other users can publish their own extension along with any needed infomation or linked to their githubs</p>
+<<<<<<< HEAD
+=======
+
+    <div class="list">
+  <div class="section">
+      <a class="btn" id="createBtn">Go back to homepage</a>
+  </div>
+  <script>
+    const vscode = acquireVsCodeApi();
+      document.getElementById('createBtn').addEventListener('click', () => {
+      vscode.postMessage({ 
+        command: 'go_Home', 
+        action: 'openWalkthrough' });
+      });
+  </script>
+>>>>>>> 63a1ddccb82e58f28b8578d6c94f1994e94fa700
 </html>

@@ -10,7 +10,8 @@ function toggleUI(context){
         config.update('breadcrumbs.enabled', isHidden, vscode.ConfigurationTarget.Global);
 
         vscode.commands.executeCommand('workbench.action.toggleSidebarVisibility');
-        //vscode.commands.executeCommand('workbench.action.togglePanel');
+        vscode.commands.executeCommand('workbench.action.togglePanel');
+        //vscode.commands.executeCommand('workbench.action.toggleZenMode');
         
     })
 

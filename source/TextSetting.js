@@ -29,24 +29,26 @@ const path = require('path');
           const configW = vscode.workspace.getConfiguration('workbench');
             if (message.command === 'fontSizeChange') {
                 let newSize = Number(message.value);
-                if (isNaN(newSize) || newSize <= 6 || newSize >= 72) {
-                    vscode.window.showErrorMessage('Font size is invalid plese pick a  size (6 – 72).');
+                if (isNaN(newSize) || newSize <= 0) {
+                    vscode.window.showErrorMessage('Font size is invalid plese pick a number greater then 0.');
                     return;
+                }
+                if(newSize == fontSize){
+                  return;
                 }
                 const config = vscode.workspace.getConfiguration();
                 try{ 
                 await config.update('editor.fontSize', newSize, vscode.ConfigurationTarget.Global);
                 await config.update('aseje.fontSize', newSize, vscode.ConfigurationTarget.Global);
+                fontSize=newSize;
+                console.log(fontSize.toString() + 'px')
+                let res= await panel.webview.postMessage({ command: 'updateFontSize', value: newSize });
+                console.log(res);
+                console.log(html);
+                vscode.window.showInformationMessage(`Suecess in setting Font size  to ${newSize}px`);
                 } catch (err) {
                     vscode.window.showErrorMessage('Failed to update font size in editor and aseje: ${err.message}');
                 }
-                console.log(fontSize.toString() + 'px')
-                html=html.replace(fontSize.toString() + 'px', newSize.toString()+'px');
-                html=html.replace(fontSize.toString() + 'px', newSize.toString()+'px');
-                fontSize=newSize;
-                console.log(html)
-                panel.webview.html = html;
-                vscode.window.showInformationMessage(`Suecess in setting Font size  to ${newSize}px`);
                 
             }
             if (message.command === 'changeActivityBar') {
@@ -109,6 +111,9 @@ const path = require('path');
                 vscode.window.showInformationMessage('Suecess in setting side bar right');                
                 }
             }
+            if (message.command === 'go_Home') {
+                  vscode.commands.executeCommand('aseje.showWalkthrough');
+            }
           return;
         });
     });
@@ -116,79 +121,7 @@ const path = require('path');
     context.subscriptions.push(disposable);
 
 }
-/*
-function getWebviewContent(fontSize) {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>text change</title>
-    <style>
-      body {
-        font-size: ${fontSize}px;
-        font-family: monospace;
-        padding: 20px;
-        }
-    </style>
-</head>
-<body>
-  <h2>Change Font Size</h2>
-  <input id="sizeInput" type="number" placeholder="Enter font size" />
-  <button id="changeButton">Change</button>
 
-  <h2> Activity bar location </h2>
-
-  <form id="Activity Bar locatgion">
-    <label><input type="radio" id="default" name="option" value="default" checked> Default (left)</label><br>
-    <label><input type="radio" id="top" name="option" value="top"> Top</label><br>
-    <label><input type="radio" id="bottom" name="option" value="bottom"> Bottom</label><br>
-    <label><input type="radio" id="hidden" name="option" value="hidden"> Hidden</label><br>
-  </form>
-
-  <button id="changeActivityBar" type="button">Change</button>
-
-  <h2> side bar location </h2>
-  <form id="sideBar">
-    <label><input type="radio" id="left" name="optionS" value="left" checked> left</label><br>
-    <label><input type="radio" id="right" name="optionS" value="right"> right </label><br>
-  </form>
-
-  <button id="changeSideBar" type="button">Change</button>
-
-    
-
-    <script>
-      const vscode = acquireVsCodeApi();
-      document.getElementById('changeButton').addEventListener('click', () => {
-        const x = document.getElementById('sizeInput').value;
-        vscode.postMessage({
-          command: 'fontSizeChange',
-          value: x
-        });
-      });
-
-      document.getElementById('changeActivityBar').addEventListener('click', () => {
-      const selected = document.querySelector('input[name="option"]:checked');
-        const y=selected.value;
-        vscode.postMessage({ 
-        command: 'changeActivityBar', 
-        value: y });
-      });
-      document.getElementById('changeSideBar').addEventListener('click', () => {
-      const selected = document.querySelector('input[name="optionS"]:checked');
-        const y=selected.value;
-        vscode.postMessage({ 
-        command: 'changeSideBar', 
-        value: y });
-      });
-    </script>
-  
-</body>
-</html>`;
-}
-*/
 module.exports = {
     registerTextSetting
 } 
