@@ -5,10 +5,13 @@ asjej is a plug in for VScode that rehauls the plug in to be more beginner and s
 ## Features
 
 - Retools settings to be more user friendly and compiles the most important setting together.
-
+- debug javascript using a custom made debugger. 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+If you want to use debugger you need to do the following
+npm install 
+run extension
+debug and run then use our debugger
 
 ## Extension Settings
 
