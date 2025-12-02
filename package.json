@@ -102,12 +102,12 @@
       "editor/context": [
         {
           "command": "aseje.addBreakpointNote",
-          "when": "editorHasBreakpoint",
+         // "when": "editorHasBreakpoint",
           "group": "aseje_debug@1"
         },
         {
           "command": "aseje.insertAutoComment",
-          "when": "editorHasBreakpoint",
+         // "when": "editorHasBreakpoint",
           "group": "aseje_debug@2"
         }
       ]
@@ -194,5 +194,3 @@
     "@vscode/debugadapter": "^1.68.0"
   }
 }
-
-    
