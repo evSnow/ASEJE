@@ -57,6 +57,19 @@
         "command": "aseje.createStarterProject",
         "title": "$(new-file) Create Starter Project",
         "category": "ASEJE"
+      },
+
+      {
+        "command": "aseje.addBreakpointNote",
+        "title": "$(note) Add Breakpoint Note (ASEJE)"
+      },
+      {
+        "command": "aseje.insertAutoComment",
+        "title": "$(comment) Insert Auto Comment (ASEJE)"
+      },
+      {
+        "command": "aseje.incrementBreakpointHit",
+        "title": "Increment Breakpoint Hit (Debug Test)"
       }
     ],
     "menus": {
@@ -76,9 +89,30 @@
         },
         {
           "command": "aseje.createStarterProject"
+        },
+
+        {
+          "command": "aseje.addBreakpointNote"
+        },
+        {
+          "command": "aseje.insertAutoComment"
+        }
+      ],
+
+      "editor/context": [
+        {
+          "command": "aseje.addBreakpointNote",
+        
+          "group": "aseje_debug@1"
+        },
+        {
+          "command": "aseje.insertAutoComment",
+       
+          "group": "aseje_debug@2"
         }
       ]
-    },
+
+},
     "debuggers": [
       {
         "type": "mo",
