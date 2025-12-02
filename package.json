@@ -12,7 +12,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onDebug:mockDebug"
+    "onDebug:mo"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -81,23 +81,34 @@
     },
     "debuggers": [
       {
-      "type": "mockDebug",
-      "label": "JS debug",
-      "languages": ["javascript"],
-       "configurationAttributes": {
-        "launch": {
-          "required": ["program"],
-          "properties": {
-            "program": {
-              "type": "string",
-              "description": "Debug start"}}}},
-      "initialConfigurations": [
-      {
-        "type": "mockDebug",
-        "request": "launch",
-        "name": "JS debug",
-        "program": "${file}"
-    }]
+        "type": "mo",
+        "label": "JS debug",
+        "runtime": "node",
+        "program": "./jsDebuggerStart.js",
+        "languages": [
+          "javascript"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Debug start"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "mo",
+            "request": "launch",
+            "name": "JS debug",
+            "program": "${workspaceFolder}/app.js"
+          }
+        ]
       }
     ],
     "views": {
@@ -157,6 +168,8 @@
     "eslint": "^9.34.0"
   },
   "dependencies": {
-    "@vscode/debugadapter": "^1.68.0"
+    "@vscode/debugadapter": "^1.68.0",
+    "chrome-remote-interface": "^0.33.3",
+    "ws": "^8.18.3"
   }
 }
