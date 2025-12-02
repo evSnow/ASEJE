@@ -102,12 +102,12 @@
       "editor/context": [
         {
           "command": "aseje.addBreakpointNote",
-         // "when": "editorHasBreakpoint",
+        
           "group": "aseje_debug@1"
         },
         {
           "command": "aseje.insertAutoComment",
-         // "when": "editorHasBreakpoint",
+       
           "group": "aseje_debug@2"
         }
       ]
