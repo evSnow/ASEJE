@@ -8,6 +8,7 @@ const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
 const {stepsOne} = require('./source/steps');
 const path = require('path');
+const { registerDebugSuite } = require('./source/DebugSuite');
 //const { introPage } = require('./source/introWalkthrough');
 // Variable to track the current mode state
 //let isBeginnerMode = false;
@@ -36,6 +37,9 @@ function activate(context) {
 	registerUIHelperCommands(context);
     toggleUI(context);
 	stepsOne(context);
+	
+	registerDebugSuite(context);
+
 	
 	const templateDisposable = vscode.commands.registerCommand('aseje.createStarterProject', () => {
         templateLibrary.createStarterProject();
