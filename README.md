@@ -9,6 +9,7 @@ asjej is a plug in for VScode that rehauls the plug in to be more beginner and s
 ## Requirements
 
 If you want to use debugger you need to do the following
+have python3 installed on your system
 npm install 
 run extension
 debug and run then use our debugger
