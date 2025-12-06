@@ -12,7 +12,14 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onDebug:mockDebug"
+    "onDebugResolve:aseje-js",
+    "onCommand:aseje.helloWorld",
+    "onCommand:aseje.textSetting",
+    "onCommand:aseje.stepOne",
+    "onCommand:aseje.textChange",
+    "onCommand:aseje.toggleBeginnerMode",
+    "onCommand:aseje.showWalkthrough",
+    "onCommand:aseje.createStarterProject"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -81,23 +88,40 @@
     },
     "debuggers": [
       {
-      "type": "mockDebug",
-      "label": "JS debug",
-      "languages": ["javascript"],
-       "configurationAttributes": {
-        "launch": {
-          "required": ["program"],
-          "properties": {
-            "program": {
-              "type": "string",
-              "description": "Debug start"}}}},
-      "initialConfigurations": [
-      {
-        "type": "mockDebug",
-        "request": "launch",
-        "name": "JS debug",
-        "program": "${file}"
-    }]
+        "type": "aseje-js",
+        "label": "ASEJE JS (Mock)",
+        "languages": [
+          "javascript"
+        ],
+        "program": "./source/debug/jsDebugSe.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Path to the script/file to simulate executing"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "default": true,
+                "description": "Stop immediately at the first line"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "aseje-js",
+            "request": "launch",
+            "name": "ASEJE: Debug Current File (Mock)",
+            "program": "${file}",
+            "stopOnEntry": true
+          }
+        ]
       }
     ],
     "views": {
