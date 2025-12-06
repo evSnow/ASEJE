@@ -14,10 +14,10 @@
 			]
 		},
 		{ 
-			"name": "JS debug",
-			"type": "mo",
+			"name": "ASEJE Python",
+			"type": "python_D",
 			"request": "launch",
-			"program": "${workspaceFolder}/app.js",
+			"program": "${workspaceFolder}/app.py",
 			"trace": true,
 		}
 	]

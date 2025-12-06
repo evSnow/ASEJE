@@ -8,18 +8,10 @@ const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
 const {stepsOne} = require('./source/steps');
 const path = require('path');
+const fs = require('fs');
 //const { introPage } = require('./source/introWalkthrough');
 // Variable to track the current mode state
 //let isBeginnerMode = false;
-/*
-class jsDebugAdapterFactory {
-    createDebugAdapterDescriptor(_session) {
-	   const adapterPath = path.join(__dirname,'debugger', 'jsDebuggerStart.js');
-		console.log(adapterPath);
-       return new vscode.DebugAdapterExecutable('node', [adapterPath]);
-    }
-}
-*/
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -48,15 +40,15 @@ console.log("before")
 const factory={ 
 	createDebugAdapterDescriptor(_session) {
 	   console.log("QQQQQ");
-	   const adapterPath = path.join(__dirname,'debugger', 'jsDebuggerStart.js');
-		console.log(adapterPath);
+	   const adapterPath = path.join(__dirname,'debugger', 'pyDebuggerStart.js');
+		console.log(fs.existsSync(adapterPath));
        let a= new vscode.DebugAdapterExecutable('node', [adapterPath]);
 	   console.log(a.command, a.args);
 	   return a
 }
 };
 console.log("After");
-context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory("mockDebug", factory));
+context.subscriptions.push( vscode.debug.registerDebugAdapterDescriptorFactory("python_D", factory));
 
 context.subscriptions.push(
         toggleModeDisposable, 
