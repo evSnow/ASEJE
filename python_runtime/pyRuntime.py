@@ -1,7 +1,7 @@
-import bdb
-import sys
-import json
-import os
+import bdb  #debugger class
+import sys  #system function
+import json #modify json
+import os   #interact with operation 
 
 class PyDebugger(bdb.Bdb):
     def __init__(self, target_file):
@@ -13,7 +13,7 @@ class PyDebugger(bdb.Bdb):
         
     def user_line(self, frame):
         filename=self.target_file
-        line = frame.f_lineno
+        line = frame.f_lineno #current line
         
         
         # Stop on first line to test if work
@@ -85,11 +85,11 @@ if __name__ == "__main__":
     target = sys.argv[1]
     
     if not os.path.exists(target):
-        print(json.dumps({"event": "error", "message": f"File not found: {target}"}), flush=True)
+        print(json.dumps({"event": "error", "message": f"File not found: {target}"}), flush=True)  #check if file path exist
         sys.exit(1)
     
     dbg = PyDebugger(target)
-    dbg.set_trace()
+    dbg.set_trace()  #turn one the line by line
     
     try:
         with open(target) as f:

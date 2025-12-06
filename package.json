@@ -12,7 +12,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onDebug:mo"
+    "onDebug:python_D"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -115,12 +115,12 @@
 },
     "debuggers": [
       {
-        "type": "mo",
-        "label": "JS debug",
+        "type": "python_D",
+        "label": "ASEJE Python",
         "runtime": "node",
-        "program": "./jsDebuggerStart.js",
+        "program": "./pyDebuggerStart.py",
         "languages": [
-          "javascript"
+          "python"
         ],
         "configurationAttributes": {
           "launch": {
@@ -137,10 +137,10 @@
         },
         "initialConfigurations": [
           {
-            "type": "mo",
+            "type": "python_D",
             "request": "launch",
-            "name": "JS debug",
-            "program": "${workspaceFolder}/app.js"
+            "name": "ASEJE Python",
+            "program": "${workspaceFolder}/app.py"
           }
         ]
       }
