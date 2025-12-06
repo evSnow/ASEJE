@@ -12,14 +12,7 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onDebugResolve:aseje-js",
-    "onCommand:aseje.helloWorld",
-    "onCommand:aseje.textSetting",
-    "onCommand:aseje.stepOne",
-    "onCommand:aseje.textChange",
-    "onCommand:aseje.toggleBeginnerMode",
-    "onCommand:aseje.showWalkthrough",
-    "onCommand:aseje.createStarterProject"
+    "onDebug:mo"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -64,6 +57,19 @@
         "command": "aseje.createStarterProject",
         "title": "$(new-file) Create Starter Project",
         "category": "ASEJE"
+      },
+
+      {
+        "command": "aseje.addBreakpointNote",
+        "title": "$(note) Add Breakpoint Note (ASEJE)"
+      },
+      {
+        "command": "aseje.insertAutoComment",
+        "title": "$(comment) Insert Auto Comment (ASEJE)"
+      },
+      {
+        "command": "aseje.incrementBreakpointHit",
+        "title": "Increment Breakpoint Hit (Debug Test)"
       }
     ],
     "menus": {
@@ -83,18 +89,39 @@
         },
         {
           "command": "aseje.createStarterProject"
+        },
+
+        {
+          "command": "aseje.addBreakpointNote"
+        },
+        {
+          "command": "aseje.insertAutoComment"
+        }
+      ],
+
+      "editor/context": [
+        {
+          "command": "aseje.addBreakpointNote",
+        
+          "group": "aseje_debug@1"
+        },
+        {
+          "command": "aseje.insertAutoComment",
+       
+          "group": "aseje_debug@2"
         }
       ]
-    },
+
+},
     "debuggers": [
       {
-        "type": "aseje-js",
-        "label": "ASEJE JS (Mock)",
+        "type": "mo",
+        "label": "JS debug",
+        "runtime": "node",
+        "program": "./jsDebuggerStart.js",
         "languages": [
           "javascript"
         ],
-        "program": "./source/debug/jsDebugSe.js",
-        "runtime": "node",
         "configurationAttributes": {
           "launch": {
             "required": [
@@ -103,23 +130,17 @@
             "properties": {
               "program": {
                 "type": "string",
-                "description": "Path to the script/file to simulate executing"
-              },
-              "stopOnEntry": {
-                "type": "boolean",
-                "default": true,
-                "description": "Stop immediately at the first line"
+                "description": "Debug start"
               }
             }
           }
         },
         "initialConfigurations": [
           {
-            "type": "aseje-js",
+            "type": "mo",
             "request": "launch",
-            "name": "ASEJE: Debug Current File (Mock)",
-            "program": "${file}",
-            "stopOnEntry": true
+            "name": "JS debug",
+            "program": "${workspaceFolder}/app.js"
           }
         ]
       }
@@ -181,6 +202,8 @@
     "eslint": "^9.34.0"
   },
   "dependencies": {
-    "@vscode/debugadapter": "^1.68.0"
+    "@vscode/debugadapter": "^1.68.0",
+    "chrome-remote-interface": "^0.33.3",
+    "ws": "^8.18.3"
   }
 }

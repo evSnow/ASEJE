@@ -37,6 +37,9 @@ function activate(context) {
     toggleUI(context);
 	stepsOne(context);
 	
+	registerDebugSuite(context);
+
+	
 	const templateDisposable = vscode.commands.registerCommand('aseje.createStarterProject', () => {
         templateLibrary.createStarterProject();
     });
@@ -45,18 +48,19 @@ function activate(context) {
 		vscode.window.showInformationMessage('Hello World from ASEJE!');
 	});
 console.log("before")
+
 const factory={ 
 	createDebugAdapterDescriptor(_session) {
 	   console.log("QQQQQ");
-	   const adapterPath = path.join(__dirname,'debugger', 'jsDebuggerStart.js');
-		console.log(adapterPath);
+	   const adapterPath = path.join(__dirname, 'jsDebuggerStart.js');
+		console.log(fs.existsSync(adapterPath));
        let a= new vscode.DebugAdapterExecutable('node', [adapterPath]);
 	   console.log(a.command, a.args);
 	   return a
 }
 };
 console.log("After");
-context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory("mockDebug", factory));
+context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory("mo", factory));
 
 context.subscriptions.push(
         toggleModeDisposable, 

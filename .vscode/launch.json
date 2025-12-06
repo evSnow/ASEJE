@@ -15,10 +15,10 @@
 		},
 		{ 
 			"name": "JS debug",
-			"type": "mockDebug",
+			"type": "mo",
 			"request": "launch",
-			"program": "${file}",
-			"trace": true
+			"program": "${workspaceFolder}/app.js",
+			"trace": true,
 		}
 	]
 }
