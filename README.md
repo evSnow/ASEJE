@@ -1,6 +1,6 @@
-# asjej README
+# ASEJE README
 
-asjej is a plug in for VScode that rehauls the plug in to be more beginner and student friendly.
+ASEJE is a plug in for VScode that rehauls the plug in to be more beginner and student friendly.
 
 ## Features
 
