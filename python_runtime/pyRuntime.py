@@ -3,7 +3,7 @@ import sys  #system function
 import json #modify json
 import os   #interact with operation 
 
-class PyDebugger(bdb.Bdb):
+class PyRuntime(bdb.Bdb):
     def __init__(self, target_file):
         super().__init__()
         self.target_file = os.path.abspath(target_file)    # path for target
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         print(json.dumps({"event": "error", "message": f"File not found: {target}"}), flush=True)  #check if file path exist
         sys.exit(1)
     
-    dbg = PyDebugger(target)
+    dbg = PyRuntime(target)
     dbg.set_trace()  #turn one the line by line
     
     try:
