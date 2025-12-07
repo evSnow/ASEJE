@@ -2,8 +2,9 @@ const vscode = require('vscode');
 
 // Key used to store custom breakpoint data globally
 const BREAKPOINT_DATA_KEY = 'aseje.breakpointData';
+let heatmapDecorationType = null;
 
-let breakpointDecorationType = null;
+let accessibleBreakpointGutterDecoration = null;
 let context;
 
 /**
@@ -26,6 +27,48 @@ function saveBreakpointData(data) {
  * --- Feature: Breakpoint Notes ---
  * Command triggered via context menu to attach a note to a breakpoint.
  */
+
+function getAccessibleBreakpointGutterDecoration() {
+    if (!accessibleBreakpointGutterDecoration) {
+    accessibleBreakpointGutterDecoration = vscode.window.createTextEditorDecorationType({
+        isWholeLine: false,
+        gutterIcon: {
+            dark: new vscode.ThemeIcon('triangle-right', new vscode.ThemeColor('terminal.ansiCyan')),
+light: new vscode.ThemeIcon('triangle-right', new vscode.ThemeColor('terminal.ansiBlue')) 
+            },
+            // Size adjustment for the icon
+            gutterIconSize: '70%',
+overviewRulerLane: vscode.OverviewRulerLane.Full
+        });
+    }
+    return accessibleBreakpointGutterDecoration;
+}
+
+/**
+ * Applies the custom accessible breakpoint icon to a specific line.
+ * @param {vscode.TextEditor} editor 
+ * @param {number} lineNum - 0-based line index.
+ */
+function applyCustomBreakpointIcon(editor, lineNum) {
+    const range = new vscode.Range(lineNum, 0, lineNum, 0);
+    const decorationType = getAccessibleBreakpointGutterDecoration();
+
+editor.setDecorations(decorationType, []);
+    
+    // Apply the new accessible icon
+    editor.setDecorations(decorationType, [range]);
+}
+
+/**
+ * Removes the custom accessible breakpoint icon from a specific line.
+ * @param {vscode.TextEditor} editor 
+ * @param {number} lineNum - 0-based line index.
+ */
+function removeCustomBreakpointIcon(editor) {
+    const decorationType = getAccessibleBreakpointGutterDecoration();
+    editor.setDecorations(decorationType, []);
+}
+
 async function addBreakpointNote() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
@@ -44,10 +87,20 @@ async function addBreakpointNote() {
     const data = loadBreakpointData();
     data[filePath] = data[filePath] || {};
     data[filePath][lineNum] = data[filePath][lineNum] || { count: 0 };
-    data[filePath][lineNum].note = note;
-    saveBreakpointData(data);
+    // If the user clears the note, remove the line data entirely
+    if (note.trim() === '') {
+        delete data[filePath][lineNum];
+        vscode.window.showInformationMessage(`Note removed for line ${lineNum + 1}.`);
+    } else {
+        data[filePath][lineNum].note = note;
 
     vscode.window.showInformationMessage(`Note saved for breakpoint on line ${lineNum + 1}.`);
+    applyCustomBreakpointIcon(editor, lineNum); 
+    }
+    
+    saveBreakpointData(data);
+
+
     applyAsejeDecorations();
 }
 
@@ -55,6 +108,7 @@ async function addBreakpointNote() {
  * --- Feature: Breakpoint Auto Comments ---
  * Inserts a comment above the current line, marking it as an ASEJE breakpoint.
  */
+
 function insertAutoComment() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
@@ -65,6 +119,7 @@ function insertAutoComment() {
     editor.edit(editBuilder => {
         editBuilder.insert(new vscode.Position(lineNum, 0), `// 🚧 ASEJE Breakpoint added for analysis.\n`);
     });
+    applyCustomBreakpointIcon(editor, lineNum);
 }
 
 
@@ -72,14 +127,17 @@ function insertAutoComment() {
  * --- Feature: Breakpoint Counter & Heatmap ---
  * Applies visual decorations based on hit count.
  */
+
 function applyAsejeDecorations() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
 
     // Clean up previous decorations
-    if (breakpointDecorationType) {
-        editor.setDecorations(breakpointDecorationType, []);
+    if (heatmapDecorationType) {
+        editor.setDecorations(heatmapDecorationType, []);
     }
+
+    removeCustomBreakpointIcon(editor);
 
     const data = loadBreakpointData();
     const fileData = data[editor.document.uri.fsPath];
@@ -89,14 +147,9 @@ function applyAsejeDecorations() {
     const maxHits = Math.max(...Object.values(fileData).map(item => item.count));
     const hitThreshold = maxHits > 0 ? maxHits / 3 : 1; // Used to determine heatmap level
 
-    // 1. Define the decoration style based on hit count
-    // NOTE: In a real extension, you would define multiple styles (low, med, high).
-    if (!breakpointDecorationType) {
-        // Define a general style once
-        breakpointDecorationType = vscode.window.createTextEditorDecorationType({
-            // Using a custom icon or emoji to distinguish from the native red dot
-            gutterIconPath: vscode.Uri.file(context.asAbsolutePath('resources/aseje-pin.svg')), // Requires an actual file
-            gutterIconSize: '70%',
+if (!heatmapDecorationType) {
+        heatmapDecorationType = vscode.window.createTextEditorDecorationType({
+            isWholeLine: true,
             overviewRulerLane: vscode.OverviewRulerLane.Left,
         });
     }
@@ -104,7 +157,9 @@ function applyAsejeDecorations() {
     // 2. Map the data to the decorations
     for (const [line, item] of Object.entries(fileData)) {
         const lineNum = parseInt(line);
-        let backgroundColor;
+
+        if (item.count > 0 || item.note) {
+            let backgroundColor = 'transparent'; // Default to transparent
 
         if (item.count >= hitThreshold * 2) {
             backgroundColor = 'rgba(255, 99, 71, 0.4)'; // High Heat (Tomato Red)
@@ -125,9 +180,19 @@ function applyAsejeDecorations() {
         });
         
         // You'd also update the counter text here if you wanted it visible on the line.
+    applyCustomBreakpointIcon(editor, lineNum);
+
+        } else {
+            // If data exists but has no count and no note, delete it for cleanup
+            delete fileData[line];
+        }
+
     }
 
-    editor.setDecorations(breakpointDecorationType, heatmapDecorations);
+    editor.setDecorations(heatmapDecorationType, heatmapDecorations);
+
+    // Save the cleaned up data
+    saveBreakpointData(data);
 }
 
 
