@@ -11,11 +11,9 @@ const { stepsOne } = require('./source/steps');
 
 const path = require('path');
 const fs = require('fs');
-// const { introPage } = require('./source/introWalkthrough');
-
 // Variable to track the current mode state (kept here for possible future use).
 // let isBeginnerMode = false;
-
+const { registerDebugSuite } = require('./source/DebugSuite');
 /**
  * Entry point for the ASEJE extension.
  *
@@ -50,6 +48,7 @@ function activate(context) {
     // Register the first lesson / set of steps for our learning flow.
     stepsOne(context);
 
+    registerDebugSuite(context);
     /**
      * Command: aseje.createStarterProject
      *
