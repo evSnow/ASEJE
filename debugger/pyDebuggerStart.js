@@ -248,6 +248,11 @@ class pyDebugSe extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
+
+    variable(response, args){
+        
+    }
+
     /**
      * Handle "threads" request.
      *

@@ -72,6 +72,18 @@ class PyRuntime(bdb.Bdb):
                     self.clear_all_breaks()  #clear previous breakpoint and nextline set new one
                     for bp_line in lines:
                         self.set_break(file_path, bp_line)
+                elif command == "variable":  #Here will be a check of local variabl and global and display it
+                    SoVar =command[1] ##fix to properly fine local and global  
+                    if SoVar == "local":
+                        pass
+                    elif SoVar == "global":
+                        pass
+
+                elif command == "evaluate":  #
+                    pass
+
+                elif command == "stackTrace":
+                    pass
             except Exception as e:
                 # If there is an error in code then output below
                 print(json.dumps({"event": "error", "message": str(e)}), flush=True)
