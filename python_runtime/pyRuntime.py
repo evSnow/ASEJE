@@ -16,14 +16,14 @@ class PyRuntime(bdb.Bdb):
         line = frame.f_lineno #current line
         
         
-        # Stop on first line to test if work
+        # Stop on first line to test if work and send a response
         if self.first_stop:
             self.first_stop = False
             print(json.dumps({"event": "stopped", "reason": "entry", "line": line}), flush=True)
             self.wait_for_command(frame)
             return
         
-        # function stop at breakpoint hit
+        # function stop at breakpoint hit and send a response
         if line in self.breakpoints_loc.get(filename, []):
             print(json.dumps({"event": "stopped", "reason": "breakpoint", "line": line}), flush=True)
             self.wait_for_command(frame)
@@ -60,7 +60,7 @@ class PyRuntime(bdb.Bdb):
                     return
                 
                 elif command == "step_out":
-                    self.should_stop = False
+                    self.should_stop = True
                     self.set_return(frame)
                     return
                 
@@ -72,7 +72,6 @@ class PyRuntime(bdb.Bdb):
                     self.clear_all_breaks()  #clear previous breakpoint and nextline set new one
                     for bp_line in lines:
                         self.set_break(file_path, bp_line)
-                    
             except Exception as e:
                 # If there is an error in code then output below
                 print(json.dumps({"event": "error", "message": str(e)}), flush=True)
