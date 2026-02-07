@@ -6,10 +6,10 @@
     "configurations": [
     
         {
-            "type": "mo",
-            "request": "launch",
-            "name": "JS debug",
-            "program": "${workspaceFolder}/app.js"
+			"name": "ASEJE Python",
+			"type": "python_D",
+			"request": "launch",
+			"program": "${workspaceFolder}/app.py",
         }
     ]
 }
