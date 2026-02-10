@@ -76,6 +76,8 @@ class pyDebugSe extends LoggingDebugSession {
         // Placeholder for future stack frame support.
         this.stackFrames = [];
 
+        this.requestSeq = 0;
+        this.pendingResponses = new Map();  //scope
         log('Constructor initialized');
     }
 
@@ -174,7 +176,7 @@ class pyDebugSe extends LoggingDebugSession {
                 try {
                     // Python runtime sends JSON describing events and state.
                     const current = JSON.parse(data);
-
+                    log("hffi");
                     if (current.event === 'stopped') {
                         this.currentLine = current.line;
                         let reason = current.reason || 'step';
@@ -187,6 +189,16 @@ class pyDebugSe extends LoggingDebugSession {
                     } else if (current.event === 'terminated') {
                         log('Program terminated');
                         this.sendEvent(new TerminatedEvent());
+                    } else if (current.event === 'variables') { // get variable
+                        log("heaallo");
+                        const resolve = this.pendingResponses.get(current.requestId);  // store waiting promises to get value form pyruntime
+                        if (resolve) {
+                            resolve(current.variables);
+                            this.pendingResponses.delete(current.requestId);  // delete waiting promisies when completed
+                        }
+                        else{
+                            log('error');
+                        }
                     } else {
                         // If it's some other JSON event we don't handle yet,
                         // forward it as output so the user can still see it.
@@ -194,7 +206,7 @@ class pyDebugSe extends LoggingDebugSession {
                     }
                 } catch (error) {
                     // If stdout line is not valid JSON, treat it as normal output.
-                    log('Error in parshing json code: ' + error + ' Data is:' + data);
+                    log('Error in launch request: ' + error + ' Data is:' + data);
                     this.sendEvent(new OutputEvent(data + '\n', 'stdout'));
                 }
             });
@@ -248,9 +260,52 @@ class pyDebugSe extends LoggingDebugSession {
         this.sendResponse(response);
     }
 
+    scopesRequest(response, args){  // used to establish globals and local in dap
+        log('fello');
+        response.body = {
+            scopes: [
+                {name: 'Local', variablesReference: 1, expensive: false},
+                {name: 'Globals', variablesReference: 2, expensive: true}
+            ]
+        }
+        this.sendResponse(response);
+    }
 
-    variable(response, args){
-        
+
+    async variablesRequest(response, args){  //request variable from dap
+        const ref = args.variablesReference; // get if local or global 1,2
+        let scope;
+        log("test var"+ref); 
+        if (ref === 1) {
+            scope='locals';
+        }
+
+        else if (ref === 2) {
+            scope='globals';
+        }
+        else {
+            response.body = { variables: [] };
+            this.sendResponse(response);
+            return;
+        }
+        const variables = await this.getVariablesFromPython(scope); // code that wait for the promise in get variable from python
+        log(variables);
+        response.body = { variables};
+        this.sendResponse(response);
+    }
+    getVariablesFromPython(scope) {
+        const requestId = ++this.requestSeq; // put id in a request to not overlap
+        log(`Requesting variables for scope: ${scope}, requestId: ${requestId}`);
+        return new Promise((resolve,reject) => {  //put process in a promise which willrequest info from run time
+            this.pendingResponses.set(requestId, resolve); //store the order to not overlap
+            const message = JSON.stringify({ command: "variables", scope, requestId }) + "\n";
+            const success = this.py_program.stdin.write(message); // send to runtime
+            if(!success){
+                this.pendingResponses.delete(requestId);
+                reject(new Error("Failed to write to Python stdin"));
+            }
+
+        });
     }
 
     /**
@@ -277,11 +332,11 @@ class pyDebugSe extends LoggingDebugSession {
 
         const frames = [
             new StackFrame(
-                0, // frame id
+                1, // frame id
                 `line ${this.currentLine}`, // frame name shown in UI
                 new Source(path.basename(this.currentFile), this.currentFile), // source file
                 this.currentLine, // line number
-                0 // column (start of line)
+                1 // column (start of line)
             )
         ];
 
