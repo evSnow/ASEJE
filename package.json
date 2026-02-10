@@ -12,7 +12,8 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onDebug:python_D"
+    "onDebug:python_D",
+    "onLanguage:python"
   ],
   "main": "./extension.js",
   "contributes": {
