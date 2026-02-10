@@ -8,6 +8,7 @@ const { registerUIHelperCommands, showGuidedWalkthrough } = require('./source/UI
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
 const { stepsOne } = require('./source/steps');
+const { registerPythonHoverProvider } = require('./source/pythonHoverProvider');
 
 const path = require('path');
 const fs = require('fs');
@@ -55,6 +56,10 @@ function activate(context) {
      * Creates a new starter project using the templates from TemplateLibrary.
      * This gives new programmers a ready-to-use workspace with example code.
      */
+
+    registerPythonHoverProvider(context);
+
+
     const templateDisposable = vscode.commands.registerCommand(
         'aseje.createStarterProject',
         () => {
