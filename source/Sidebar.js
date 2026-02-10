@@ -17,22 +17,12 @@ module.exports = {
     deactivate
 }
 
-getWebview(); {
+getWebview() {
        return`
             <!DOCTYPE html>
             <html>
             <body>
-                <h1>Hello from Side Panel!</h1>
-                <button onclick="sendMessage()">Send Message</button>
-                <script>
-                    const vscode = acquireVsCodeApi();
-                    function sendMessage() {
-                        vscode.postMessage({
-                            command: 'showMessage',
-                            text: 'Hello from Webview!'
-                        });
-                    }
-                </script>
+                <h1>Side Panel</h1>
             </body>
             </html>
         `;
