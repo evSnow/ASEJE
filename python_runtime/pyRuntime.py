@@ -10,20 +10,25 @@ class PyRuntime(bdb.Bdb):
         self.breakpoints_loc = {}
         self.first_stop = True 
         self.should_stop = False  
+        self.curFrame = None
         
     def user_line(self, frame):
         filename=self.target_file
         line = frame.f_lineno #current line
+        self.curFrame=frame
         
         
-        # Stop on first line to test if work
+        # Stop on first line to test if work and send a response
         if self.first_stop:
             self.first_stop = False
-            print(json.dumps({"event": "stopped", "reason": "entry", "line": line}), flush=True)
+            #print('hi')
+            ev={"event": "stopped", "reason": "entry", "line": 1}
+            print(json.dumps(ev), flush=True)
+            #print('ters')
             self.wait_for_command(frame)
             return
         
-        # function stop at breakpoint hit
+        # function stop at breakpoint hit and send a response
         if line in self.breakpoints_loc.get(filename, []):
             print(json.dumps({"event": "stopped", "reason": "breakpoint", "line": line}), flush=True)
             self.wait_for_command(frame)
@@ -41,7 +46,8 @@ class PyRuntime(bdb.Bdb):
                 return
             
             try:
-                choice = json.loads(line.strip()) #strip the 
+                choice = json.loads(line.strip()) #strip the white and then load into choice
+                #print (choice)
                 command = choice.get("command")
                 
                 if command == "continue":
@@ -60,7 +66,7 @@ class PyRuntime(bdb.Bdb):
                     return
                 
                 elif command == "step_out":
-                    self.should_stop = False
+                    self.should_stop = True
                     self.set_return(frame)
                     return
                 
@@ -72,23 +78,71 @@ class PyRuntime(bdb.Bdb):
                     self.clear_all_breaks()  #clear previous breakpoint and nextline set new one
                     for bp_line in lines:
                         self.set_break(file_path, bp_line)
-                    
+                
+                elif command == "variables":  #Here will be a check of local variabl and global and display it
+                    scope=choice.get("scope")
+                    request_id = choice.get("requestId")
+                    self.sendVariable(scope,request_id)
+
+                elif command == "evaluate":  #
+                    pass
+
+                elif command == "stackTrace":
+                    pass
             except Exception as e:
                 # If there is an error in code then output below
                 print(json.dumps({"event": "error", "message": str(e)}), flush=True)
+    def sendVariable(self, scope,request_id):
+        if scope == "locals":
+            if self.curFrame is None:
+               vars = {}
+            else:
+                vars = self.curFrame.f_locals
+        elif scope == "globals":
+            if self.curFrame is None:
+               vars = {}
+            else:
+                vars = self.curFrame.f_globals
+        else:
+            var={}
+        real_var=[]
+        ignore_names = {"self", "dbg", "target", "__name__", "__file__", "bdb", "sys", "os", "json"}  #remove excess word
+        for n, value in vars.items():
+            if n in ignore_names or n.startswith("__"): #skip is name is in ignore or has usless __ but will evalurate later
+                continue
+            else:
+                try:
+                    real_var.append({  #apend the variable to var including local
+                        "name": str(n),
+                        "value": repr(value),
+                        "type": type(value).__name__,
+                        "variablesReference": 0
+                    })
+                except Exception:
+                    real_var.append({  # not a normal variable like open file will add more detail later but for now unkown 
+                        "name": str(n),
+                        "value": "<unavailable>",
+                        "type": "unknown",
+                        "variablesReference": 0
+                    })
 
+        print(json.dumps({
+            "event": "variables",
+            "requestId": request_id,
+            "variables": real_var
+        }), flush=True)
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print(json.dumps({"event": "error", "message": "No target file entered"}), flush=True)  # check if target exist
+        print(json.dumps({"event": "error", "message": "No target file entered"}), flush=True)  # check if target exist if not send to dap
         sys.exit(1)
-    
+    #print(sys.argv)
     target = sys.argv[1]
     
     if not os.path.exists(target):
-        print(json.dumps({"event": "error", "message": f"File not found: {target}"}), flush=True)  #check if file path exist
+        print(json.dumps({"event": "error", "message": f"File not found: {target}"}), flush=True)  #check if file path if not send to dap
         sys.exit(1)
-    
-    dbg = PyRuntime(target)
+    #print('before run')
+    dbg = PyRuntime(target)  # creat class to store the file 
     dbg.set_trace()  #turn one the line by line
     
     try:
