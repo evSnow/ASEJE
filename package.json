@@ -13,7 +13,8 @@
   "activationEvents": [
     "onStartupFinished",
     "onDebug:python_D",
-    "onLanguage:python"
+    "onLanguage:python",
+    "onview:aseje.sidebar"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -153,6 +154,13 @@
         {
           "id": "workbench.view.extensions",
           "when": "!aseje.isBeginnerMode"
+        }
+      ],
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "aseje.sidebar",
+          "name": "Sidebar Helper"
         }
       ]
     },
