@@ -1,4 +1,28 @@
-node_modules
-.vscode-test/
-*.vsix
-.env
+const vscode = require('vscode');
+
+class SidebarProvider {
+  constructor(context) {
+    this.context = context;
+  }
+
+  resolveWebviewView(webviewView) {
+    webviewView.webview.options = {
+      enableScripts: true
+    };
+
+    webviewView.webview.html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <body style="padding:10px;">
+        <h3>ASEJE Sidebar</h3>
+        <p>Sidebar loaded successfully ✅</p>
+        <button onclick="alert('ASEJE Button Clicked')">
+          Test Button
+        </button>
+      </body>
+      </html>
+    `;
+  }
+}
+
+module.exports = { SidebarProvider };
