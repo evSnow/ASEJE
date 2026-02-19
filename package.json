@@ -13,7 +13,8 @@
   "activationEvents": [
     "onStartupFinished",
     "onDebug:python_D",
-    "onLanguage:python"
+    "onLanguage:python",
+    "onView:aseje.sidebarView"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -27,23 +28,12 @@
         }
       }
     },
+
     "commands": [
-      {
-        "command": "aseje.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "aseje.textSetting",
-        "title": "text Setting"
-      },
-      {
-        "command": "aseje.stepOne",
-        "title": "step one"
-      },
-      {
-        "command": "aseje.textChange",
-        "title": "textChange"
-      },
+      { "command": "aseje.helloWorld", "title": "Hello World" },
+      { "command": "aseje.textSetting", "title": "text Setting" },
+      { "command": "aseje.stepOne", "title": "step one" },
+      { "command": "aseje.textChange", "title": "textChange" },
       {
         "command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
@@ -59,19 +49,11 @@
         "title": "$(new-file) Create Starter Project",
         "category": "ASEJE"
       },
-      {
-        "command": "aseje.addBreakpointNote",
-        "title": "$(note) Add Breakpoint Note (ASEJE)"
-      },
-      {
-        "command": "aseje.insertAutoComment",
-        "title": "$(comment) Insert Auto Comment (ASEJE)"
-      },
-      {
-        "command": "aseje.incrementBreakpointHit",
-        "title": "Increment Breakpoint Hit (Debug Test)"
-      }
+      { "command": "aseje.addBreakpointNote", "title": "$(note) Add Breakpoint Note (ASEJE)" },
+      { "command": "aseje.insertAutoComment", "title": "$(comment) Insert Auto Comment (ASEJE)" },
+      { "command": "aseje.incrementBreakpointHit", "title": "Increment Breakpoint Hit (Debug Test)" }
     ],
+
     "menus": {
       "editor/title": [
         {
@@ -81,47 +63,28 @@
         }
       ],
       "commandPalette": [
-        {
-          "command": "aseje.toggleBeginnerMode"
-        },
-        {
-          "command": "aseje.showWalkthrough"
-        },
-        {
-          "command": "aseje.createStarterProject"
-        },
-        {
-          "command": "aseje.addBreakpointNote"
-        },
-        {
-          "command": "aseje.insertAutoComment"
-        }
+        { "command": "aseje.toggleBeginnerMode" },
+        { "command": "aseje.showWalkthrough" },
+        { "command": "aseje.createStarterProject" },
+        { "command": "aseje.addBreakpointNote" },
+        { "command": "aseje.insertAutoComment" }
       ],
       "editor/context": [
-        {
-          "command": "aseje.addBreakpointNote",
-          "group": "aseje_debug@1"
-        },
-        {
-          "command": "aseje.insertAutoComment",
-          "group": "aseje_debug@2"
-        }
+        { "command": "aseje.addBreakpointNote", "group": "aseje_debug@1" },
+        { "command": "aseje.insertAutoComment", "group": "aseje_debug@2" }
       ]
     },
+
     "debuggers": [
       {
         "type": "python_D",
         "label": "ASEJE Python",
         "runtime": "node",
         "program": "./pyDebuggerStart.py",
-        "languages": [
-          "python"
-        ],
+        "languages": ["python"],
         "configurationAttributes": {
           "launch": {
-            "required": [
-              "program"
-            ],
+            "required": ["program"],
             "properties": {
               "program": {
                 "type": "string",
@@ -140,22 +103,16 @@
         ]
       }
     ],
+
     "views": {
-      "activitybar": [
+      "explorer": [
         {
-          "id": "workbench.view.scm",
-          "when": "!aseje.isBeginnerMode"
-        },
-        {
-          "id": "workbench.view.debug",
-          "when": "!aseje.isBeginnerMode"
-        },
-        {
-          "id": "workbench.view.extensions",
-          "when": "!aseje.isBeginnerMode"
+          "id": "aseje.sidebarView",
+          "name": "ASEJE Sidebar"
         }
       ]
     },
+
     "walkthroughs": [
       {
         "id": "aseje.myFirstWalkthrough",
@@ -166,23 +123,20 @@
             "id": "aseje.walkthrough.step1.intro",
             "title": "Welcome to Simplified Coding",
             "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI. You can link to a Markdown file here.",
-            "completionEvents": [
-              "onCommand:aseje.toggleBeginnerMode"
-            ]
+            "completionEvents": ["onCommand:aseje.toggleBeginnerMode"]
           },
           {
             "id": "aseje.walkthrough.step2.project",
             "title": "Create Your First Project",
             "description": "Click the 'Create Starter Project' command below to begin a sample file.",
             "command": "aseje.createStarterProject",
-            "completionEvents": [
-              "onCommand:aseje.createStarterProject"
-            ]
+            "completionEvents": ["onCommand:aseje.createStarterProject"]
           }
         ]
       }
     ]
   },
+
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
