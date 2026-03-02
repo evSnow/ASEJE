@@ -97,8 +97,7 @@ class SidebarProvider {
         { label: "Walkthrough",     cmd: "aseje.showWalkthrough" },
         { label: "Beginner Mode",   cmd: "aseje.toggleBeginnerMode" },
         { label: "Starter Project", cmd: "aseje.createStarterProject" },
-        { label: "Debug Notes",     cmd: "aseje.addBreakpointNote" },
-        { label: "Heatmap",         cmd: null }
+        { label: "Reference",     cmd: "aseje.reference" }
       ];
 
       const searchEl  = document.getElementById("search");
