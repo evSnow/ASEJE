@@ -103,12 +103,21 @@
         ]
       }
     ],
-
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "asejeSidebar",
+          "title": "ASEJE",
+          "icon": "$(lightbulb)"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "asejeSidebar": [
         {
           "id": "aseje.sidebarView",
-          "name": "ASEJE Sidebar"
+          "name": "ASEJE Sidebar",
+          "type": "webview"
         }
       ]
     },
