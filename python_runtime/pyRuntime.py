@@ -11,18 +11,19 @@ class PyRuntime(bdb.Bdb):
         self.first_stop = True 
         self.should_stop = False  
         self.curFrame = None
+        self.frame_list = {}
         
     def user_line(self, frame):
         filename=self.target_file
         line = frame.f_lineno #current line
         self.curFrame=frame
-        
+        currentStack = self.stack_creation(frame)
         
         # Stop on first line to test if work and send a response
         if self.first_stop:
             self.first_stop = False
             #print('hi')
-            ev={"event": "stopped", "reason": "entry", "line": 1}
+            ev={"event": "stopped", "reason": "entry", "line": 1, "stack": currentStack}
             print(json.dumps(ev), flush=True)
             #print('ters')
             self.wait_for_command(frame)
@@ -30,12 +31,12 @@ class PyRuntime(bdb.Bdb):
         
         # function stop at breakpoint hit and send a response
         if line in self.breakpoints_loc.get(filename, []):
-            print(json.dumps({"event": "stopped", "reason": "breakpoint", "line": line}), flush=True)
+            print(json.dumps({"event": "stopped", "reason": "breakpoint", "line": line, "stack": currentStack}), flush=True)
             self.wait_for_command(frame)
             return
         if self.should_stop:
             self.should_stop = False
-            print(json.dumps({"event": "stopped", "reason": "step", "line": line}), flush=True)
+            print(json.dumps({"event": "stopped", "reason": "step", "line": line, "stack": currentStack}), flush=True)
             self.wait_for_command(frame)
     
     def wait_for_command(self, frame):
@@ -81,30 +82,39 @@ class PyRuntime(bdb.Bdb):
                 
                 elif command == "variables":  #Here will be a check of local variabl and global and display it
                     scope=choice.get("scope")
+                    frame_id = choice.get("frameId")
                     request_id = choice.get("requestId")
-                    self.sendVariable(scope,request_id)
+                    self.sendVariable(scope,request_id,frame_id)
 
                 elif command == "evaluate":  #
-                    pass
+                    expression = choice.get("expression")
+                    frame_id = choice.get("frameId")
+                    request_id = choice.get("requestId")
+                    self.evaluate_expression(expression, frame_id, request_id)
+                    
 
                 elif command == "stackTrace":
-                    pass
+                    request_id = choice.get("requestId")
+                    stack_data = self.stack_creation(frame)
+                    
+                    print(json.dumps({
+                        "event": "stackTrace",
+                        "requestId": request_id,
+                        "stackFrames": stack_data
+                    }), flush=True)
             except Exception as e:
                 # If there is an error in code then output below
                 print(json.dumps({"event": "error", "message": str(e)}), flush=True)
-    def sendVariable(self, scope,request_id):
-        if scope == "locals":
-            if self.curFrame is None:
-               vars = {}
-            else:
-                vars = self.curFrame.f_locals
+    def sendVariable(self, scope,request_id,frame_id):
+        frame = self.frame_list.get(frame_id)
+        if frame is None:
+            vars = {}
+        elif scope == "locals":
+            vars = frame.f_locals or {}
         elif scope == "globals":
-            if self.curFrame is None:
-               vars = {}
-            else:
-                vars = self.curFrame.f_globals
+            vars =frame.f_globals or {}
         else:
-            var={}
+            vars={}
         real_var=[]
         ignore_names = {"self", "dbg", "target", "__name__", "__file__", "bdb", "sys", "os", "json"}  #remove excess word
         for n, value in vars.items():
@@ -113,14 +123,14 @@ class PyRuntime(bdb.Bdb):
             else:
                 try:
                     real_var.append({  #apend the variable to var including local
-                        "name": str(n),
+                        "name": n,
                         "value": repr(value),
                         "type": type(value).__name__,
                         "variablesReference": 0
                     })
                 except Exception:
                     real_var.append({  # not a normal variable like open file will add more detail later but for now unkown 
-                        "name": str(n),
+                        "name": n,
                         "value": "<unavailable>",
                         "type": "unknown",
                         "variablesReference": 0
@@ -130,6 +140,41 @@ class PyRuntime(bdb.Bdb):
             "event": "variables",
             "requestId": request_id,
             "variables": real_var
+        }), flush=True)
+
+    def stack_creation(self, frame):
+        data = []
+        stack, _ = self.get_stack(frame, None)
+        self.frame_list={}
+
+        for i in range(len(stack)):
+            frame, lineno = stack[i]
+            file_name = getattr(frame.f_code, "co_filename", None)
+            
+            if os.path.abspath(file_name) == os.path.abspath(__file__):
+                continue
+            data.append({
+                "id": int(i),
+                "name": str(frame.f_code.co_name),
+                "file": str(file_name),
+                "line": int(lineno),
+                "column":1
+            })
+            self.frame_list[i] = frame
+        return data
+
+    def evaluate_expression(self, expression, frame_id, request_id):
+        frame = self.frame_list.get(frame_id)
+        if frame is None:
+            result = "no frame"
+        else:
+            result = eval(expression, frame.f_globals, frame.f_locals) #calculate data
+
+        print(json.dumps({ 
+            "event": "evaluate",
+            "requestId": request_id,
+            "result": repr(result),
+            "variablesReference": 0
         }), flush=True)
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -142,9 +187,8 @@ if __name__ == "__main__":
         print(json.dumps({"event": "error", "message": f"File not found: {target}"}), flush=True)  #check if file path if not send to dap
         sys.exit(1)
     #print('before run')
-    dbg = PyRuntime(target)  # creat class to store the file 
-    dbg.set_trace()  #turn one the line by line
-    
+    dbg = PyRuntime(target)  # creat class to store the file
+    dbg.set_trace()  #turn one the line by line 
     try:
         with open(target) as f:
             code = compile(f.read(), target, 'exec')

@@ -59,7 +59,8 @@ class pyDebugSe extends LoggingDebugSession {
     constructor() {
         // Log all DAP traffic into py_1.log
         super('py_1.log');
-
+        this.setDebuggerLinesStartAt1(true);
+        this.setDebuggerColumnsStartAt1(true);
         // Handle to the spawned Python runtime process.
         this.py_program = null;
 
@@ -75,7 +76,8 @@ class pyDebugSe extends LoggingDebugSession {
 
         // Placeholder for future stack frame support.
         this.stackFrames = [];
-
+        this.nextFrameId = 1;
+        this.frameHandles = new Map();
         this.requestSeq = 0;
         this.pendingResponses = new Map();  //scope
         log('Constructor initialized');
@@ -95,6 +97,7 @@ class pyDebugSe extends LoggingDebugSession {
         response.body.supportsConfigurationDoneRequest = true;
         response.body.supportsStepBack = false;
         response.body.supportsStepInTargetsRequest = false;
+        response.body.supportsEvaluateForHovers = true;
 
         this.sendResponse(response);
 
@@ -129,31 +132,36 @@ class pyDebugSe extends LoggingDebugSession {
 
         // Basic validation on paths.
         if (!fs.existsSync(programPath)) {
-            log('Runtime does not worked because bad pathing ' + programPath);
+            log('Launch: Runtime does not worked because bad pathing ' + programPath);
             return;
         }
 
         if (!fs.existsSync(program)) {
-            log('Target program not because bad pathing: ' + program);
+            log('Launch: Target program not because bad pathing: ' + program);
             return;
         }
 
         this.currentFile = program;
-        log('Program:' + program);
-        log('Runtime:' + programPath);
+        log('Launch: Program files:' + program);
+        log('Launch: Runtime files:' + programPath);
 
         // Spawn Python process that will coordinate debugging.
         this.py_program = spawn('python3', [programPath, program]);
 
         // If the process fails to start at all.
         this.py_program.on('error', err => {
-            log('Runtime failed: ' + err);
+            log('Launch: Runtime failed: ' + err);
             this.sendEvent(new TerminatedEvent());
         });
 
         // When the Python runtime ends normally or with an error code.
         this.py_program.on('exit', code => {
-            log('Runtime ended:' + code);
+            log('Launch: Runtime ended:' + code);
+            this.pendingResponses.clear();
+            this.stackFrames = [];
+            this.frameHandles.clear();
+            this.activeRuntimeFrameId = undefined;
+            this.requestSeq = 0;
             this.sendEvent(new TerminatedEvent());
         });
 
@@ -171,26 +179,29 @@ class pyDebugSe extends LoggingDebugSession {
             lines.forEach(data => {
                 if (!data.trim()) return;
 
-                log('Received: ' + data);
+                log('Launch: Received: ' + data);
 
                 try {
                     // Python runtime sends JSON describing events and state.
                     const current = JSON.parse(data);
-                    log("hffi");
+                    log("Launch: hffi");
                     if (current.event === 'stopped') {
                         this.currentLine = current.line;
+                        this.stackFrames = current.stack || [];
+                        this.nextFrameId = 1;
                         let reason = current.reason || 'step';
-                        log('line:' + this.currentLine + ' reason: ' + reason);
+                        log('Launch: line:' + this.currentLine + ' reason: ' + reason);
                         this.sendEvent(new StoppedEvent(reason, this.THREAD_ID));
+
                     } else if (current.event === 'breakpoint') {
                         this.currentLine = current.line;
-                        log('Breakpoint hit: ' + this.currentLine);
+                        log('Launch: Breakpoint hit: ' + this.currentLine);
                         this.sendEvent(new StoppedEvent('breakpoint', this.THREAD_ID));
                     } else if (current.event === 'terminated') {
-                        log('Program terminated');
+                        log('Launch: Program terminated');
                         this.sendEvent(new TerminatedEvent());
                     } else if (current.event === 'variables') { // get variable
-                        log("heaallo");
+                        log("Launch: heaallo");
                         const resolve = this.pendingResponses.get(current.requestId);  // store waiting promises to get value form pyruntime
                         if (resolve) {
                             resolve(current.variables);
@@ -199,14 +210,32 @@ class pyDebugSe extends LoggingDebugSession {
                         else{
                             log('error');
                         }
-                    } else {
+                    } else if (current.event === 'evaluate') {
+                        log("Launch: eval enter")
+                        const resolve = this.pendingResponses.get(current.requestId);
+                        if (resolve) {
+                            resolve(current);
+                        this.pendingResponses.delete(current.requestId);
+                        }
+                    }
+                    else if (current.event === 'error') {
+                        const resolve = this.pendingResponses.get(current.requestId);
+                        if (resolve) {
+                            resolve({
+                                result: `<error: ${current.message}>`,
+                                variablesReference: 0
+                            });
+                            this.pendingResponses.delete(current.requestId);
+                        }
+                    }
+                    else {
                         // If it's some other JSON event we don't handle yet,
                         // forward it as output so the user can still see it.
                         this.sendEvent(new OutputEvent(data + '\n', 'stdout'));
                     }
                 } catch (error) {
                     // If stdout line is not valid JSON, treat it as normal output.
-                    log('Error in launch request: ' + error + ' Data is:' + data);
+                    log('Error in launch request: ' + error + ' info is:' + data);
                     this.sendEvent(new OutputEvent(data + '\n', 'stdout'));
                 }
             });
@@ -225,10 +254,10 @@ class pyDebugSe extends LoggingDebugSession {
     setBreakPointsRequest(response, args) {
         let filePath = path.resolve(args.source.path);
         let lines = args.lines || [];
-        log('Breakpoint at ' + lines);
+        log('Breakpoint: Breakpoint at ' + lines);
 
         if (!fs.existsSync(filePath)) {
-            log('file path does not exist for ' + filePath);
+            log('Breakpoint: file path does not exist for ' + filePath);
             response.body = { breakpoints: [] };
             this.sendResponse(response);
             return;
@@ -245,10 +274,10 @@ class pyDebugSe extends LoggingDebugSession {
                 lines: lines
             }) + '\n';
 
-            log('Sending to Python: ' + loc.trim());
+            log('Breakpoint: Sending this string to Python: ' + loc.trim());
             this.py_program.stdin.write(loc);
         } else {
-            log('Breakpoint not ready to be implmeted');
+            log('Breakpoint: Breakpoint not ready to be implmeted');
         }
 
         // Report all breakpoints as verified back to VS Code.
@@ -261,7 +290,9 @@ class pyDebugSe extends LoggingDebugSession {
     }
 
     scopesRequest(response, args){  // used to establish globals and local in dap
-        log('fello');
+        log('Scopes: fello');
+        const FrameId = args.frameId;
+        this.activeRuntimeFrameId = this.frameHandles.get(FrameId);
         response.body = {
             scopes: [
                 {name: 'Local', variablesReference: 1, expensive: false},
@@ -274,8 +305,10 @@ class pyDebugSe extends LoggingDebugSession {
 
     async variablesRequest(response, args){  //request variable from dap
         const ref = args.variablesReference; // get if local or global 1,2
+        const frameId = this.activeRuntimeFrameId;
+        
         let scope;
-        log("test var"+ref); 
+        log("variables: test var"+ref); 
         if (ref === 1) {
             scope='locals';
         }
@@ -288,17 +321,16 @@ class pyDebugSe extends LoggingDebugSession {
             this.sendResponse(response);
             return;
         }
-        const variables = await this.getVariablesFromPython(scope); // code that wait for the promise in get variable from python
-        log(variables);
+        const variables = await this.getVariablesFromPython(scope,frameId); // code that wait for the promise in get variable from python
         response.body = { variables};
         this.sendResponse(response);
     }
-    getVariablesFromPython(scope) {
+    getVariablesFromPython(scope, frameid) {
         const requestId = ++this.requestSeq; // put id in a request to not overlap
-        log(`Requesting variables for scope: ${scope}, requestId: ${requestId}`);
+        log(`variables_py: Requesting variables for scope: ${scope}, requestId: ${requestId}`);
         return new Promise((resolve,reject) => {  //put process in a promise which willrequest info from run time
             this.pendingResponses.set(requestId, resolve); //store the order to not overlap
-            const message = JSON.stringify({ command: "variables", scope, requestId }) + "\n";
+            const message = JSON.stringify({ command: "variables", scope, requestId, frameId:frameid }) + "\n";
             const success = this.py_program.stdin.write(message); // send to runtime
             if(!success){
                 this.pendingResponses.delete(requestId);
@@ -328,25 +360,63 @@ class pyDebugSe extends LoggingDebugSession {
      * This still gives the user enough information to see where execution stopped.
      */
     stackTraceRequest(response, args) {
-        log('Stack trace request');
+        log('Stack: Stack trace request');
+        const frames = [];
+        this.frameHandles.clear();
+        this.nextFrameId = 1;
+        if(this.stackFrames.length === 0){
+            response.body = { stackFrames: [], totalFrames: 0 };
+            this.sendResponse(response);
+            return;
+        }
+        for (let i = 0; i < this.stackFrames.length; i++) {
+            const currentFrame = this.stackFrames[i];
 
-        const frames = [
-            new StackFrame(
-                1, // frame id
-                `line ${this.currentLine}`, // frame name shown in UI
-                new Source(path.basename(this.currentFile), this.currentFile), // source file
-                this.currentLine, // line number
-                1 // column (start of line)
-            )
-        ];
+            const currentFrameId = this.nextFrameId++;
+            this.frameHandles.set(currentFrameId, currentFrame.id); 
+            frames.push(
+                new StackFrame(
+                    currentFrameId,
+                    currentFrame.name, // frame id
+                    //`line ${this.currentLine}`, // frame name shown in UI
+                    new Source(path.basename(currentFrame.file), currentFrame.file), // source file
+                    Number(currentFrame.line) || 1, // line number
+                    currentFrame.column || 1 // column (start of line)
+                )
+            );
+        }
 
         response.body = {
             stackFrames: frames,
-            totalFrames: 1
+            totalFrames: frames.length
         };
         this.sendResponse(response);
     }
 
+
+async evaluateRequest(response, args) {
+    log("EVAL")
+    const expression = args.expression;
+    const runtimeFrameId = this.frameHandles.get(args.frameId);
+    log("EVAL"+expression)
+    log("eval"+runtimeFrameId)
+    const requestId = ++this.requestSeq;
+
+    this.pendingResponses.set(requestId, (result) => {
+        response.body = {
+            result: String(result.result),
+            variablesReference: result.variablesReference || 0
+        };
+        this.sendResponse(response);
+    });
+
+    this.py_program.stdin.write(JSON.stringify({
+        command: "evaluate",
+        expression: expression,
+        frameId: runtimeFrameId,   // MUST be camelCase
+        requestId: requestId       // MUST be camelCase
+    }) + "\n");
+}
     /**
      * Handle "continue" request from VS Code.
      *
