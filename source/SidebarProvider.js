@@ -1,9 +1,14 @@
 const vscode = require('vscode');
-
 class SidebarProvider {
   constructor(extensionUri) {
     this.extensionUri = extensionUri;
+    this._onHoverToggle = null; // Storage for the callback
   }
+
+setHoverToggleCallback(callback) {
+    this._onHoverToggle = callback;
+  }
+
 
   resolveWebviewView(webviewView) {
     this._view = webviewView;
@@ -86,12 +91,29 @@ class SidebarProvider {
   <h2>ASEJE Sidebar</h2>
   <p class="desc">Beginner-friendly tools and quick actions.</p>
 
+<label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+    <input type="checkbox" id="hoverToggle" /> 
+    <span style="margin-left: 8px;">Enable Hover Hints</span>
+  </label>
+  <hr/>
+
+
+
   <input type="text" id="search" placeholder="Search\u2026" />
   <ul id="results"></ul>
 
   <script nonce="${nonce}">
     (function () {
       const vscodeApi = acquireVsCodeApi();
+
+      const hoverToggle = document.getElementById("hoverToggle");
+      hoverToggle.addEventListener("change", (e) => {
+        vscodeApi.postMessage({ 
+          command: "toggleHover", 
+          value: e.target.checked 
+        });
+      });
+
 
       const items = [
         { label: "Walkthrough",     cmd: "aseje.showWalkthrough" },
@@ -143,6 +165,14 @@ class SidebarProvider {
       if (message.command === 'runCommand' && message.value) {
         vscode.commands.executeCommand(message.value);
       }
+
+
+  else if (message.command === 'toggleHover') {
+        if (this._onHoverToggle) {
+          this._onHoverToggle(message.value);
+        }
+      }
+
     });
   }
 }
