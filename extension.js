@@ -8,14 +8,16 @@ const { registerUIHelperCommands, showGuidedWalkthrough } = require('./source/UI
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
 const { stepsOne } = require('./source/steps');
-const { registerPythonHoverProvider } = require('./source/pythonHoverProvider');
+
+const { registerPythonHoverProvider, setHoverStatus } = require('./source/pythonHoverProvider');
 const { SidebarProvider} = require('./source/SidebarProvider')
+const { registerDebugSuite } = require('./source/DebugSuite');
+
 
 const path = require('path');
 const fs = require('fs');
 // Variable to track the current mode state (kept here for possible future use).
 // let isBeginnerMode = false;
-const { registerDebugSuite } = require('./source/DebugSuite');
 
 /**
  * Entry point for the ASEJE extension.
@@ -69,6 +71,13 @@ function activate(context) {
    * Creates a new starter project using the templates from TemplateLibrary.
    * This gives new programmers a ready-to-use workspace with example code.
    */
+
+sidebarProvider.setHoverToggleCallback((value) => {
+          setHoverStatus(value); 
+          vscode.window.showInformationMessage(`Aseje Hover Help is now ${value ? 'Enabled' : 'Disabled'}`);
+});
+
+
   const templateDisposable = vscode.commands.registerCommand(
     'aseje.createStarterProject',
     () => {
@@ -82,6 +91,8 @@ function activate(context) {
    * Simple command used as a sanity check to confirm that the extension has
    * been activated and commands are successfully registered.
    */
+
+
   const helloWorldDisposable = vscode.commands.registerCommand(
     'aseje.helloWorld',
     () => {
