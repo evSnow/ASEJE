@@ -1,5 +1,7 @@
 const vscode = require("vscode");
 
+let isHoverEnabled = false; //Defaulted to off
+
 const pythonDocs = {
   "print": "Displays the specified message to the screen or other standard output device.",
   "input": "Allows the user to enter data. Returns the input as a string.",
@@ -11,9 +13,16 @@ const pythonDocs = {
   "while": "A loop that continues as long as a specified condition is true."
 };
 
+
+function setHoverStatus(status) {
+    isHoverEnabled = status;
+}
+
 function registerPythonHoverProvider(context) {
   const provider = vscode.languages.registerHoverProvider("python", {
     provideHover(document, position) {
+
+     if (!isHoverEnabled) return null; 
 
       const diagnostics = vscode.languages.getDiagnostics(document.uri);
       const atPos = diagnostics.filter(d => d.range.contains(position));
@@ -175,4 +184,4 @@ function escapeInlineCode(text) {
   return String(text).replace(/`/g, "\\`");
 }
 
-module.exports = { registerPythonHoverProvider };
+module.exports = { registerPythonHoverProvider, setHoverStatus };
