@@ -168,8 +168,10 @@ class PyRuntime(bdb.Bdb):
         if frame is None:
             result = "no frame"
         else:
-            result = eval(expression, frame.f_globals, frame.f_locals) #calculate data
-
+            try:
+                result = eval(expression, frame.f_globals, frame.f_locals) #calculate data
+            except NameError:
+                result = "<not defined>"
         print(json.dumps({ 
             "event": "evaluate",
             "requestId": request_id,
