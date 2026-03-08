@@ -13,6 +13,8 @@ const { registerPythonHoverProvider, setHoverStatus } = require('./source/python
 const { SidebarProvider} = require('./source/SidebarProvider')
 const { registerDebugSuite } = require('./source/DebugSuite');
 
+const { registerReferenceCommands } = require('./source/Reference');
+
 
 const path = require('path');
 const fs = require('fs');
@@ -57,6 +59,7 @@ function activate(context) {
 
   registerPythonHoverProvider(context);
 
+  registerReferenceCommands(context);
 
  const sidebarProvider = new SidebarProvider(context.extensionUri);
   context.subscriptions.push(

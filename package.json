@@ -51,7 +51,8 @@
       },
       { "command": "aseje.addBreakpointNote", "title": "$(note) Add Breakpoint Note (ASEJE)" },
       { "command": "aseje.insertAutoComment", "title": "$(comment) Insert Auto Comment (ASEJE)" },
-      { "command": "aseje.incrementBreakpointHit", "title": "Increment Breakpoint Hit (Debug Test)" }
+      { "command": "aseje.incrementBreakpointHit", "title": "Increment Breakpoint Hit (Debug Test)" },
+      { "command": "aseje.reference", "title": "Open python escape sequence reference" }
     ],
 
     "menus": {
