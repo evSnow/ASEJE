@@ -178,6 +178,9 @@ class PyRuntime(bdb.Bdb):
             "result": repr(result),
             "variablesReference": 0
         }), flush=True)
+        
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(json.dumps({"event": "error", "message": "No target file entered"}), flush=True)  # check if target exist if not send to dap
@@ -190,6 +193,9 @@ if __name__ == "__main__":
         sys.exit(1)
     #print('before run')
     dbg = PyRuntime(target)  # creat class to store the file
+
+    dbg.set_break(target, 1)  
+
     dbg.set_trace()  #turn one the line by line 
     try:
         with open(target) as f:

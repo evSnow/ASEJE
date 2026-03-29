@@ -27,10 +27,12 @@ const Logs = path.join(__dirname, '..', 'logs');
 // Ensure the logs directory exists.
 if (!fs.existsSync(Logs)) {
     fs.mkdirSync(Logs, { recursive: true });
+    
 }
 
 // Main log file for this debug adapter.
 const starterLog = path.join(Logs, 'starter.log');
+fs.writeFileSync(starterLog, '');
 
 /**
  * Append a message to the starter log.
@@ -80,6 +82,7 @@ class pyDebugSe extends LoggingDebugSession {
         this.frameHandles = new Map();
         this.requestSeq = 0;
         this.pendingResponses = new Map();  //scope
+        this.done=false;
         log('Constructor initialized');
     }
 
@@ -111,6 +114,10 @@ class pyDebugSe extends LoggingDebugSession {
      */
     configurationDoneRequest(response, args) {
         log('Configuration done');
+        this.done=true
+        this.py_program.stdin.write(
+            JSON.stringify({ command: 'continue' }) + '\n'
+        );
         this.sendResponse(response);
     }
 
@@ -186,17 +193,19 @@ class pyDebugSe extends LoggingDebugSession {
                     const current = JSON.parse(data);
                     log("Launch: hffi");
                     if (current.event === 'stopped') {
+                        if (!this.done) {
+                            log("IGNORING EARLY STOP");
+                            return;
+                        }
+
+
                         this.currentLine = current.line;
                         this.stackFrames = current.stack || [];
-                        this.nextFrameId = 1;
+                        this.nextFrameId = current.nextFrameId || 1;
                         let reason = current.reason || 'step';
                         log('Launch: line:' + this.currentLine + ' reason: ' + reason);
                         this.sendEvent(new StoppedEvent(reason, this.THREAD_ID));
 
-                    } else if (current.event === 'breakpoint') {
-                        this.currentLine = current.line;
-                        log('Launch: Breakpoint hit: ' + this.currentLine);
-                        this.sendEvent(new StoppedEvent('breakpoint', this.THREAD_ID));
                     } else if (current.event === 'terminated') {
                         log('Launch: Program terminated');
                         this.sendEvent(new TerminatedEvent());
