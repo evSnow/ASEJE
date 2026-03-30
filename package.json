@@ -54,18 +54,18 @@
           "description": "Debug events that should trigger ASEJE audio notifications."
         }
       }
-    },
-      
+    },      
+      "commands": [
       {  "command": "aseje.helloWorld", "title": "Hello World" },
       { "command": "aseje.textSetting", "title": "text Setting" },
       { "command": "aseje.stepOne", "title": "step one" },
       { "command": "aseje.textChange", "title": "textChange" },
       {"command": "audio.playSound", "title": "Play Sound"},
-      {
-        "command": "aseje.toggleBeginnerMode",
+      {"command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
         "category": "ASEJE"
-      },
+    },
+
       {
         "command": "aseje.showWalkthrough",
         "title": "$(book) Start ASEJE Guided Walkthrough",
