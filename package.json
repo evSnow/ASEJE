@@ -13,7 +13,7 @@
   "activationEvents": [
     "onStartupFinished",
     "onDebug:python_D",
-    "onLanguage:python",
+    "onLanguage:python"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -148,7 +148,7 @@
       ]
     },
 
-    "walkthroughs": [
+   "walkthroughs": [
   {
     "id": "aseje.myFirstWalkthrough",
     "title": "Start Coding with ASEJE",
@@ -158,14 +158,14 @@
         "id": "aseje.walkthrough.step1.intro",
         "title": "Welcome to Simplified Coding",
         "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI.",
-        "media": { "image": "media/welcome.png", "alt": "ASEJE Welcome Screen" }, // Added inside step
+        "media": { "image": "media/welcome.png", "altText": "ASEJE Welcome Screen" },
         "completionEvents": ["onCommand:aseje.toggleBeginnerMode"]
       },
       {
         "id": "aseje.walkthrough.step2.project",
         "title": "Create Your First Project",
         "description": "Click the 'Create Starter Project' command below to begin a sample file.",
-        "media": { "image": "media/welcome.png", "alt": "ASEJE Welcome Screen" }, // Added inside step
+        "media": { "image": "media/welcome.png", "altText": "ASEJE Welcome Screen" },
         "command": "aseje.createStarterProject",
         "completionEvents": ["onCommand:aseje.createStarterProject"]
       }
