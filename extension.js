@@ -54,6 +54,7 @@ function activate(context) {
   // Register the first lesson / set of steps for our learning flow.
   stepsOne(context);
   registerAudioNotifier(context);
+  console.log("testt");
   registerDebugSuite(context);
 
   registerPythonHoverProvider(context);
@@ -94,18 +95,10 @@ sidebarProvider.setHoverToggleCallback((value) => {
    * been activated and commands are successfully registered.
    */
 
-
-  const helloWorldDisposable = vscode.commands.registerCommand(
-    'aseje.helloWorld',
-    () => {
-      vscode.window.showInformationMessage('Hello World from ASEJE!');
-    }
-  );
-
-
-  const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
-    toggleUI(context); 
-  });
+  console.log("testtt");
+  //const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
+  //  toggleUI(context); 
+  //});
 
 
   console.log('before');
@@ -119,6 +112,7 @@ sidebarProvider.setHoverToggleCallback((value) => {
    *
    * @type {vscode.DebugAdapterDescriptorFactory}
    */
+  console.log("testt");
   const factory = {
     /**
      * Create and return a debug adapter descriptor.
