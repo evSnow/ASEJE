@@ -14,8 +14,6 @@
     "onStartupFinished",
     "onDebug:python_D",
     "onLanguage:python",
-    "onCommand:audio.playSound",
-    "onView:aseje.sidebarView"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -136,7 +134,7 @@
         {
           "id": "asejeSidebar",
           "title": "ASEJE",
-          "icon": "$(lightbulb)"
+          "icon": "media/icon.svg"
         }
       ]
     },
@@ -151,29 +149,30 @@
     },
 
     "walkthroughs": [
+  {
+    "id": "aseje.myFirstWalkthrough",
+    "title": "Start Coding with ASEJE",
+    "description": "Your guided tour to a simpler VS Code experience.",
+    "steps": [
       {
-        "id": "aseje.myFirstWalkthrough",
-        "title": "Start Coding with ASEJE",
-        "description": "Your guided tour to a simpler VS Code experience.",
-        "steps": [
-          {
-            "id": "aseje.walkthrough.step1.intro",
-            "title": "Welcome to Simplified Coding",
-            "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI. You can link to a Markdown file here.",
-            "completionEvents": ["onCommand:aseje.toggleBeginnerMode"]
-          },
-          {
-            "id": "aseje.walkthrough.step2.project",
-            "title": "Create Your First Project",
-            "description": "Click the 'Create Starter Project' command below to begin a sample file.",
-            "command": "aseje.createStarterProject",
-            "completionEvents": ["onCommand:aseje.createStarterProject"]
-          }
-        ]
+        "id": "aseje.walkthrough.step1.intro",
+        "title": "Welcome to Simplified Coding",
+        "description": "This is the first step. Explain why VS Code is overwhelming and how ASEJE simplifies the UI.",
+        "media": { "image": "media/welcome.png", "alt": "ASEJE Welcome Screen" }, // Added inside step
+        "completionEvents": ["onCommand:aseje.toggleBeginnerMode"]
+      },
+      {
+        "id": "aseje.walkthrough.step2.project",
+        "title": "Create Your First Project",
+        "description": "Click the 'Create Starter Project' command below to begin a sample file.",
+        "media": { "image": "media/welcome.png", "alt": "ASEJE Welcome Screen" }, // Added inside step
+        "command": "aseje.createStarterProject",
+        "completionEvents": ["onCommand:aseje.createStarterProject"]
       }
     ]
+  }
+]
   },
-
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
