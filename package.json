@@ -26,12 +26,37 @@
           "type": "number",
           "default": 14,
           "description": "The font size used in both setting and terminal"
+      },
+        "aseje.audio.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable ASEJE audio notifications during debugging."
+        },
+        "aseje.audio.volume": {
+          "type": "number",
+          "default": 0.45,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Volume for ASEJE debug sounds from 0.0 to 1.0."
+        },
+        "aseje.audio.source": {
+          "type": "string",
+          "default": "media/beep.wav",
+          "description": "Relative path inside the extension to the sound file ASEJE should play."
+        },
+        "aseje.audio.events": {
+          "type": "array",
+          "default": ["start", "breakpoint", "exception", "terminate"],
+          "items": {
+            "type": "string",
+            "enum": ["start", "breakpoint", "exception", "step", "pause", "terminate"]
+          },
+          "description": "Debug events that should trigger ASEJE audio notifications."
         }
       }
     },
-
-    "commands": [
-      { "command": "aseje.helloWorld", "title": "Hello World" },
+      
+      {  "command": "aseje.helloWorld", "title": "Hello World" },
       { "command": "aseje.textSetting", "title": "text Setting" },
       { "command": "aseje.stepOne", "title": "step one" },
       { "command": "aseje.textChange", "title": "textChange" },

@@ -7,10 +7,8 @@ const { registerTextSetting } = require('./source/TextSetting');
 const { registerUIHelperCommands, showGuidedWalkthrough } = require('./source/UIHelper');
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
-const { stepsOne } = require('./source/steps');
-const {playSound} = require('./source/audioTrigger')
-
-const { registerPythonHoverProvider, setHoverStatus } = require('./source/pythonHoverProvider');
+const { stepsOne } = require('./source/steps);
+const {registerAudioNotifier } = require('./source/audioTrigger');
 const { SidebarProvider} = require('./source/SidebarProvider')
 const { registerDebugSuite } = require('./source/DebugSuite');
 
@@ -55,10 +53,7 @@ function activate(context) {
 
   // Register the first lesson / set of steps for our learning flow.
   stepsOne(context);
-  const audioDis = vscode.commands.registerCommand('audio.playSound',() =>{
-    playSound(context)
-  });
-  context.subscriptions.push(audioDis);
+  registerAudioNotifier(context);
   registerDebugSuite(context);
 
   registerPythonHoverProvider(context);
