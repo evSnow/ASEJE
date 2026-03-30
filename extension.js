@@ -7,11 +7,12 @@ const { registerTextSetting } = require('./source/TextSetting');
 const { registerUIHelperCommands, showGuidedWalkthrough } = require('./source/UIHelper');
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
-const { stepsOne } = require('./source/steps);
+const { stepsOne } = require('./source/steps');
 const {registerAudioNotifier } = require('./source/audioTrigger');
-const { SidebarProvider} = require('./source/SidebarProvider')
+const { SidebarProvider} = require('./source/SidebarProvider');
 const { registerDebugSuite } = require('./source/DebugSuite');
-
+const { registerPythonHoverProvider } = require('./source/HoverProvider');
+const { setHoverStatus } = require('./source/HoverProvider');
 const { registerReferenceCommands } = require('./source/Reference');
 
 
@@ -102,6 +103,12 @@ sidebarProvider.setHoverToggleCallback((value) => {
     }
   );
 
+
+  const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
+    toggleUI(context); 
+  });
+
+
   console.log('before');
 
   /**
@@ -158,7 +165,8 @@ sidebarProvider.setHoverToggleCallback((value) => {
 
   context.subscriptions.push(
     templateDisposable,
-    helloWorldDisposable
+    helloWorldDisposable,
+    toggleModeDisposable
   );
 
   // Log any time a debug session starts. This is helpful for understanding
