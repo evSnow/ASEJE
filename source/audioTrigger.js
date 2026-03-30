@@ -236,6 +236,10 @@ class AudioNotifier {
             try {
                 player.currentTime = 0;
                 await player.play();
+                setTimeout(() => {
+                    player.pause();
+                    player.currentTime = 0;
+                }, 1000);
                 status.textContent = message.label || 'Playing';
             } catch (error) {
                 queuedEvent = message;
