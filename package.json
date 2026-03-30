@@ -134,7 +134,7 @@
         {
           "id": "asejeSidebar",
           "title": "ASEJE",
-          "icon": "media/icon.svg"
+          "icon": "$(lightbulb)"
         }
       ]
     },
