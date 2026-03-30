@@ -12,7 +12,7 @@ const {registerAudioNotifier } = require('./source/audioTrigger');
 const { SidebarProvider} = require('./source/SidebarProvider');
 const { registerDebugSuite } = require('./source/DebugSuite');
 const { registerPythonHoverProvider } = require('./source/HoverProvider');
-const { setHoverStatus } = require('./source/HoverProvider');
+const { setHoverStatus } = require('./source/pythonHoverProvider');
 const { registerReferenceCommands } = require('./source/Reference');
 
 
