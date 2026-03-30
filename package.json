@@ -14,6 +14,7 @@
     "onStartupFinished",
     "onDebug:python_D",
     "onLanguage:python",
+    "onCommand:audio.playSound",
     "onView:aseje.sidebarView"
   ],
   "main": "./extension.js",
@@ -34,6 +35,7 @@
       { "command": "aseje.textSetting", "title": "text Setting" },
       { "command": "aseje.stepOne", "title": "step one" },
       { "command": "aseje.textChange", "title": "textChange" },
+      {"command": "audio.playSound", "title": "Play Sound"},
       {
         "command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
