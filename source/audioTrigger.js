@@ -108,7 +108,7 @@ class AudioNotifier {
         this.panel = vscode.window.createWebviewPanel(
             AUDIO_VIEW_TYPE,
             'ASEJE Audio Service',
-            { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
+            { viewColumn: vscode.ViewColumn.Three, preserveFocus: true },
             {
                 enableScripts: true,
                 retainContextWhenHidden: true,
