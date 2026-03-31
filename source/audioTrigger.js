@@ -57,30 +57,32 @@ class AudioNotifier {
         });
 
         const debugStart = vscode.debug.onDidStartDebugSession(async () => {
-            await this.play('start');
+            a=null;
         });
 
         const debugEnd = vscode.debug.onDidTerminateDebugSession(async () => {
             await this.play('terminate');
         });
 
-        const debugCustom = vscode.debug.onDidReceiveDebugSessionCustomEvent(async event => {
-            if (!event || !event.event) {
-                return;
-            }
+        const debugCustom = vscode.debug.registerDebugAdapterTrackerFactory('*', {
+            createDebugAdapterTracker: () => ({
+                onDidSendMessage: async (message) => {
+                    if (message.type !== 'event') return;
 
-            if (event.event === 'stopped') {
-                const reason = event.body?.reason || 'pause';
-                if (reason === 'breakpoint') {
-                    await this.play('breakpoint');
-                } else if (reason === 'exception') {
-                    await this.play('exception');
-                } else {
-                    await this.play('step');
+                    if (message.event === 'stopped') {
+                        const reason = message.body?.reason || 'pause';
+                        if (reason === 'breakpoint') {
+                            await this.play('breakpoint');
+                        } else if (reason === 'exception') {
+                            await this.play('exception');
+                        } else {
+                            await this.play('step');
+                        }
+                    } else if (message.event === 'terminated') {
+                        await this.play('terminate');
+                    }
                 }
-            } else if (event.event === 'terminated') {
-                await this.play('terminate');
-            }
+            })
         });
 
         const configWatcher = vscode.workspace.onDidChangeConfiguration(event => {
