@@ -119,7 +119,8 @@ setHoverToggleCallback(callback) {
         { label: "Walkthrough",     cmd: "aseje.showWalkthrough" },
         { label: "Beginner Mode",   cmd: "aseje.toggleBeginnerMode" },
         { label: "Starter Project", cmd: "aseje.createStarterProject" },
-        { label: "Reference",     cmd: "aseje.reference" }
+        { label: "Reference",     cmd: "aseje.reference" },
+        { label: "Soundtest",     cmd: "audio.playSound" }
       ];
 
       const searchEl  = document.getElementById("search");
