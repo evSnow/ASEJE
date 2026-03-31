@@ -1,4 +1,7 @@
 const vscode = require('vscode');
+const path = require('path');
+
+const sidebarItems = require('./sidebar-data');
 class SidebarProvider {
   constructor(extensionUri) {
     this.extensionUri = extensionUri;
@@ -16,6 +19,8 @@ setHoverToggleCallback(callback) {
     webviewView.webview.options = { enableScripts: true };
 
     const nonce = getNonce();
+    const itemsJson = JSON.stringify(sidebarItems);
+
 
     webviewView.webview.html = `
 <!doctype html>
@@ -105,7 +110,9 @@ setHoverToggleCallback(callback) {
   <script nonce="${nonce}">
     (function () {
       const vscodeApi = acquireVsCodeApi();
-
+      const items = ${itemsJson};
+      
+      
       const hoverToggle = document.getElementById("hoverToggle");
       hoverToggle.addEventListener("change", (e) => {
         vscodeApi.postMessage({ 
@@ -115,44 +122,51 @@ setHoverToggleCallback(callback) {
       });
 
 
-      const items = [
-        { label: "Walkthrough",     cmd: "aseje.showWalkthrough" },
-        { label: "Beginner Mode",   cmd: "aseje.toggleBeginnerMode" },
-        { label: "Starter Project", cmd: "aseje.createStarterProject" },
-        { label: "Reference",     cmd: "aseje.reference" },
-        { label: "Soundtest",     cmd: "audio.playSound" }
-      ];
 
-      const searchEl  = document.getElementById("search");
-      const resultsEl = document.getElementById("results");
+
+      const searchElement  = document.getElementById("search");
+      const resultsElement = document.getElementById("results");
 
       function render(filter) {
         const query = (filter || "").toLowerCase();
-        const matched = items.filter(i => i.label.toLowerCase().includes(query));
-
-        resultsEl.innerHTML = "";
+        
+        const matched = items.filter(i => {
+          const text = (
+            (i.title || "") + " " +
+            (i.description || "") + " " +
+            (i.keywords || []).join(" ")
+          ).toLowerCase();
+          return text.includes(query);
+        });
+        resultsElement.innerHTML = "";
 
         if (matched.length === 0) {
-          const li = document.createElement("li");
-          li.className = "no-results";
-          li.textContent = "No results found.";
-          resultsEl.appendChild(li);
+          const list = document.createElement("li");
+          list.textContent = "No results found for search terms";
+          resultsElement.append(list);
           return;
         }
 
         matched.forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = item.label;
-          li.addEventListener("click", () => {
-            if (item.cmd) {
-              vscodeApi.postMessage({ command: "runCommand", value: item.cmd });
-            }
+          const list = document.createElement("li");
+
+          const title = document.createElement("div");
+          title.textContent = item.title;
+
+          const desc = document.createElement("div");
+          desc.textContent = item.description;
+
+          list.append(title,desc);
+
+          list.addEventListener("click", () => {
+            console.log("running");
+              vscodeApi.postMessage({ command: "runCommand", value: item.action });
           });
-          resultsEl.appendChild(li);
+          resultsElement.append(list);
         });
       }
 
-      searchEl.addEventListener("input", () => render(searchEl.value));
+      searchElement.addEventListener("input", () => render(searchElement.value));
 
       // Show all items on initial load.
       render("");
@@ -161,10 +175,22 @@ setHoverToggleCallback(callback) {
 </body>
 </html>`;
 
+
+const actionList = {
+  showReference: "aseje.reference",
+  openDebugHelp: "aseje.showDebugHelp",
+  toggleBeginnerMode: "aseje.toggleBeginnerMode",
+  createStarterProject: "aseje.createStarterProject",
+  openMediaTools: "aseje.openMediaTools",
+  openHelpCenter: "aseje.openHelpCenter",
+  showWalkthrough: "aseje.showWalkthrough",
+  playSound: "audio.playSound"
+};
     // Listen for messages sent from the webview script.
     webviewView.webview.onDidReceiveMessage(message => {
       if (message.command === 'runCommand' && message.value) {
-        vscode.commands.executeCommand(message.value);
+        const comman = actionList[message.value] || message.value;
+        vscode.commands.executeCommand(comman);
       }
 
 

@@ -7,6 +7,7 @@ const sidebarItems = [
     action: "showReference",
     keywords: ["python", "escape", "characters", "strings"]
   },
+  /*
   {
     id: "debugging",
     title: "VS Code Debugging",
@@ -15,6 +16,7 @@ const sidebarItems = [
     action: "openDebugHelp",
     keywords: ["debug", "vscode", "breakpoints", "troubleshooting"]
   },
+  */
   {
     id: "beginner-mode",
     title: "Beginner Mode",
@@ -32,6 +34,19 @@ const sidebarItems = [
     keywords: ["starter", "project", "template", "setup"]
   },
   {
+    title: "Walkthrough",
+    description: "Open extension walkthrough and main page",
+    action: "showWalkthrough",
+    keywords: ["walkthrough", "guide", "start"]
+  },
+  {
+    title: "Open audio player",
+    description: "Play notification sound after hitting a breakpoint",
+    action: "playSound",
+    keywords: ["sound", "audio", "player"]
+  }
+  /*
+  {
     id: "media-tools",
     title: "MP4 Media Tools",
     description: "Upload and validate MP4 files securely in the sidebar",
@@ -47,6 +62,7 @@ const sidebarItems = [
     action: "openHelpCenter",
     keywords: ["help", "faq", "support", "activity"]
   }
+    */
 ];
 
 module.exports = sidebarItems;
