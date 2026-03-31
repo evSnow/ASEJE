@@ -11,16 +11,131 @@ class SidebarProvider {
     };
 
     webviewView.webview.html = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <body style="padding:10px;">
-        <h3>ASEJE Sidebar</h3>
-        <p>Sidebar loaded successfully </p>
-        <button onclick="alert('ASEJE Button Clicked')">
-          Test Button
-        </button>
-      </body>
-      </html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          padding: 10px;
+        }
+
+        h3 {
+          margin-bottom: 10px;
+        }
+
+        .search {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 10px;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+        }
+
+        .menu {
+          display: flex;
+          gap: 6px;
+          margin-bottom: 10px;
+        }
+
+        .menu button {
+          flex: 1;
+          padding: 6px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          background: #007acc;
+          color: white;
+        }
+
+        .menu button:hover {
+          background: #005f99;
+        }
+
+        .card {
+          padding: 10px;
+          border-radius: 8px;
+          background: #f3f3f3;
+          margin-bottom: 10px;
+        }
+
+        .hidden {
+          display: none;
+        }
+
+        .result {
+          font-size: 13px;
+          margin-top: 5px;
+        }
+      </style>
+    </head>
+
+    <body>
+
+      <h3>ASEJE Dashboard</h3>
+
+      <input id="searchInput" class="search" placeholder="Search anything..." />
+
+      <div class="menu">
+        <button onclick="showPanel('home')">Home</button>
+        <button onclick="showPanel('tools')">Tools</button>
+        <button onclick="showPanel('debug')">Debug</button>
+      </div>
+
+      <div id="home" class="panel">
+        <div class="card">
+          <b>Welcome</b>
+          <p>This is your ASEJE sidebar dashboard.</p>
+        </div>
+      </div>
+
+      <div id="tools" class="panel hidden">
+        <div class="card">
+          <b>Quick Tools</b>
+          <button onclick="runTool()">Run Tool</button>
+          <p id="toolResult" class="result"></p>
+        </div>
+      </div>
+
+      <div id="debug" class="panel hidden">
+        <div class="card">
+          <b>Debug Info</b>
+          <button onclick="checkDebug()">Check Status</button>
+          <p id="debugResult" class="result"></p>
+        </div>
+      </div>
+
+      <script>
+        const searchInput = document.getElementById("searchInput");
+
+        function showPanel(panelId) {
+          document.querySelectorAll(".panel").forEach(p => {
+            p.classList.add("hidden");
+          });
+
+          document.getElementById(panelId).classList.remove("hidden");
+        }
+
+        searchInput.addEventListener("input", () => {
+          const value = searchInput.value.toLowerCase();
+
+          document.querySelectorAll(".card").forEach(card => {
+            const text = card.innerText.toLowerCase();
+            card.style.display = text.includes(value) ? "block" : "none";
+          });
+        });
+
+        function runTool() {
+          document.getElementById("toolResult").textContent = "Tool executed successfully!";
+        }
+
+        function checkDebug() {
+          document.getElementById("debugResult").textContent = "No errors detected.";
+        }
+      </script>
+
+    </body>
+    </html>
     `;
   }
 }
