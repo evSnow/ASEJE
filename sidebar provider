@@ -67,6 +67,17 @@ class SidebarProvider {
           font-size: 13px;
           margin-top: 5px;
         }
+
+        .faq-answer {
+          display: none;
+          font-size: 13px;
+          margin-top: 5px;
+        }
+
+        .log {
+          font-size: 12px;
+          margin-top: 5px;
+        }
       </style>
     </head>
 
@@ -80,6 +91,7 @@ class SidebarProvider {
         <button onclick="showPanel('home')">Home</button>
         <button onclick="showPanel('tools')">Tools</button>
         <button onclick="showPanel('debug')">Debug</button>
+        <button onclick="showPanel('help')">Help</button>
       </div>
 
       <div id="home" class="panel">
@@ -105,8 +117,39 @@ class SidebarProvider {
         </div>
       </div>
 
+      <!-- NEW HELP PANEL -->
+      <div id="help" class="panel hidden">
+        <div class="card">
+          <b>FAQ</b><br><br>
+
+          <button onclick="toggleFAQ(0)">What is this extension?</button>
+          <div class="faq-answer">This extension helps beginners understand coding tools.</div>
+
+          <button onclick="toggleFAQ(1)">How do I use tools?</button>
+          <div class="faq-answer">Click the tools tab and run available actions.</div>
+
+          <button onclick="toggleFAQ(2)">Is MP4 supported?</button>
+          <div class="faq-answer">Yes, only MP4 files are supported for safety.</div>
+        </div>
+
+        <div class="card">
+          <b>Recent Activity</b>
+          <div id="activityLog" class="log">No activity yet.</div>
+        </div>
+      </div>
+
       <script>
         const searchInput = document.getElementById("searchInput");
+        let activity = [];
+
+        function logAction(text) {
+          const time = new Date().toLocaleTimeString();
+          activity.unshift(time + " - " + text);
+          activity = activity.slice(0, 5);
+
+          document.getElementById("activityLog").innerHTML =
+            activity.join("<br>");
+        }
 
         function showPanel(panelId) {
           document.querySelectorAll(".panel").forEach(p => {
@@ -114,6 +157,7 @@ class SidebarProvider {
           });
 
           document.getElementById(panelId).classList.remove("hidden");
+          logAction("Opened " + panelId + " panel");
         }
 
         searchInput.addEventListener("input", () => {
@@ -127,10 +171,20 @@ class SidebarProvider {
 
         function runTool() {
           document.getElementById("toolResult").textContent = "Tool executed successfully!";
+          logAction("Tool executed");
         }
 
         function checkDebug() {
           document.getElementById("debugResult").textContent = "No errors detected.";
+          logAction("Debug checked");
+        }
+
+        function toggleFAQ(index) {
+          const answers = document.querySelectorAll(".faq-answer");
+          answers[index].style.display =
+            answers[index].style.display === "block" ? "none" : "block";
+
+          logAction("Opened FAQ");
         }
       </script>
 
