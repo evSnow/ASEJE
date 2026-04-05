@@ -3,7 +3,7 @@ const vscode = require('vscode');
 
 const AUDIO_VIEW_TYPE = 'aseje.audioService';
 const DEFAULT_VOLUME = 0.45;
-const FALLBACK_EVENTS = ['start', 'breakpoint', 'exception', 'terminate'];
+const FALLBACK_EVENTS = ['start', 'breakpoint', 'exception', 'terminate', 'change'];
 
 function normalizeAudioConfig() {
     const config = vscode.workspace.getConfiguration('aseje.audio');
@@ -28,6 +28,7 @@ function normalizeAudioConfig() {
     return Math.max(0, Math.min(1, numericValue));
 }
 
+
 function getEventLabel(eventName) {
     const eventLabels = {
         start: 'Debug session started',
@@ -36,7 +37,8 @@ function getEventLabel(eventName) {
         step: 'Execution paused',
         pause: 'Execution paused',
         terminate: 'Debug session ended',
-        preview: 'Preview sound'
+        preview: 'Preview sound',
+        change: 'change sound',
     };
 
     return eventLabels[eventName] || 'ASEJE notification';
@@ -56,8 +58,29 @@ class AudioNotifier {
             vscode.window.showInformationMessage('ASEJE audio preview played.');
         });
 
+    const pickSoundCommand = vscode.commands.registerCommand('audio.pickSound', async () => {
+        const result = await vscode.window.showOpenDialog({
+            canSelectMany: false,
+            filters: {
+                Audio: ['wav', 'WAV', 'mp3', 'MP3', 'ogg', 'OGG', 'mp4', 'MP4']
+            },
+            openLabel: 'Select Sound File'
+        });
+
+        if (!result || result.length === 0) return;
+
+        const filepath = result[0].fsPath;
+
+        await vscode.workspace
+            .getConfiguration('aseje.audio')
+            .update('source', filepath, vscode.ConfigurationTarget.Global);
+
+        vscode.window.showInformationMessage('ASEJE sound updated.');
+
+        await this.play('change', { force: true }); // ✅ play sound immediately
+    });
         const debugStart = vscode.debug.onDidStartDebugSession(async () => {
-            a=null;
+            let a=null;
         });
 
         const debugEnd = vscode.debug.onDidTerminateDebugSession(async () => {
@@ -98,6 +121,7 @@ class AudioNotifier {
             debugEnd,
             debugCustom,
             configWatcher,
+            pickSoundCommand,
             { dispose: () => this.dispose() }
         );
     }
@@ -114,7 +138,10 @@ class AudioNotifier {
             {
                 enableScripts: true,
                 retainContextWhenHidden: true,
-                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'media'))]
+                localResourceRoots: [
+                    vscode.Uri.file(path.join(this.context.extensionPath, 'media')),
+                    vscode.Uri.file(path.dirname(normalizeAudioConfig().source))
+                ]
             }
         );
 
@@ -168,10 +195,15 @@ class AudioNotifier {
     }
 
     getSoundUri(webview, sourceSetting) {
-        const relativePath = sourceSetting && typeof sourceSetting === 'string'
-            ? sourceSetting
-            : 'media/beep.wav';
-        const diskPath = vscode.Uri.file(path.join(this.context.extensionPath, relativePath));
+        let diskPath;
+
+        if (path.isAbsolute(sourceSetting)) {
+            diskPath = vscode.Uri.file(sourceSetting);
+        } else {
+            diskPath = vscode.Uri.file(
+                path.join(this.context.extensionPath, sourceSetting)
+            );
+        }
         return webview.asWebviewUri(diskPath).toString();
     }
 
@@ -238,10 +270,7 @@ class AudioNotifier {
             try {
                 player.currentTime = 0;
                 await player.play();
-                setTimeout(() => {
-                    player.pause();
-                    player.currentTime = 0;
-                }, 1000);
+                
                 status.textContent = message.label || 'Playing';
             } catch (error) {
                 queuedEvent = message;

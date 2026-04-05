@@ -62,7 +62,11 @@
       {"command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
         "category": "ASEJE"
-    },
+      },
+      {
+        "command": "audio.pickSound",
+        "title": "ASEJE: Pick Audio File"
+      },
 
       {
         "command": "aseje.showWalkthrough",
