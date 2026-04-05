@@ -240,8 +240,9 @@ class AudioNotifier {
             font-size: 12px;
             margin-bottom: 12px;
         }
-        h3 {
+        h2 {
             margin: 0 0 8px;
+            color: #007acc;
         }
         p {
             margin: 0;
@@ -252,12 +253,29 @@ class AudioNotifier {
             padding: 2px 4px;
             border-radius: 4px;
         }
+        button {
+            display: inline-block;
+            background: #007acc;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
     </style>
 </head>
 <body>
     <div class="status" id="status">Idle</div>
-    <h3>ASEJE Audio Notifications</h3>
-    <p>This hidden helper panel plays a packaged sound when configured ASEJE debug events occur. Use <code>Play Sound</code> to preview it.</p>
+    <h2>ASEJE Audio Notifications</h2>
+    <p>This hidden helper panel plays a packaged sound when configured ASEJE debug events occur, 
+    be sure this page is open in order for the debug sounds to play. 
+    Use <code>Play Sound</code> to preview it.<br><br>
+    The Change Sound button below will allow you to change the played sound to an audio file of your choice.
+    Make sure the file is either mp3, wav, or m4a and an appropriate length for your use.</p>
     <div style="margin-top:12px;">
         <button id="playButton">Play Sound</button>
         <button id="changeButton">Change Sound</button>
