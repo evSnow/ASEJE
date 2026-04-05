@@ -21,6 +21,8 @@ const fs = require('fs');
 // Variable to track the current mode state (kept here for possible future use).
 // let isBeginnerMode = false;
 
+// Minor comment update for sprint commit
+
 /**
  * Entry point for the ASEJE extension.
  *
@@ -55,7 +57,7 @@ function activate(context) {
   // Register the first lesson / set of steps for our learning flow.
   stepsOne(context);
   registerAudioNotifier(context);
-  console.log("testt");
+  console.log("ASEJE audio notifier loaded");
   registerDebugSuite(context);
 
   registerPythonHoverProvider(context);
@@ -95,13 +97,13 @@ sidebarProvider.setHoverToggleCallback((value) => {
    * been activated and commands are successfully registered.
    */
 
-  console.log("testtt");
+  console.log("ASEJE starter project command registered");
   //const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
   //  toggleUI(context); 
   //});
 
 
-  console.log('before');
+  console.log('Before debug adapter registration');
 
   /**
    * Debug adapter factory for the custom Python debugger.
@@ -112,7 +114,7 @@ sidebarProvider.setHoverToggleCallback((value) => {
    *
    * @type {vscode.DebugAdapterDescriptorFactory}
    */
-  console.log("testt");
+  console.log("Preparing debug adapter factory");
   const factory = {
     /**
      * Create and return a debug adapter descriptor.
@@ -121,7 +123,7 @@ sidebarProvider.setHoverToggleCallback((value) => {
      * @returns {vscode.DebugAdapterExecutable} Executable used as the debug adapter.
      */
     createDebugAdapterDescriptor(_session) {
-      console.log('QQQQQ');
+      console.log('Creating ASEJE debug adapter');
 
       // Build the full path to our debug adapter entry file.
       const adapterPath = path.join(__dirname, 'debugger', 'pyDebuggerStart.js');
@@ -138,7 +140,7 @@ sidebarProvider.setHoverToggleCallback((value) => {
     }
   };
 
-  console.log('After');
+  console.log('After debug adapter setup');
 
   // Register the debug adapter factory for our custom debug type "python_D".
   context.subscriptions.push(
