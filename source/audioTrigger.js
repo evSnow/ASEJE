@@ -16,7 +16,7 @@ function normalizeAudioConfig() {
         enabled: config.get('enabled', true) !== false,
         events: events.length ? events : FALLBACK_EVENTS,
         volume: clampVolume(config.get('volume', DEFAULT_VOLUME)),
-        source: config.get('source', 'media/beep.wav')
+        source: config.get('source', 'media/beep.m4a')
     };
 }
     function clampVolume(value) {
@@ -62,7 +62,7 @@ class AudioNotifier {
         const result = await vscode.window.showOpenDialog({
             canSelectMany: false,
             filters: {
-                Audio: ['wav', 'WAV', 'mp3', 'MP3', 'ogg', 'OGG', 'mp4', 'MP4']
+                Audio: ['wav', 'WAV', 'mp3', 'MP3', 'ogg', 'OGG', 'm4a']
             },
             openLabel: 'Select Sound File'
         });
