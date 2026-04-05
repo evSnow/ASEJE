@@ -62,7 +62,7 @@ class AudioNotifier {
         const result = await vscode.window.showOpenDialog({
             canSelectMany: false,
             filters: {
-                Audio: ['wav', 'WAV', 'mp3', 'MP3', 'ogg', 'OGG', 'm4a']
+                Audio: ['wav', 'WAV', 'mp3', 'MP3', 'm4a']
             },
             openLabel: 'Select Sound File'
         });
