@@ -148,6 +148,15 @@ class AudioNotifier {
         this.panel.onDidDispose(() => {
             this.panel = null;
         });
+        this.panel.webview.onDidReceiveMessage(async (message) => {
+            if (message.command === 'playSound') {
+                await vscode.commands.executeCommand('audio.playSound');
+            }
+
+            if (message.command === 'pickSound') {
+                await vscode.commands.executeCommand('audio.pickSound');
+            }
+        });
 
         this.panel.webview.html = this.getWebviewHtml(this.panel.webview);
         this.syncConfig();
@@ -249,8 +258,14 @@ class AudioNotifier {
     <div class="status" id="status">Idle</div>
     <h3>ASEJE Audio Notifications</h3>
     <p>This hidden helper panel plays a packaged sound when configured ASEJE debug events occur. Use <code>Play Sound</code> to preview it.</p>
+    <div style="margin-top:12px;">
+        <button id="playButton">Play Sound</button>
+        <button id="changeButton">Change Sound</button>
+    </div>
+    
     <audio id="player" preload="auto" src="${soundUri}"></audio>
     <script>
+        const vscodeApi = acquireVsCodeApi();
         const player = document.getElementById('player');
         const status = document.getElementById('status');
         let enabled = true;
@@ -277,7 +292,12 @@ class AudioNotifier {
                 status.textContent = 'Waiting for audio permission';
             }
         }
-
+        document.getElementById('playButton').addEventListener('click', () => {
+            vscodeApi.postMessage({ command: 'playSound' });
+        });
+        document.getElementById('changeButton').addEventListener('click', () => {
+            vscodeApi.postMessage({ command: 'pickSound' });
+        });
         window.addEventListener('click', async () => {
             if (!queuedEvent) {
                 return;
