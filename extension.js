@@ -56,16 +56,19 @@ function activate(context) {
   registerAudioNotifier(context);
   registerDebugSuite(context);
 
+  const savedHoverState = context.globalState.get('aseje.hoverEnabled', false);
+  setHoverStatus(savedHoverState);
+
   registerPythonHoverProvider(context);
 
   registerReferenceCommands(context);
 
- const sidebarProvider = new SidebarProvider(context.extensionUri);
+  const sidebarProvider = new SidebarProvider(context.extensionUri, context);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('aseje.sidebarView', sidebarProvider, {
       webviewOptions: { retainContextWhenHidden: true }
     })
-  ); 
+  );
 
   /**
    * Command: aseje.createStarterProject
