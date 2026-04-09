@@ -3,7 +3,7 @@ const vscode = require('vscode');
 
 const AUDIO_VIEW_TYPE = 'aseje.audioService';
 const DEFAULT_VOLUME = 0.45;
-const FALLBACK_EVENTS = ['start', 'breakpoint', 'exception', 'terminate'];
+const FALLBACK_EVENTS = ['start', 'breakpoint', 'exception', 'terminate', 'change'];
 
 function normalizeAudioConfig() {
     const config = vscode.workspace.getConfiguration('aseje.audio');
@@ -16,7 +16,7 @@ function normalizeAudioConfig() {
         enabled: config.get('enabled', true) !== false,
         events: events.length ? events : FALLBACK_EVENTS,
         volume: clampVolume(config.get('volume', DEFAULT_VOLUME)),
-        source: config.get('source', 'media/beep.wav')
+        source: config.get('source', 'media/beep.m4a')
     };
 }
     function clampVolume(value) {
@@ -28,6 +28,7 @@ function normalizeAudioConfig() {
     return Math.max(0, Math.min(1, numericValue));
 }
 
+
 function getEventLabel(eventName) {
     const eventLabels = {
         start: 'Debug session started',
@@ -36,7 +37,8 @@ function getEventLabel(eventName) {
         step: 'Execution paused',
         pause: 'Execution paused',
         terminate: 'Debug session ended',
-        preview: 'Preview sound'
+        preview: 'Preview sound',
+        change: 'change sound',
     };
 
     return eventLabels[eventName] || 'ASEJE notification';
@@ -56,31 +58,54 @@ class AudioNotifier {
             vscode.window.showInformationMessage('ASEJE audio preview played.');
         });
 
+    const pickSoundCommand = vscode.commands.registerCommand('audio.pickSound', async () => {
+        const result = await vscode.window.showOpenDialog({
+            canSelectMany: false,
+            filters: {
+                Audio: ['wav', 'WAV', 'mp3', 'MP3', 'm4a']
+            },
+            openLabel: 'Select Sound File'
+        });
+
+        if (!result || result.length === 0) return;
+
+        const filepath = result[0].fsPath;
+
+        await vscode.workspace
+            .getConfiguration('aseje.audio')
+            .update('source', filepath, vscode.ConfigurationTarget.Global);
+
+        vscode.window.showInformationMessage('ASEJE sound updated.');
+
+        await this.play('change', { force: true }); // ✅ play sound immediately
+    });
         const debugStart = vscode.debug.onDidStartDebugSession(async () => {
-            await this.play('start');
+            let a=null;
         });
 
         const debugEnd = vscode.debug.onDidTerminateDebugSession(async () => {
             await this.play('terminate');
         });
 
-        const debugCustom = vscode.debug.onDidReceiveDebugSessionCustomEvent(async event => {
-            if (!event || !event.event) {
-                return;
-            }
+        const debugCustom = vscode.debug.registerDebugAdapterTrackerFactory('*', {
+            createDebugAdapterTracker: () => ({
+                onDidSendMessage: async (message) => {
+                    if (message.type !== 'event') return;
 
-            if (event.event === 'stopped') {
-                const reason = event.body?.reason || 'pause';
-                if (reason === 'breakpoint') {
-                    await this.play('breakpoint');
-                } else if (reason === 'exception') {
-                    await this.play('exception');
-                } else {
-                    await this.play('step');
+                    if (message.event === 'stopped') {
+                        const reason = message.body?.reason || 'pause';
+                        if (reason === 'breakpoint') {
+                            await this.play('breakpoint');
+                        } else if (reason === 'exception') {
+                            await this.play('exception');
+                        } else {
+                            await this.play('step');
+                        }
+                    } else if (message.event === 'terminated') {
+                        await this.play('terminate');
+                    }
                 }
-            } else if (event.event === 'terminated') {
-                await this.play('terminate');
-            }
+            })
         });
 
         const configWatcher = vscode.workspace.onDidChangeConfiguration(event => {
@@ -96,6 +121,7 @@ class AudioNotifier {
             debugEnd,
             debugCustom,
             configWatcher,
+            pickSoundCommand,
             { dispose: () => this.dispose() }
         );
     }
@@ -112,12 +138,24 @@ class AudioNotifier {
             {
                 enableScripts: true,
                 retainContextWhenHidden: true,
-                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'media'))]
+                localResourceRoots: [
+                    vscode.Uri.file(path.join(this.context.extensionPath, 'media')),
+                    vscode.Uri.file(path.dirname(normalizeAudioConfig().source))
+                ]
             }
         );
 
         this.panel.onDidDispose(() => {
             this.panel = null;
+        });
+        this.panel.webview.onDidReceiveMessage(async (message) => {
+            if (message.command === 'playSound') {
+                await vscode.commands.executeCommand('audio.playSound');
+            }
+
+            if (message.command === 'pickSound') {
+                await vscode.commands.executeCommand('audio.pickSound');
+            }
         });
 
         this.panel.webview.html = this.getWebviewHtml(this.panel.webview);
@@ -166,10 +204,15 @@ class AudioNotifier {
     }
 
     getSoundUri(webview, sourceSetting) {
-        const relativePath = sourceSetting && typeof sourceSetting === 'string'
-            ? sourceSetting
-            : 'media/beep.wav';
-        const diskPath = vscode.Uri.file(path.join(this.context.extensionPath, relativePath));
+        let diskPath;
+
+        if (path.isAbsolute(sourceSetting)) {
+            diskPath = vscode.Uri.file(sourceSetting);
+        } else {
+            diskPath = vscode.Uri.file(
+                path.join(this.context.extensionPath, sourceSetting)
+            );
+        }
         return webview.asWebviewUri(diskPath).toString();
     }
 
@@ -197,8 +240,9 @@ class AudioNotifier {
             font-size: 12px;
             margin-bottom: 12px;
         }
-        h3 {
+        h2 {
             margin: 0 0 8px;
+            color: #007acc;
         }
         p {
             margin: 0;
@@ -209,14 +253,37 @@ class AudioNotifier {
             padding: 2px 4px;
             border-radius: 4px;
         }
+        button {
+            display: inline-block;
+            background: #007acc;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
     </style>
 </head>
 <body>
     <div class="status" id="status">Idle</div>
-    <h3>ASEJE Audio Notifications</h3>
-    <p>This hidden helper panel plays a packaged sound when configured ASEJE debug events occur. Use <code>Play Sound</code> to preview it.</p>
+    <h2>ASEJE Audio Notifications</h2>
+    <p>This hidden helper panel plays a packaged sound when configured ASEJE debug events occur, 
+    be sure this page is open in order for the debug sounds to play. 
+    Use <code>Play Sound</code> to preview it.<br><br>
+    The Change Sound button below will allow you to change the played sound to an audio file of your choice.
+    Make sure the file is either mp3, wav, or m4a and an appropriate length for your use.</p>
+    <div style="margin-top:12px;">
+        <button id="playButton">Play Sound</button>
+        <button id="changeButton">Change Sound</button>
+    </div>
+    
     <audio id="player" preload="auto" src="${soundUri}"></audio>
     <script>
+        const vscodeApi = acquireVsCodeApi();
         const player = document.getElementById('player');
         const status = document.getElementById('status');
         let enabled = true;
@@ -236,13 +303,19 @@ class AudioNotifier {
             try {
                 player.currentTime = 0;
                 await player.play();
+                
                 status.textContent = message.label || 'Playing';
             } catch (error) {
                 queuedEvent = message;
                 status.textContent = 'Waiting for audio permission';
             }
         }
-
+        document.getElementById('playButton').addEventListener('click', () => {
+            vscodeApi.postMessage({ command: 'playSound' });
+        });
+        document.getElementById('changeButton').addEventListener('click', () => {
+            vscodeApi.postMessage({ command: 'pickSound' });
+        });
         window.addEventListener('click', async () => {
             if (!queuedEvent) {
                 return;

@@ -61,3 +61,10 @@ You can author your README using Visual Studio Code.  Here are some useful edito
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
+## Sprint 6 Progress
+
+During Sprint 6, the team continued improving ASEJE to make the VS Code experience more beginner-friendly and interactive. Work during this sprint included updates to the sidebar feature, including better navigation, improved layout, search functionality, a help panel with FAQ, and an activity log for user actions. The team also continued developing the audio notification feature, which allows users to select audio cues for breakpoints or errors. In addition, the requirements document, design document, and test plan were updated to reflect the new features and current project progress.
+
+## Current Development Focus
+
+The current focus of the project is completing feature integration, improving UI consistency, fixing remaining bugs, and testing all features for the final demo. The team is also working on final documentation updates and preparing the extension for final submission.

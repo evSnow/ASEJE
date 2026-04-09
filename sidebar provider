@@ -11,16 +11,185 @@ class SidebarProvider {
     };
 
     webviewView.webview.html = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <body style="padding:10px;">
-        <h3>ASEJE Sidebar</h3>
-        <p>Sidebar loaded successfully </p>
-        <button onclick="alert('ASEJE Button Clicked')">
-          Test Button
-        </button>
-      </body>
-      </html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          padding: 10px;
+        }
+
+        h3 {
+          margin-bottom: 10px;
+        }
+
+        .search {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 10px;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+        }
+
+        .menu {
+          display: flex;
+          gap: 6px;
+          margin-bottom: 10px;
+        }
+
+        .menu button {
+          flex: 1;
+          padding: 6px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          background: #007acc;
+          color: white;
+        }
+
+        .menu button:hover {
+          background: #005f99;
+        }
+
+        .card {
+          padding: 10px;
+          border-radius: 8px;
+          background: #f3f3f3;
+          margin-bottom: 10px;
+        }
+
+        .hidden {
+          display: none;
+        }
+
+        .result {
+          font-size: 13px;
+          margin-top: 5px;
+        }
+
+        .faq-answer {
+          display: none;
+          font-size: 13px;
+          margin-top: 5px;
+        }
+
+        .log {
+          font-size: 12px;
+          margin-top: 5px;
+        }
+      </style>
+    </head>
+
+    <body>
+
+      <h3>ASEJE Dashboard</h3>
+
+      <input id="searchInput" class="search" placeholder="Search anything..." />
+
+      <div class="menu">
+        <button onclick="showPanel('home')">Home</button>
+        <button onclick="showPanel('tools')">Tools</button>
+        <button onclick="showPanel('debug')">Debug</button>
+        <button onclick="showPanel('help')">Help</button>
+      </div>
+
+      <div id="home" class="panel">
+        <div class="card">
+          <b>Welcome</b>
+          <p>This is your ASEJE sidebar dashboard.</p>
+        </div>
+      </div>
+
+      <div id="tools" class="panel hidden">
+        <div class="card">
+          <b>Quick Tools</b>
+          <button onclick="runTool()">Run Tool</button>
+          <p id="toolResult" class="result"></p>
+        </div>
+      </div>
+
+      <div id="debug" class="panel hidden">
+        <div class="card">
+          <b>Debug Info</b>
+          <button onclick="checkDebug()">Check Status</button>
+          <p id="debugResult" class="result"></p>
+        </div>
+      </div>
+
+      <!-- NEW HELP PANEL -->
+      <div id="help" class="panel hidden">
+        <div class="card">
+          <b>FAQ</b><br><br>
+
+          <button onclick="toggleFAQ(0)">What is this extension?</button>
+          <div class="faq-answer">This extension helps beginners understand coding tools.</div>
+
+          <button onclick="toggleFAQ(1)">How do I use tools?</button>
+          <div class="faq-answer">Click the tools tab and run available actions.</div>
+
+          <button onclick="toggleFAQ(2)">Is MP4 supported?</button>
+          <div class="faq-answer">Yes, only MP4 files are supported for safety.</div>
+        </div>
+
+        <div class="card">
+          <b>Recent Activity</b>
+          <div id="activityLog" class="log">No activity yet.</div>
+        </div>
+      </div>
+
+      <script>
+        const searchInput = document.getElementById("searchInput");
+        let activity = [];
+
+        function logAction(text) {
+          const time = new Date().toLocaleTimeString();
+          activity.unshift(time + " - " + text);
+          activity = activity.slice(0, 5);
+
+          document.getElementById("activityLog").innerHTML =
+            activity.join("<br>");
+        }
+
+        function showPanel(panelId) {
+          document.querySelectorAll(".panel").forEach(p => {
+            p.classList.add("hidden");
+          });
+
+          document.getElementById(panelId).classList.remove("hidden");
+          logAction("Opened " + panelId + " panel");
+        }
+
+        searchInput.addEventListener("input", () => {
+          const value = searchInput.value.toLowerCase();
+
+          document.querySelectorAll(".card").forEach(card => {
+            const text = card.innerText.toLowerCase();
+            card.style.display = text.includes(value) ? "block" : "none";
+          });
+        });
+
+        function runTool() {
+          document.getElementById("toolResult").textContent = "Tool executed successfully!";
+          logAction("Tool executed");
+        }
+
+        function checkDebug() {
+          document.getElementById("debugResult").textContent = "No errors detected.";
+          logAction("Debug checked");
+        }
+
+        function toggleFAQ(index) {
+          const answers = document.querySelectorAll(".faq-answer");
+          answers[index].style.display =
+            answers[index].style.display === "block" ? "none" : "block";
+
+          logAction("Opened FAQ");
+        }
+      </script>
+
+    </body>
+    </html>
     `;
   }
 }

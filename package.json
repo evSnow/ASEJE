@@ -39,7 +39,7 @@
         },
         "aseje.audio.source": {
           "type": "string",
-          "default": "media/beep.wav",
+          "default": "media/beep.m4a",
           "description": "Relative path inside the extension to the sound file ASEJE should play."
         },
         "aseje.audio.events": {
@@ -62,7 +62,11 @@
       {"command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
         "category": "ASEJE"
-    },
+      },
+      {
+        "command": "audio.pickSound",
+        "title": "ASEJE: Pick Audio File"
+      },
 
       {
         "command": "aseje.showWalkthrough",
