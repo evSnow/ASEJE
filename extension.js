@@ -61,7 +61,7 @@ function activate(context) {
   registerPythonHoverProvider(context);
 
   registerReferenceCommands(context);
- const sidebarProvider = new SidebarProvider(context.extensionUri);
+ const sidebarProvider = new SidebarProvider(context.extensionUri, context);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('aseje.sidebarView', sidebarProvider, {
       webviewOptions: { retainContextWhenHidden: true }
