@@ -8,13 +8,12 @@ const { registerUIHelperCommands, showGuidedWalkthrough } = require('./source/UI
 const { TemplateLibrary } = require('./source/TemplateLibrary');
 const { toggleUI } = require('./source/UISimple');
 const { stepsOne } = require('./source/steps');
-const {registerAudioNotifier } = require('./source/audioTrigger');
-const { SidebarProvider} = require('./source/SidebarProvider');
+const { registerAudioNotifier } = require('./source/audioTrigger');
+const { SidebarProvider } = require('./source/SidebarProvider');
 const { registerDebugSuite } = require('./source/DebugSuite');
 const { registerPythonHoverProvider, setHoverStatus } = require('./source/pythonHoverProvider');
 const { registerReferenceCommands } = require('./source/Reference');
-const {pickSoundCommand} = require('./source/audioTrigger');
-
+const { pickSoundCommand } = require('./source/audioTrigger');
 
 const path = require('path');
 const fs = require('fs');
@@ -60,15 +59,22 @@ function activate(context) {
   console.log("ASEJE audio notifier loaded");
   registerDebugSuite(context);
 
+  // 🔥 NEW: Restore saved hover state (persists across restarts)
+  const savedHoverState = context.globalState.get('aseje.hoverEnabled', false);
+  setHoverStatus(savedHoverState);
+
   registerPythonHoverProvider(context);
 
   registerReferenceCommands(context);
- const sidebarProvider = new SidebarProvider(context.extensionUri);
+
+  // 🔥 UPDATED: pass context so sidebar can store notes + hover state
+  const sidebarProvider = new SidebarProvider(context.extensionUri, context);
+
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('aseje.sidebarView', sidebarProvider, {
       webviewOptions: { retainContextWhenHidden: true }
     })
-  ); 
+  );
 
   /**
    * Command: aseje.createStarterProject
@@ -77,11 +83,13 @@ function activate(context) {
    * This gives new programmers a ready-to-use workspace with example code.
    */
 
-sidebarProvider.setHoverToggleCallback((value) => {
-          setHoverStatus(value); 
-          vscode.window.showInformationMessage(`Aseje Hover Help is now ${value ? 'Enabled' : 'Disabled'}`);
-});
-
+  // 🔥 Hover toggle callback (already correct — just kept it)
+  sidebarProvider.setHoverToggleCallback((value) => {
+    setHoverStatus(value);
+    vscode.window.showInformationMessage(
+      `Aseje Hover Help is now ${value ? 'Enabled' : 'Disabled'}`
+    );
+  });
 
   const templateDisposable = vscode.commands.registerCommand(
     'aseje.createStarterProject',
@@ -98,10 +106,22 @@ sidebarProvider.setHoverToggleCallback((value) => {
    */
 
   console.log("ASEJE starter project command registered");
-  //const toggleModeDisposable = vscode.commands.registerCommand('aseje.toggleBeginnerMode', () => {
-  //  toggleUI(context); 
-  //});
 
+  // 🔥 FIX: define this (was missing but used later)
+  const helloWorldDisposable = vscode.commands.registerCommand(
+    'aseje.helloWorld',
+    () => {
+      vscode.window.showInformationMessage('Hello World from ASEJE!');
+    }
+  );
+
+  // 🔥 FIX: define this (was commented out but still referenced)
+  const toggleModeDisposable = vscode.commands.registerCommand(
+    'aseje.toggleBeginnerMode',
+    () => {
+      toggleUI(context);
+    }
+  );
 
   console.log('Before debug adapter registration');
 
@@ -115,6 +135,7 @@ sidebarProvider.setHoverToggleCallback((value) => {
    * @type {vscode.DebugAdapterDescriptorFactory}
    */
   console.log("Preparing debug adapter factory");
+
   const factory = {
     /**
      * Create and return a debug adapter descriptor.
@@ -171,7 +192,13 @@ sidebarProvider.setHoverToggleCallback((value) => {
   });
 }
 
-
+/**
+ * Called when the extension is deactivated.
+ *
+ * Currently, there is no explicit cleanup logic because all disposables that
+ * were pushed into `context.subscriptions` are automatically disposed by VS Code.
+ * Add any additional cleanup here if you allocate resources outside that list.
+ */
 function deactivate() {}
 
 module.exports = {
