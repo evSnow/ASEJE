@@ -128,7 +128,7 @@
             "type": "python_D",
             "request": "launch",
             "name": "ASEJE Python",
-            "program": "${workspaceFolder}/app.py"
+            "program": "${file}"
           }
         ]
       }

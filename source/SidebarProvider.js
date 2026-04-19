@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const path = require('path');
-
+const fs = require('fs');
 const sidebarItems = require('./sidebar-data');
 class SidebarProvider {
   constructor(extensionUri, context) {
@@ -313,11 +313,18 @@ const actionList = {
         }
       }
   else if (message.command === 'saveNotes') {
+
         await this.context.globalState.update('aseje.notes', message.value || '');
+
+        const filePath = path.join(this.context.globalStorageUri.fsPath, 'notes.md');
+        fs.mkdirSync(this.context.globalStorageUri.fsPath, { recursive: true });
+        fs.writeFileSync(filePath, message.value, 'utf8');
+
 
         webviewView.webview.postMessage({
           command: 'notesSaved'
         });
+
       } 
   else if (message.command === 'clearNotes') {
         await this.context.globalState.update('aseje.notes', '');
@@ -327,12 +334,10 @@ const actionList = {
         });
       }
   else if (message.command === 'openNotes') {
-    const notes = this.context.globalState.get('aseje.notes', '');
+    const filePath = path.join(this.context.globalStorageUri.fsPath, 'notes.md');
 
-    const doc = await vscode.workspace.openTextDocument({
-      content: notes,
-      language: 'plaintext'
-    });
+    const uri = vscode.Uri.file(filePath);
+    const doc = await vscode.workspace.openTextDocument(uri);
 
     vscode.window.showTextDocument(doc);
   }    
