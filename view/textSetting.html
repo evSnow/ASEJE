@@ -5,224 +5,277 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Change</title>
     <style>
+
+      :root {
+      --primary: #007acc;
+      --primary-gradient: linear-gradient(135deg, #007acc 0%, #00b4db 100%);
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --input-bg: var(--vscode-input-background);
+      --input-border: var(--vscode-input-border, rgba(128, 128, 128, 0.2));
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+
       body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: #fafafa;
-      color: #222;
-      padding: 2rem;
-      line-height: 1.6;
-      font-size: ${fontSize};
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
       
     }
 
-    h1, h2 {
-      color: #007acc;
-    }
-
     .container {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    .welcome-box {
-      background: #e6f3ff;
-      border-left: 6px solid #007acc;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border-radius: 8px;
-    }
-
-    .section {
-      margin-top: 1.5rem;
-    }
-
-    .note {
-      background: #e6f3ff;        
-      border-left: 6px solid #007acc; 
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      color: #003b66;               
-    }
-
-    .btn {
-      display: inline-block;
-      background: #007acc;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      text-decoration: none;
-      margin-top: 1rem;
-    }
-
-    .btn:hover {
-      background: #005fa3;
-    }
-
-    code {
-      background: #f5f5f5;
-      color: #222;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-    }
-    .list{
-      gap:20px;
-      display:flex;
-      flex-direction: column; 
-      align-items: flex-start;
-      gap:20px
-    }
-    .container {
-      position: relative;
-      width: 250px;
-      float:left;
-      margin:20px 0;
-    }
-    
-    input[type="number"] {
+      max-width: 700px;
       width: 100%;
-      box-sizing: border-box;
+    }
+
+
+    .nav-header {
+      margin-bottom: 2rem;
+    }
+
+    .btn-back {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-back:hover { opacity: 0.8; }
+
+    .settings-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(128, 128, 128, 0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      color: var(--primary);
+      border-bottom: 2px solid rgba(0, 122, 204, 0.1);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      position: relative;
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="number"] {
+      background: var(--input-bg);
+      color: var(--text-main);
+      border: 1px solid var(--input-border);
+      padding: 10px 15px;
+      border-radius: 8px;
+      width: 100%;
+      outline: none;
     }
 
     .size-List {
       position: absolute;
-      top: 100%; /* dropdown below input */
+      top: 100%;
       left: 0;
       right: 0;
-      background: white;
-      border: 1px solid #ccc;
-      border-top: none;
-      max-height: 150px;
+      background: var(--card-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      max-height: 200px;
       overflow-y: auto;
       display: none;
-      z-index: 10;
+      z-index: 100;
+      box-shadow: var(--shadow);
     }
 
     .size-List div {
-      padding: 8px;
+      padding: 10px 15px;
       cursor: pointer;
     }
 
     .size-List div:hover {
-      background-color: #f0f0f0;
-    }  
-    </style>
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .option-label {
+      cursor: pointer;
+      border: 1px solid var(--input-border);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.2s;
+      background: rgba(128, 128, 128, 0.05);
+    }
+
+    .option-label:hover {
+      border-color: var(--primary);
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    input[type="radio"]:checked + .option-label {
+      background: var(--primary-gradient);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+    }
+
+    .btn-apply {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+      transition: transform 0.1s;
+    }
+
+    .btn-apply:hover {
+      box-shadow: 0 8px 20px rgba(0, 122, 204, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-apply:active { transform: scale(0.98); }
+
+
+
+
+
+    
+   </style>
 </head>
 <body>
-<div class="list">
-  <div class="section">
-      <a class="btn" id="createBtn">Go back to homepage</a>
+<div class="container">
+    <div class="nav-header">
+      <button class="btn-back" id="goHomeBtn">← Back to Walkthrough</button>
+    </div>
+
+    <div class="settings-card">
+      <h2>Change Font Size</h2>
+      <div class="input-group">
+        <div style="flex-grow: 1; position: relative;">
+          <input id="sizeInput" type="number" placeholder="e.g. 14" min="8" max="72"/>
+          <div id="sizeList" class="size-List">
+            <div>12</div><div>14</div><div>16</div><div>18</div><div>20</div><div>24</div><div>28</div><div>32</div>
+          </div>
+        </div>
+        <button class="btn-apply" id="changeButton" style="width: auto; margin-top: 0;">Apply</button>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <h2>Activity Bar Location</h2>
+      <div class="options-grid">
+        <label>
+          <input type="radio" name="activityBar" value="default" checked>
+          <div class="option-label">Left</div>
+        </label>
+        <label>
+          <input type="radio" name="activityBar" value="top">
+          <div class="option-label">Top</div>
+        </label>
+        <label>
+          <input type="radio" name="activityBar" value="bottom">
+          <div class="option-label">Bottom</div>
+        </label>
+        <label>
+          <input type="radio" name="activityBar" value="hidden">
+          <div class="option-label">Hidden</div>
+        </label>
+      </div>
+      <button class="btn-apply" id="changeActivityBar">Save Activity Bar Layout</button>
+    </div>
+
+    <div class="settings-card">
+      <h2>Sidebar Location</h2>
+      <div class="options-grid">
+        <label>
+          <input type="radio" name="sidebar" value="left" checked>
+          <div class="option-label">Left Side</div>
+        </label>
+        <label>
+          <input type="radio" name="sidebar" value="right">
+          <div class="option-label">Right Side</div>
+        </label>
+      </div>
+      <button class="btn-apply" id="changeSideBar">Save Sidebar Position</button>
+    </div>
+
   </div>
-  <div class = "container"> 
-   <h2>Change Font Size</h2>
-  <input id="sizeInput" type="number" placeholder="Enter font size" min="1"/>
-  <div id="sizeList" class="size-List">
-    <div>8</div>
-    <div>9</div>
-    <div>10</div>
-    <div>11</div>
-    <div>12</div>
-    <div>14</div>
-    <div>16</div>
-    <div>18</div>
-    <div>20</div>
-    <div>22</div>
-    <div>24</div>
-    <div>26</div>
-    <div>28</div>
-    <div>36</div>
-    <div>48</div>
-    <div>72</div>
-  </div>
-  <button id="changeButton">Change</button>
-</div>
+
+
+
   <script>
+    const vscode = acquireVsCodeApi();
     const input = document.getElementById('sizeInput');
     const dropdown = document.getElementById('sizeList');
-        input.addEventListener('focus', () => {
-      dropdown.style.display = 'block';
-    });
 
-    document.addEventListener('click', (eve) => {
-      if (!eve.target.closest('.container')) {
-        dropdown.style.display = 'none';
-      }
-    });
+    input.addEventListener('focus', () => dropdown.style.display = 'block');
     
-        // Filter options based on input value
-    input.addEventListener('input', () => {
-      const value = input.value;
-      for (const option of dropdown.children) {
-        option.style.display = option.textContent.startsWith(value) || value === ''
-          ? 'block'
-          : 'none';
-      }
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.input-group')) dropdown.style.display = 'none';
     });
 
-    // Click on an option fills the input
     for (const option of dropdown.children) {
       option.addEventListener('click', () => {
         input.value = option.textContent;
         dropdown.style.display = 'none';
       });
     }
-    window.addEventListener('message', event => {
-    const message = event.data;
-    if (message.command === 'updateFontSize') {
-        document.body.style.fontSize = message.value + 'px';
-        document.getElementById('fontInput').value = message.value;
-        document.getElementById('currentFont').value=message.value;
-    }
-});
-  </script>
 
-  <form class = "container" id="Activity Bar locatgion">
-    <h2>Activity bar location </h2>
-    <label><input type="radio" id="default" name="option" value="default" checked> Default (left)</label><br>
-    <label><input type="radio" id="top" name="option" value="top"> Top</label><br>
-    <label><input type="radio" id="bottom" name="option" value="bottom"> Bottom</label><br>
-    <label><input type="radio" id="hidden" name="option" value="hidden"> Hidden</label><br>
-    <button id="changeActivityBar" type="button">Change</button>
-  </form>
+    document.getElementById('changeButton').addEventListener('click', () => {
+      vscode.postMessage({ command: 'fontSizeChange', value: input.value });
+    });
 
-  <form id="sideBar">
-     <h2> side bar location </h2>
-    <label><input type="radio" id="left" name="optionS" value="left" checked> left</label><br>
-    <label><input type="radio" id="right" name="optionS" value="right"> right </label><br>
-    <button id="changeSideBar" type="button">Change</button>
-  </form>
+    document.getElementById('changeActivityBar').addEventListener('click', () => {
+      const val = document.querySelector('input[name="activityBar"]:checked').value;
+      vscode.postMessage({ command: 'changeActivityBar', value: val });
+    });
 
+    document.getElementById('changeSideBar').addEventListener('click', () => {
+      const val = document.querySelector('input[name="sidebar"]:checked').value;
+      vscode.postMessage({ command: 'changeSideBar', value: val });
+    });
+
+    document.getElementById('goHomeBtn').addEventListener('click', () => {
+      vscode.postMessage({ command: 'go_Home', action: 'openWalkthrough' });
+    });
     
-
-    <script>
-      const vscode = acquireVsCodeApi();
-      document.getElementById('changeButton').addEventListener('click', () => {
-        const x = document.getElementById('sizeInput').value;
-        vscode.postMessage({
-          command: 'fontSizeChange',
-          value: x
-        });
-      });
-      document.getElementById('changeActivityBar').addEventListener('click', () => {
-      const selected = document.querySelector('input[name="option"]:checked');
-        const y=selected.value;
-        vscode.postMessage({ 
-        command: 'changeActivityBar', 
-        value: y });
-      });
-      document.getElementById('changeSideBar').addEventListener('click', () => {
-      const selected = document.querySelector('input[name="optionS"]:checked');
-        const y=selected.value;
-        vscode.postMessage({ 
-        command: 'changeSideBar', 
-        value: y });
-      });
-          document.getElementById('createBtn').addEventListener('click', () => {
-      vscode.postMessage({ 
-        command: 'go_Home', 
-        action: 'openWalkthrough' });
-      });
-    </script>
-  </div>
+    window.addEventListener('message', event => {
+      const message = event.data;
+      if (message.command === 'updateFontSize') {
+        document.body.style.fontSize = message.value + 'px';
+        input.value = message.value;
+      }
+    });
+  </script>
 </body>
 </html>
