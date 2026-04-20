@@ -3,179 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lesson One: Activity Bar</title>
     <style>
-        body {
-            font-size: 14px;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #fafafa;
-            color: #222;
-            padding: 2rem;
-            line-height: 1.6;
-        }
+        :root {
+      --primary: #007acc;
+      --primary-gradient: linear-gradient(135deg, #007acc 0%, #00b4db 100%);
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --border: rgba(128, 128, 128, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
 
-        h1, h2 {
-            color: #007acc;
-        }
+
+    body {
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
 
         .container {
-            max-width: 800px;
-            margin: auto;
+            max-width: 850px;
+            width: 100%;
         }
 
-        .welcome-box {
-            background: #e6f3ff;
-            border-left: 6px solid #007acc;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-        }
+        .nav-header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .section {
-            margin-top: 1.5rem;
-        }
+    .btn-back {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+    }
+    .btn-back:hover { opacity: 0.8; }
 
-        .note {
-            background: #e6f3ff;
-            border-left: 6px solid #007acc;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-top: 1rem;
-            color: #003b66;
-        }
+    .lesson-badge {
+      background: rgba(0, 122, 204, 0.1);
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
 
-        .btn {
-            display: inline-block;
-            background: #007acc;
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-top: 1rem;
-        }
 
-        .btn:hover {
-            background: #005fa3;
-        }
+    .hero-section {
+      margin-bottom: 3rem;
+    }
 
-        code {
-            background: #f5f5f5;
-            color: #222;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-        }
-    </style>
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin: 0 0 1rem 0;
+      letter-spacing: -1px;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-top: 1.5rem;
+    }
+
+    ul, ol {
+      padding-left: 1.2rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.8rem;
+    }
+
+    strong {
+      color: var(--text-main);
+    }
+
+    .highlight-box {
+      background: rgba(0, 122, 204, 0.05);
+      border-left: 4px solid var(--primary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+
+    .btn-finish {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 14px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      display: block;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 2rem;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .btn-finish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 122, 204, 0.3);
+    }
+
+  </style>
 </head>
 <body>
 
-    <h1>Lesson One: Activity Bar Overview</h1>
-    <p>
-        In this section we will explain the basics of the Activity Bar and the function of each icon.
-        This is important because these icons help complete important tasks and improve workflow.
-        A more detailed explanation will be given in another lesson.
+<div class="container">
+  <div class="nav-header">
+    <button class="btn-back" id="goHomeBtn">← Back</button>
+    <span class="lesson-badge">Module 1: Basics</span>
+  </div>
+
+  <header class="hero-section">
+    <h1>Activity Bar Overview</h1>
+    <p class="intro-text">
+      The Activity Bar is your command center in VS Code. Understanding these icons will help you navigate your project and debug code like a pro.
     </p>
+  </header>
 
-    <h2>What is it?</h2>
-    <p>
-        The Activity Bar is a toolbar on either the left, right, or top of the VS Code window.
-        Each icon has a function that developers frequently use when coding.
-    </p>
-
-    <div class="section">
-        <h2>Explorer</h2>
-        <p>
-            This function allows users to open a folder and manage the contents of a directory.
-            It includes adding new files, renaming folders, and navigating the project.
-        </p>
+  <div class="grid">
+    <div class="section-card">
+      <h2>What is the Activity Bar?</h2>
+      <p>
+        Located at the edge of your window, this toolbar holds the most frequently used tools. 
+        Whether you are searching for code or managing your project files, this is where you start.
+      </p>
+      <div class="highlight-box">
+        <strong>💡 ASEJE Tip:</strong> Our extension simplifies this view to focus only on what you need for your current lesson.
+      </div>
     </div>
 
-    <div class="section">
-        <h2>Source Code</h2>
-        <p>
-            This icon controls Git versioning for GitHub, enabling quick push/pull actions and staging changes.
-        </p>
+    <div class="section-card">
+      <h2>Core Navigation Icons</h2>
+      <ul>
+        <li><strong>Explorer:</strong> Manage your files and project folders.</li>
+        <li><strong>Search:</strong> Find specific text across all your files.</li>
+        <li><strong>Source Control:</strong> Connect your code to GitHub.</li>
+        <li><strong>Extensions:</strong> Add new powers to your editor.</li>
+      </ul>
     </div>
 
-    <div class="section">
-        <h2>Run and Debug</h2>
-        <p>
-            This function is used to debug code, create breakpoints, and run the program.
-            Debugging can also be enhanced by other extensions.
-        </p>
+    <div class="section-card">
+      <h2>Run and Debug</h2>
+      <p>This is where the magic happens. Use this icon to find mistakes (bugs) in your code.</p>
+      <h3>Standard Controls:</h3>
+      <ul>
+        <li><strong>Start / Continue:</strong> Kick off your program.</li>
+        <li><strong>Step Over:</strong> Move to the next line of code.</li>
+        <li><strong>Step Into:</strong> Look inside a specific function.</li>
+        <li><strong>Stop:</strong> End the program immediately.</li>
+      </ul>
     </div>
 
-    <div class="section">
-        <h2>Extensions</h2>
-        <p>
-            This opens the marketplace where users can install extensions created by others.
-            Developers can publish their own extensions with documentation and GitHub links.
-        </p>
+    <div class="section-card">
+      <h2>Your First Debug Session</h2>
+      <ol>
+        <li>Open your Python or C++ file.</li>
+        <li>Click <strong>Run and Debug</strong> in the sidebar.</li>
+        <li>Set a <strong>Breakpoint</strong> by clicking next to a line number.</li>
+        <li>Press the green arrow to begin your journey!</li>
+      </ol>
     </div>
+  </div>
 
-    <!--  INSERTED ACTION BAR SECTION  -->
-    <section>
-        <h2>Understanding the Action Bar (Sidebar)</h2>
+  <button class="btn-finish" id="finishBtn">Finish Lesson & Return Home</button>
+</div>
 
-        <p>
-            The <strong>Action Bar</strong> (also known as the <strong>Activity Bar</strong>) is the
-            vertical toolbar on the left side of Visual Studio Code. It provides access to the most
-            important tools used by developers. Understanding this area is essential for navigating VS Code.
-        </p>
+<script>
+  const vscode = acquireVsCodeApi();
 
-        <h3>What the Action Bar Contains</h3>
-        <ul>
-            <li><strong>Explorer</strong> – view and manage project files</li>
-            <li><strong>Search</strong> – search text across the entire project</li>
-            <li><strong>Source Control</strong> – interact with Git (commit, push, pull)</li>
-            <li><strong>Run and Debug</strong> – start and control debugging sessions</li>
-            <li><strong>Extensions</strong> – install and manage additional VS Code features</li>
-            <li><strong>Custom ASEJE Views</strong> – added by our extension to support beginners</li>
-        </ul>
+  const returnHome = () => {
+    vscode.postMessage({ 
+      command: 'go_Home', 
+      action: 'openWalkthrough' 
+    });
+  };
 
-        <h3>How ASEJE Uses the Sidebar</h3>
-        <ul>
-            <li>Highlighting breakpoints clearly</li>
-            <li>Showing the current execution line</li>
-            <li>Providing simplified debug controls</li>
-            <li>Helping beginners step through code in a guided way</li>
-        </ul>
-
-        <h3>Debugging Controls in the Action Bar</h3>
-        <ul>
-            <li><strong>Start / Continue</strong> – run or resume the program</li>
-            <li><strong>Pause</strong> – temporarily halt execution</li>
-            <li><strong>Stop</strong> – end the debug session</li>
-            <li><strong>Step Over</strong> – go to the next line without entering a function</li>
-            <li><strong>Step Into</strong> – go inside a function call</li>
-            <li><strong>Step Out</strong> – exit the current function</li>
-        </ul>
-
-        <h3>Example: Debugging Using the Sidebar</h3>
-        <ol>
-            <li>Open the file you want to debug.</li>
-            <li>Click the <strong>Run and Debug</strong> icon in the Action Bar.</li>
-            <li>Click next to a line number to set a breakpoint.</li>
-            <li>Press <strong>Run and Debug</strong> to begin.</li>
-            <li>Use Step Over / Step Into / Step Out to control execution.</li>
-        </ol>
-    </section>
-    <!--  END OF ACTION BAR SECTION  -->
-
-    <div class="list">
-        <div class="section">
-            <a class="btn" id="createBtn">Go back to homepage</a>
-        </div>
-    </div>
-
-    <script>
-        const vscode = acquireVsCodeApi();
-        document.getElementById('createBtn').addEventListener('click', () => {
-            vscode.postMessage({
-                command: 'go_Home',
-                action: 'openWalkthrough'
-            });
-        });
-    </script>
+  document.getElementById('goHomeBtn').addEventListener('click', returnHome);
+  document.getElementById('finishBtn').addEventListener('click', returnHome);
+</script>
 
 </body>
 </html>
+
+
+
