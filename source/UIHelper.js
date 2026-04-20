@@ -15,6 +15,17 @@ function registerUIHelperCommands(context) {
   context.subscriptions.push(walkthroughDisposable);
 }
 
+function getWebviewContent(context, fileName) {
+  const htmlPath = path.join(context.extensionPath, 'view', fileName);
+  let html = fs.readFileSync(htmlPath, 'utf8');
+
+  const config = vscode.workspace.getConfiguration();
+  let fontSize = (config.get('aseje.fontSize') || 14);
+
+  html = html.replace(/(\d+)px/, `${fontSize}px`);
+  return html;
+}
+
 function showGuidedWalkthrough(context) {
   const panel = vscode.window.createWebviewPanel(
     'asejeWalkthrough',
@@ -48,7 +59,10 @@ function showGuidedWalkthrough(context) {
     if (message.command === 'beginning') {
           vscode.commands.executeCommand('aseje.stepOne');
     }
-    
+    if (message.command === 'openManual') {
+      panel.title = 'ASEJE Manual';
+      panel.webview.html = getWebviewContent(context, 'manual.html');
+    }
   });
 }
 

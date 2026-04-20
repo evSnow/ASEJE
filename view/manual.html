@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASEJE Manual</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --primary-gradient: linear-gradient(135deg, #007acc 0%, #00b4db 100%);
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 950px;
+      width: 100%;
+    }
+
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 114, 255, 0.2);
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 2.4rem;
+    }
+
+    .hero p {
+      margin-top: 1rem;
+      font-size: 1.05rem;
+      opacity: 0.95;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(128, 128, 128, 0.1);
+    }
+
+    .section h2 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+
+    .section p,
+    .section li {
+      color: var(--text-main);
+      line-height: 1.65;
+    }
+
+    .section ul {
+      padding-left: 1.25rem;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 122, 204, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>📘 ASEJE Manual</h1>
+      <p>This manual explains every major feature included in the ASEJE extension.</p>
+    </header>
+
+    <div class="section">
+      <h2>1. What ASEJE Is</h2>
+      <p>
+        ASEJE is a beginner-focused VS Code extension designed to help new developers
+        better understand coding, debugging, and editor tools in a simpler and more guided way.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>2. Debugger</h2>
+      <p>
+        The debugger is one of the main features of ASEJE. It helps users understand
+        how their code runs step by step instead of guessing why something failed.
+      </p>
+      <ul>
+        <li><strong>Step In:</strong> Moves into a function to show what happens inside it.</li>
+        <li><strong>Step Out:</strong> Exits the current function and returns to the higher stack level.</li>
+        <li><strong>Continue:</strong> Runs the program until the next breakpoint.</li>
+        <li><strong>Breakpoints:</strong> Pause execution at important lines to inspect behavior.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>3. Audio Cues</h2>
+      <p>
+        ASEJE supports audio feedback during debugging. Sound can play when a breakpoint is hit
+        or when a program ends.
+      </p>
+      <ul>
+        <li>Helps reinforce learning through sound</li>
+        <li>Can be enabled or disabled by the user</li>
+        <li>Can use custom audio files</li>
+        <li>Supported formats include MP3, WAV, and M4A</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>4. Hover Explanations</h2>
+      <p>
+        The hover feature helps explain code directly inside VS Code. This is especially useful
+        for new developers who may not understand what a loop, print statement, or variable is doing.
+      </p>
+      <ul>
+        <li>Provides beginner-friendly explanations</li>
+        <li>Helps explain Python syntax and behavior</li>
+        <li>Can make errors easier to understand</li>
+        <li>Can be turned on or off</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>5. Sidebar</h2>
+      <p>
+        The ASEJE sidebar provides a structured place for users to access extension features.
+        It is designed to make navigation easier and reduce confusion.
+      </p>
+      <ul>
+        <li>Organized menus and sections</li>
+        <li>Quick access to extension tools</li>
+        <li>Supports notes and reference-style content</li>
+        <li>Can update based on user actions</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>6. Starter Templates</h2>
+      <p>
+        ASEJE includes starter templates to help beginners begin projects faster and better understand
+        how files are structured.
+      </p>
+      <ul>
+        <li>Templates for Python</li>
+        <li>Templates for HTML</li>
+        <li>Templates for JavaScript</li>
+        <li>Templates for C</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>7. Walkthroughs</h2>
+      <p>
+        The walkthrough system helps users learn the extension step by step.
+        It introduces important tools and explains how to use core features in Visual Studio Code.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>8. Future Improvements</h2>
+      <ul>
+        <li>AI-powered code explanations</li>
+        <li>More language support beyond Python</li>
+        <li>Performance insights and optimization help</li>
+        <li>Custom learning modes like Beginner, Intermediate, and Advanced</li>
+      </ul>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-outline" id="backBtn">Back to Home</button>
+    </div>
+  </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        vscode.postMessage({ command: 'goHome', action: 'goHome' });
+      });
+    }
+  </script>
+</body>
+</html>
