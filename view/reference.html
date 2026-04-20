@@ -1,60 +1,170 @@
 <!DOCTYPE html>
-<html>
-<style>
-    table, td, th {
-      border:0.2em solid black;
-    }
-
-    td, th {
-      padding: .5em;
+<html lang="en">
+<head> <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Reference</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --primary-gradient: linear-gradient(135deg, #007acc 0%, #00b4db 100%);
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --border: rgba(128, 128, 128, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     body {
-      font-size: 14px;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: #fafafa;
-      color: #222;
-      padding: 2rem;
-      line-height: 1.6;
-      
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
     }
 
-    th, h2 {
-      color: #007acc;
+    .container {
+      max-width: 800px;
+      width: 100%;
     }
+    .nav-header {
+      margin-bottom: 2rem;
+    }
+
+    .btn-back {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-back:hover { opacity: 0.8; }
+
+    .reference-card {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.75rem;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+
+    th {
+      background: rgba(0, 122, 204, 0.05);
+      color: var(--primary);
+      text-align: left;
+      padding: 1rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .code-text {
+      font-family: "Cascadia Code", Consolas, monospace;
+      background: rgba(128, 128, 128, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #d63384;
+    }
+
+    .row-label {
+      font-weight: 500;
+    }
+
 </style>
+</head>
 <body>
 
-<h2>Python Escape Sequence Characters</h2>
+<div class="container">
+  <div class="nav-header">
+    <button class="btn-back" id="goHomeBtn">← Back to Walkthrough</button>
+  </div>
 
-<p>Escape sequences are series of characters that will store otherwise untypeable characters into strings.</p>
+  <div class="reference-card">
+    <h2>Python Escape Sequences</h2>
+    <p>Escape sequences are special character combinations used to represent "untypeable" characters like new lines or quotes inside a string.</p>
 
-<table style="width:100%">
-  <tr>
-    <th>Character</th>
-    <th>Escape Sequence</th>
+    <table>
+      <thead>
+        <tr>
+          <th>Character Name</th>
+          <th>Escape Sequence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Newline</td>
+          <td><span class="code-text">\n</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Horizontal Tab</td>
+          <td><span class="code-text">\t</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Backslash</td>
+          <td><span class="code-text">\\</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Single Quote</td>
+          <td><span class="code-text">\'</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Double Quote</td>
+          <td><span class="code-text">\"</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-  </tr>
-  <tr>
-    <td> Newline</td>
-    <td> \n</td>
-  </tr>
-  <tr>
-    <td> Tab</td>
-    <td> \t</td>
-  </tr>
-  <tr>
-    <td> Backslash</td>
-    <td> \\</td>
-  </tr>
-    <tr>
-    <td> Single quote</td>
-    <td> \'</td>
-  </tr>
-    <tr>
-    <td> Double quote</td>
-    <td> \"</td>
-  </tr>
-</table>
+<script>
+  const vscode = acquireVsCodeApi();
+
+  document.getElementById('goHomeBtn').addEventListener('click', () => {
+    vscode.postMessage({ 
+      command: 'go_Home', 
+      action: 'openWalkthrough' 
+    });
+  });
+</script>
+
 </body>
 </html>
