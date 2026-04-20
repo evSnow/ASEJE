@@ -2,151 +2,223 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to ASEJE</title>
   <style>
+      :root {
+      --primary: #007acc;
+      --primary-gradient: linear-gradient(135deg, #007acc 0%, #00b4db 100%);
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
 
     body {
-      font-size: 14px;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: #fafafa;
-      color: #222;
-      padding: 2rem;
-      line-height: 1.6;
-      
-    }
-
-    h1, h2 {
-      color: #007acc;
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+     background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
     }
 
     .container {
-      max-width: 800px;
-      margin: auto;
+      max-width: 850px;
+      width: 100%;
     }
 
-    .welcome-box {
-      background: #e6f3ff;
-      border-left: 6px solid #007acc;
+    .hero {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 114, 255, 0.2);
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 1rem auto 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: var(--card-bg);
       padding: 1.5rem;
-      margin-bottom: 2rem;
-      border-radius: 8px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 122, 204, 0.15);
     }
 
-    .section {
-      margin-top: 1.5rem;
+    .card h3 {
+      color: var(--primary);
+      margin-top: 0;
+      font-size: 1.2rem;
     }
 
-    .note {
-      background: #e6f3ff;        
-      border-left: 6px solid #007acc; 
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      color: #003b66;               
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+
+    .instruction-box {
+      background: var(--card-bg);
+      color: var(--text-main);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 3rem;
+      border: 1px solid rgba(128, 128, 128, 0.1);
+    }
+
+
+    code {
+     background: rgba(128, 128, 128, 0.15);
+     padding: 2px 6px;
+     border-radius: 4px;
+     font-family: "Cascadia Code", Consolas, monospace;
+     color: #d63384;
+     font-size: 0.9rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .btn {
-      display: inline-block;
-      background: #007acc;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 600;
       text-decoration: none;
-      margin-top: 1rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+    }
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
     }
 
-    .btn:hover {
-      background: #005fa3;
+    .btn-primary:hover {
+      box-shadow: 0 8px 20px rgba(0, 122, 204, 0.3);
+      transform: scale(1.02);
     }
 
-    code {
-      background: #f5f5f5;
-      color: #222;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
     }
+
+    .btn-outline:hover {
+      background: rgba(0, 122, 204, 0.05);
+    }
+
+    .tip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--vscode-notifications-background, #fff9e6);
+      border-left: 4px solid #ffcc00;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+
+
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="welcome-box">
-      <h1>Welcome to ASEJE</h1>
-      <p>We’re excited to have you here! ASEJE is your beginner-friendly assistant for Visual Studio Code(Extension)
-      designed to make learning, coding, and personalizing your workspace simple and fun.</p>
-      <p>Let’s take a quick tour!</p>
-    </div>
+   <header class="hero">
+      <h1>🚀 Welcome to ASEJE</h1>
+      <p>Your journey from Junior Engineer to Pro starts here. Let's simplify your coding environment together.</p>
+    </header>
 
-    <div class="section">
-      <h2>What is ASEJE?</h2>
-      <p>ASEJE stands for <em>Adaptive Starter Extension for Junior Engineers</em>. 
-      It helps new programmers feel comfortable in VS Code by simplifying the interface and 
-      providing quick-start coding templates for popular languages.</p>
-    </div>
-
-    <div class="section">
-      <h2>Key Features</h2>
-      <ul>
-        <li><strong>Beginner Mode:</strong> Simplifies the VS Code UI with one click.</li>
-        <li><strong>Starter Templates:</strong> Instantly create “Hello World” projects in C, Python, HTML, JavaScript and more.</li>
-        <li><strong>Text Settings:</strong> Customize font size, theme, and layout visually.</li>
-        <li><strong>Guided Walkthroughs:</strong> Learn all the vscode essential features and coding fundamentals directly inside VS Code.</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>Getting Started</h2>
-      <p>To begin exploring ASEJE:</p>
-      <ol>
-        <li>Press <code>Ctrl + Shift + P</code> (or <code>Cmd + Shift + P</code> on Mac).</li>
-        <li>Type <code>ASEJE</code> to see available commands.</li>
-        <li>Start with <strong>“Toggle Beginner Mode (ASEJE)”</strong> to simplify your editor.</li>
-      </ol>
-      <div class="note">
-        Tip: You can change font size in ASEJE’s Text Settings panel!
+    <div class="grid">
+      <div class="card">
+        <h3>Beginner Mode</h3>
+        <p>A distraction-free UI designed for focus and clarity.</p>
+      </div>
+      <div class="card">
+        <h3>Smart Templates</h3>
+        <p>Launch C++, Python, or Web projects in seconds.</p>
+      </div>
+      <div class="card">
+        <h3>Custom Style</h3>
+        <p>Easily tweak fonts and themes to fit your eyes.</p>
+      </div>
+      <div class="card">
+        <h3>Walkthroughs</h3>
+        <p>Interactive lessons built directly into your editor.</p>
       </div>
     </div>
 
-    <div class="section">
-      <h2>The ASEJE walkthrough</h2>
-      <p>Our built-in walkthrough gives you short lessons on essential function of vscode and programming concepts like:</p>
-      <ul>
-        <li>Introduce all the UI functions and how to use them appropriately</li>
-        <li>All non-UI feature in vscode</li>
-        <li>important shortcuts to improve workflow</li>
-        <li>Printing output (<code>print()</code>, <code>console.log()</code>)</li>
-        <li>Variables and data types</li>
-        <li>Loops and conditionals</li>
-        <li>Basic file handling</li>
-      </ul>
-      <p>More topics will appear as ASEJE updates!</p>
+    <div class="instruction-box">
+      <h2>Quick Start Guide</h2>
+      <p>To access the ASEJE command center:</p>
+      <ol>
+        <li>Press <code>Ctrl + Shift + P</code> (or <code>Cmd + Shift + P</code>)</li>
+        <li>Type <strong>"ASEJE"</strong></li>
+        <li>Select <strong>Toggle Beginner Mode</strong> to see the magic.</li>
+      </ol>
+      <div class="tip">
+        💡 Pro Tip: Check out the <b>Text Settings</b> to boost your font size for better focus!
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Ready to Start?</h2>
-      <p>Click below to open your first project template or explore settings.</p>
-      <a class="btn" id="createBtn">Create a Starter Project</a>
-      <a class="btn" id="settingsBtn">Open Text Settings</a>
-      <a class="btn" id="beginning">Start Tutorial</a>
+    <div class="actions">
+      <button class="btn btn-primary" id="createBtn">Create Starter Project</button>
+      <button class="btn btn-outline" id="settingsBtn">Open Text Settings</button>
+      <button class="btn btn-outline" id="beginning">Start Tutorial</button>
     </div>
+
   </div>
 
   <script>
     const vscode = acquireVsCodeApi();
-    document.getElementById('createBtn').addEventListener('click', () => {
-      vscode.postMessage({ 
-        command: 'createProject', 
-        action: 'openTemplateMenu'
+  const handleAction = (id, command, action = '') => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener('click', () => {
+        vscode.postMessage({ command, action });
       });
-    });
-    document.getElementById('settingsBtn').addEventListener('click', () => {
-      vscode.postMessage({ 
-          command: 'openTextSettings',
-          action: 'openTextSettings'
-         });
-    });
-        document.getElementById('beginning').addEventListener('click', () => {
-      vscode.postMessage({ command: 'beginning' });
-    });
+    }
+  };
+
+  handleAction('createBtn', 'createProject', 'openTemplateMenu');
+  handleAction('settingsBtn', 'openTextSettings', 'openTextSettings');
+  handleAction('beginning', 'beginning', 'startWalkthrough');
   </script>
 </body>
 </html>
