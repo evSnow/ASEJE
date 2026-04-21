@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VS Code Quick Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      margin-bottom: 25px;
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 500px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(30, 41, 59, 0.95);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      color: #7dd3fc;
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .card p {
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    }
+
+    .shortcut {
+      background: #0f172a;
+      border-left: 4px solid #38bdf8;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #1d4ed8;
+      color: white;
+    }
+
+    .no-results {
+      text-align: center;
+      margin-top: 25px;
+      color: #fca5a5;
+      display: none;
+      font-size: 18px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 35px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .tip-box {
+      background: #172554;
+      border-left: 5px solid #38bdf8;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      color: #dbeafe;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>VS Code Quick Guide for Beginners</h1>
+    <p class="subtitle">
+      Helpful VS Code features that new programmers should know
+    </p>
+
+    <div class="tip-box">
+      This guide is designed to help beginner users understand common VS Code tools,
+      navigation options, and useful shortcuts that make coding easier.
+    </div>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search VS Code features, tools, or shortcuts..."
+      />
+    </div>
+
+    <div class="grid" id="cardContainer">
+      <div class="card" data-keywords="explorer files folders project navigation">
+        <h2>Explorer</h2>
+        <p>
+          The Explorer lets you view project folders, open files, and organize your code.
+          It is one of the most important areas in VS Code.
+        </p>
+        <div class="shortcut">Use it to open files quickly and keep your project organized.</div>
+        <span class="tag">Navigation</span>
+      </div>
+
+      <div class="card" data-keywords="terminal command line run install python npm">
+        <h2>Terminal</h2>
+        <p>
+          The Terminal allows you to run commands, install packages, execute Python files,
+          and test programs directly inside VS Code.
+        </p>
+        <div class="shortcut"><strong>Shortcut:</strong> Ctrl + `</div>
+        <span class="tag">Commands</span>
+      </div>
+
+      <div class="card" data-keywords="debug run breakpoint step variables errors">
+        <h2>Run and Debug</h2>
+        <p>
+          This feature helps you run your code and debug problems by setting breakpoints,
+          checking variable values, and stepping through the program.
+        </p>
+        <div class="shortcut"><strong>Shortcut:</strong> F5</div>
+        <span class="tag">Debugging</span>
+      </div>
+
+      <div class="card" data-keywords="extensions plugins python prettier tools">
+        <h2>Extensions</h2>
+        <p>
+          Extensions add extra features to VS Code. Beginners commonly install Python support,
+          formatters, themes, and debugging tools.
+        </p>
+        <div class="shortcut">Popular examples: Python, Prettier, Live Server</div>
+        <span class="tag">Customization</span>
+      </div>
+
+      <div class="card" data-keywords="command palette commands actions search">
+        <h2>Command Palette</h2>
+        <p>
+          The Command Palette is a fast way to search for commands without clicking through menus.
+          It is one of the most useful VS Code tools.
+        </p>
+        <div class="shortcut"><strong>Shortcut:</strong> Ctrl + Shift + P</div>
+        <span class="tag">Shortcuts</span>
+      </div>
+
+      <div class="card" data-keywords="problems errors warnings syntax issues">
+        <h2>Problems Tab</h2>
+        <p>
+          The Problems tab shows syntax errors, warnings, and code issues that help you understand
+          what needs to be fixed.
+        </p>
+        <div class="shortcut">Check it when your code is not running correctly.</div>
+        <span class="tag">Errors</span>
+      </div>
+
+      <div class="card" data-keywords="settings theme font size layout preferences">
+        <h2>Settings</h2>
+        <p>
+          Settings let you customize VS Code, including font size, themes, formatting behavior,
+          and editor preferences.
+        </p>
+        <div class="shortcut"><strong>Shortcut:</strong> Ctrl + ,</div>
+        <span class="tag">Preferences</span>
+      </div>
+
+      <div class="card" data-keywords="search find replace files text code">
+        <h2>Find and Replace</h2>
+        <p>
+          Use Find and Replace to search for text in a file or across your whole project.
+          This is very useful when updating repeated code or finding mistakes.
+        </p>
+        <div class="shortcut"><strong>Shortcut:</strong> Ctrl + F</div>
+        <span class="tag">Editing</span>
+      </div>
+
+      <div class="card" data-keywords="comment shortcut code explain notes">
+        <h2>Comments</h2>
+        <p>
+          Comments help you explain code, leave notes, and organize your work.
+          They are ignored when the program runs.
+        </p>
+        <div class="shortcut"><strong>Shortcut:</strong> Ctrl + /</div>
+        <span class="tag">Coding Basics</span>
+      </div>
+    </div>
+
+    <p class="no-results" id="noResults">No matching features found.</p>
+
+    <div class="footer">
+      ASEJE • Beginner-Friendly VS Code Guide
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = document.querySelectorAll(".card");
+    const noResults = document.getElementById("noResults");
+
+    function filterCards() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const keywords = card.getAttribute("data-keywords").toLowerCase();
+        const matches = text.includes(query) || keywords.includes(query);
+
+        if (matches) {
+          card.style.display = "block";
+          visibleCount++;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      noResults.style.display = visibleCount === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", filterCards);
+  </script>
+</body>
+</html>
