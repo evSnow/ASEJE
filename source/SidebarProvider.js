@@ -318,8 +318,20 @@ const actionList = {
         await this.context.globalState.update('aseje.notes', message.value || '');
 
         const filePath = path.join(this.context.globalStorageUri.fsPath, 'notes.md');
+
         fs.mkdirSync(this.context.globalStorageUri.fsPath, { recursive: true });
-        fs.writeFileSync(filePath, message.value, 'utf8');
+        let existing = '';
+        if (fs.existsSync(filePath)) {  //check if oldata exist exist
+          existing = fs.readFileSync(filePath, 'utf8');
+        }
+
+        let appended = '';
+        if (existing) {  // if old data exist append
+          appended = existing + '\n' + message.value;
+        } else {  //if no old data just save over
+          appended = message.value;
+        }
+        fs.writeFileSync(filePath, appended, 'utf8');
 
 
         webviewView.webview.postMessage({
@@ -329,7 +341,10 @@ const actionList = {
       } 
   else if (message.command === 'clearNotes') {
         await this.context.globalState.update('aseje.notes', '');
-
+        const filePath = path.join(this.context.globalStorageUri.fsPath, 'notes.md');
+        if (fs.existsSync(filePath)){  //If exist save over blanked
+          fs.writeFileSync(filePath, '', 'utf8');
+        }
         webviewView.webview.postMessage({
           command: 'notesCleared'
         });
