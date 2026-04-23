@@ -62,6 +62,7 @@
       { "command": "aseje.vscodeShort", "title": "vsCode Shortcuts Tips" },
       { "command": "aseje.textChange", "title": "textChange" },
       {"command": "audio.playSound", "title": "Play Sound"},
+      { "command": "audio.openPanel", "title": "ASEJE: Open Audio Panel" },
       {"command": "aseje.toggleBeginnerMode",
         "title": "$(pencil) Toggle Beginner Mode (ASEJE)",
         "category": "ASEJE"

@@ -57,6 +57,11 @@ class AudioNotifier {
             await this.play('preview', { force: true });
             vscode.window.showInformationMessage('ASEJE audio preview played.');
         });
+        const openPanelCommand = vscode.commands.registerCommand('audio.openPanel', async () => {
+       this.ensurePanel();
+       await this.play('preview', { force: true });
+       vscode.window.showInformationMessage('ASEJE audio panel opened.');
+   });
 
     const pickSoundCommand = vscode.commands.registerCommand('audio.pickSound', async () => {
         const result = await vscode.window.showOpenDialog({
@@ -110,7 +115,7 @@ class AudioNotifier {
 
         const configWatcher = vscode.workspace.onDidChangeConfiguration(event => {
             if (event.affectsConfiguration('aseje.audio')) {
-                this.ensurePanel();
+                
                 this.syncConfig();
             }
         });
@@ -119,6 +124,7 @@ class AudioNotifier {
             previewCommand,
             debugStart,
             debugEnd,
+            openPanelCommand,
             debugCustom,
             configWatcher,
             pickSoundCommand,
@@ -179,7 +185,8 @@ class AudioNotifier {
         }
 
         this.lastPlayedAt = now;
-        const panel = this.ensurePanel();
+        const panel = this.panel;
+        if (!panel) return;
         await panel.webview.postMessage({
             type: 'play',
             event: eventName,

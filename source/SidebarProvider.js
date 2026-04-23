@@ -293,7 +293,7 @@ const actionList = {
   toggleBeginnerMode: "aseje.toggleBeginnerMode",
   createStarterProject: "aseje.createStarterProject",
   showWalkthrough: "aseje.showWalkthrough",
-  playSound: "audio.playSound",
+  playSound: "audio.openPanel",
   Debug_Tips: "aseje.showDebuggingTips",
   Python_Tips: "aseje.pyTips",
   VS_Shortcuts: "aseje.vscodeShort",
