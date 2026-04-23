@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VS Code Shortcuts Guide</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --border: rgba(128, 128, 128, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .nav-header {
+      margin-bottom: 2rem;
+    }
+
+    .btn-back {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-back:hover {
+      opacity: 0.8;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    p {
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    th {
+      background: rgba(0, 122, 204, 0.05);
+      color: var(--primary);
+      text-align: left;
+      padding: 1rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .manual-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .manual-link-btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background-color: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .manual-link-btn:hover {
+      background-color: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-header">
+      <button class="btn-back" id="goHomeBtn">← Back to Walkthrough</button>
+    </div>
+
+    <div class="card">
+      <h1>VS Code Shortcuts Guide</h1>
+      <p>
+        This page gives new users a quick list of helpful Visual Studio Code shortcuts.
+        Learning these shortcuts can make coding faster and easier.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Shortcut</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ctrl + S</td>
+            <td>Save the current file</td>
+          </tr>
+          <tr>
+            <td>Ctrl + Shift + P</td>
+            <td>Open the Command Palette</td>
+          </tr>
+          <tr>
+            <td>Ctrl + /</td>
+            <td>Comment or uncomment the selected line</td>
+          </tr>
+          <tr>
+            <td>Ctrl + `</td>
+            <td>Open or close the integrated terminal</td>
+          </tr>
+          <tr>
+            <td>Ctrl + F</td>
+            <td>Find text in the current file</td>
+          </tr>
+          <tr>
+            <td>Ctrl + H</td>
+            <td>Find and replace text</td>
+          </tr>
+          <tr>
+            <td>Ctrl + P</td>
+            <td>Quickly open files by name</td>
+          </tr>
+          <tr>
+            <td>Ctrl + ,</td>
+            <td>Open Settings</td>
+          </tr>
+          <tr>
+            <td>F5</td>
+            <td>Start debugging</td>
+          </tr>
+          <tr>
+            <td>Shift + F5</td>
+            <td>Stop debugging</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="manual-links">
+        <a href="manual.html" class="manual-link-btn">Open Manual Page</a>
+        <a href="reference.html" class="manual-link-btn">Open Reference Page</a>
+        <a href="vscodeQuickGuide.html" class="manual-link-btn">Open VS Code Quick Guide</a>
+        <a href="pythonTips.html" class="manual-link-btn">Open Beginner Python Tips</a>
+        <a href="debuggingTips.html" class="manual-link-btn">Open Debugging Tips</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+
+    document.getElementById('goHomeBtn').addEventListener('click', () => {
+      vscode.postMessage({
+        command: 'go_Home',
+        action: 'openWalkthrough'
+      });
+    });
+  </script>
+</body>
+</html>
