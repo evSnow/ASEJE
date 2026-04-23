@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson One: Activity Bar</title>
+    <style>
+        :root {
+      --primary: #007acc;
+      --primary-gradient: linear-gradient(135deg, #007acc 0%, #00b4db 100%);
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --border: rgba(128, 128, 128, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+
+    body {
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+        .container {
+            max-width: 850px;
+            width: 100%;
+        }
+
+        .nav-header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-back {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+    }
+    .btn-back:hover { opacity: 0.8; }
+
+    .lesson-badge {
+      background: rgba(0, 122, 204, 0.1);
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+
+    .hero-section {
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin: 0 0 1rem 0;
+      letter-spacing: -1px;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-top: 1.5rem;
+    }
+
+    ul, ol {
+      padding-left: 1.2rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.8rem;
+    }
+
+    strong {
+      color: var(--text-main);
+    }
+
+    .highlight-box {
+      background: rgba(0, 122, 204, 0.05);
+      border-left: 4px solid var(--primary);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+
+    .btn-finish {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 14px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      display: block;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 2rem;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .btn-finish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 122, 204, 0.3);
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="nav-header">
+    <button class="btn-back" id="goHomeBtn">← Back</button>
+  </div>
+
+  <header class="hero-section">
+    <h1>Tips and Tricks</h1>
+    <p class="intro-text">
+      VS Code has a Variety of features that arent immediately apparent. This page will detail some of the most useful features.
+    </p>
+  </header>
+
+  <div class="grid">
+    <div class="section-card">
+      <h2>Split Tabs</h2>
+      <p>
+        By dragging the tabs at the top of your screen it will split the screen between the 2 tabs letting you type while also looking at a reference. 
+        </p>
+        <div class="highlight-box">
+        Not only can you split the screen horizontally but also vertically! Experiment to find the layout thats best for you.
+      </div>
+      
+    </div>
+
+    <div class="section-card">
+      <h2>Keyboard Shortcuts</h2>
+      <ul>
+        <li><strong>ctrl+k ctrl+f</strong> Will automatically format selected text and help to improve readability.</li>
+        <li><strong>ctrl+f</strong> Will search for a given string of characters in the file.</li>
+        <li><strong>ctrl+h</strong> Will let you replace any instance of a given string of characters with another. Particularly helpful if you need to rename a variable or function.</li>
+        <li><strong>ctrl+k ctrl+s</strong> Will display all shortcuts and even allow you to change the keybinds.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h2>Themes</h2>
+      <p>Themes can help reduce eyestrain and made different parts of code stand out so you can tell at a glance whats a variable, comment, or function. <br>Type '<strong>>Preferences: Color Theme</strong>' in the search bar or press <strong>ctrl+k ctrl+t</strong> to view all your themes and choose your favorite. 
+      </p>
+      <div class="highlight-box">
+       You can also download new themes from the extention marketplace!
+      </div>
+    </div>
+
+    
+
+  <button class="btn-finish" id="finishBtn">Return Home</button>
+</div>
+
+<script>
+  const vscode = acquireVsCodeApi();
+
+  const returnHome = () => {
+    vscode.postMessage({ 
+      command: 'go_Home', 
+      action: 'openWalkthrough' 
+    });
+  };
+
+  document.getElementById('goHomeBtn').addEventListener('click', returnHome);
+  document.getElementById('finishBtn').addEventListener('click', returnHome);
+</script>
+
+</div>
+</html>
