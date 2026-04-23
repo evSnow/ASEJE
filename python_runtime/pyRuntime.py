@@ -67,8 +67,12 @@ class PyRuntime(bdb.Bdb):
                     return
                 
                 elif command == "step_out":
-                    self.should_stop = True
-                    self.set_return(frame)
+                    if frame.f_back is None:
+                        self.should_stop = False
+                        self.set_continue()
+                    else:
+                        self.should_stop = True
+                        self.set_return(frame)
                     return
                 
                 elif command == "setBreakpoints":

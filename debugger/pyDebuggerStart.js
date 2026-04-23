@@ -468,6 +468,15 @@ async evaluateRequest(response, args) {
      */
     stepOutRequest(response) {
         log('Step out request');
+        if (this.stackFrames.length <= 1) {
+            log('Step out: at top level');
+            this.py_program.stdin.write(
+                JSON.stringify({ command: 'continue' }) + '\n'
+            );
+            this.sendResponse(response);
+            return;
+        }
+
         this.py_program.stdin.write(
             JSON.stringify({ command: 'step_out' }) + '\n'
         );
