@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debugging Tips</title>
+  <style>
+    :root {
+      --primary: #007acc;
+      --bg: var(--vscode-editor-background);
+      --card-bg: var(--vscode-sideBar-background);
+      --text-main: var(--vscode-editor-foreground);
+      --text-muted: var(--vscode-descriptionForeground);
+      --border: rgba(128, 128, 128, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 950px;
+      width: 100%;
+    }
+
+    .nav-header {
+      margin-bottom: 2rem;
+    }
+
+    .btn-back {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-back:hover {
+      opacity: 0.8;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-top: 2rem;
+      font-size: 1.2rem;
+    }
+
+    p {
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .debug-box {
+      background: rgba(0, 122, 204, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .code-text {
+      font-family: "Cascadia Code", Consolas, monospace;
+      background: rgba(128, 128, 128, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #d63384;
+    }
+
+    .manual-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .manual-link-btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background-color: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .manual-link-btn:hover {
+      background-color: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-header">
+      <button class="btn-back" id="goHomeBtn">← Back to Walkthrough</button>
+    </div>
+
+    <div class="card">
+      <h1>Debugging Tips for Beginners</h1>
+      <p>
+        This page explains basic debugging ideas that help new programmers understand
+        what their code is doing and how to fix problems.
+      </p>
+
+      <div class="debug-box">
+        <h2>Use Breakpoints</h2>
+        <p>
+          Breakpoints pause your program on a specific line so you can inspect values
+          and understand what happens step by step.
+        </p>
+      </div>
+
+      <div class="debug-box">
+        <h2>Check Variable Values</h2>
+        <p>
+          When the program pauses, look at variable values to see whether they contain
+          what you expected.
+        </p>
+      </div>
+
+      <div class="debug-box">
+        <h2>Read the Error Message</h2>
+        <p>
+          Error messages usually tell you what type of problem happened and where it happened.
+          This is one of the fastest ways to start debugging.
+        </p>
+      </div>
+
+      <div class="debug-box">
+        <h2>Step Through the Code</h2>
+        <p>
+          Use step over, step into, and continue to move through your program in a controlled way.
+          This helps you find the exact place where things go wrong.
+        </p>
+      </div>
+
+      <div class="debug-box">
+        <h2>Test Small Parts</h2>
+        <p>
+          If a program is large, test one section at a time instead of trying to fix everything at once.
+        </p>
+      </div>
+
+      <div class="debug-box">
+        <h2>Use Print Statements if Needed</h2>
+        <p>
+          Even when using a debugger, simple
+          <span class="code-text">print()</span> statements can still help track values and logic.
+        </p>
+      </div>
+
+      <div class="manual-links">
+        <a href="manual.html" class="manual-link-btn">Open Manual Page</a>
+        <a href="reference.html" class="manual-link-btn">Open Reference Page</a>
+        <a href="vscodeQuickGuide.html" class="manual-link-btn">Open VS Code Quick Guide</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+
+    document.getElementById('goHomeBtn').addEventListener('click', () => {
+      vscode.postMessage({
+        command: 'go_Home',
+        action: 'openWalkthrough'
+      });
+    });
+  </script>
+</body>
+</html>
