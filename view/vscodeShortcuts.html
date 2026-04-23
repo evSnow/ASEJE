@@ -123,9 +123,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="nav-header">
-      <button class="btn-back" id="goHomeBtn">← Back to Walkthrough</button>
-    </div>
+
 
     <div class="card">
       <h1>VS Code Shortcuts Guide</h1>
@@ -184,26 +182,8 @@
           </tr>
         </tbody>
       </table>
-
-      <div class="manual-links">
-        <a href="manual.html" class="manual-link-btn">Open Manual Page</a>
-        <a href="reference.html" class="manual-link-btn">Open Reference Page</a>
-        <a href="vscodeQuickGuide.html" class="manual-link-btn">Open VS Code Quick Guide</a>
-        <a href="pythonTips.html" class="manual-link-btn">Open Beginner Python Tips</a>
-        <a href="debuggingTips.html" class="manual-link-btn">Open Debugging Tips</a>
-      </div>
     </div>
   </div>
 
-  <script>
-    const vscode = acquireVsCodeApi();
-
-    document.getElementById('goHomeBtn').addEventListener('click', () => {
-      vscode.postMessage({
-        command: 'go_Home',
-        action: 'openWalkthrough'
-      });
-    });
-  </script>
 </body>
 </html>

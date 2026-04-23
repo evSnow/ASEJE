@@ -116,9 +116,6 @@
 </head>
 <body>
   <div class="container">
-    <div class="nav-header">
-      <button class="btn-back" id="goHomeBtn">← Back to Walkthrough</button>
-    </div>
 
     <div class="card">
       <h1>Debugging Tips for Beginners</h1>
@@ -173,24 +170,8 @@
           <span class="code-text">print()</span> statements can still help track values and logic.
         </p>
       </div>
-
-      <div class="manual-links">
-        <a href="manual.html" class="manual-link-btn">Open Manual Page</a>
-        <a href="reference.html" class="manual-link-btn">Open Reference Page</a>
-        <a href="vscodeQuickGuide.html" class="manual-link-btn">Open VS Code Quick Guide</a>
-      </div>
     </div>
   </div>
 
-  <script>
-    const vscode = acquireVsCodeApi();
-
-    document.getElementById('goHomeBtn').addEventListener('click', () => {
-      vscode.postMessage({
-        command: 'go_Home',
-        action: 'openWalkthrough'
-      });
-    });
-  </script>
 </body>
 </html>

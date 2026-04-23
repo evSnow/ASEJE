@@ -7,16 +7,6 @@ const sidebarItems = [
     action: "showReference",
     keywords: ["python", "escape", "characters", "strings"]
   },
-  /*
-  {
-    id: "debugging",
-    title: "VS Code Debugging",
-    description: "Basic debugging commands and tips",
-    category: "debug",
-    action: "openDebugHelp",
-    keywords: ["debug", "vscode", "breakpoints", "troubleshooting"]
-  },
-  */
   {
     id: "beginner-mode",
     title: "Beginner Mode",
@@ -44,25 +34,40 @@ const sidebarItems = [
     description: "Play notification sound after hitting a breakpoint",
     action: "playSound",
     keywords: ["sound", "audio", "player"]
-  }
-  /*
-  {
-    id: "media-tools",
-    title: "MP4 Media Tools",
-    description: "Upload and validate MP4 files securely in the sidebar",
-    category: "media",
-    action: "openMediaTools",
-    keywords: ["mp4", "media", "video", "upload"]
+  },
+    {
+    id: "Debug_Tips",
+    title: "Debug Tips Page",
+    description: "Tips for using the debugger",
+    category: "tool",
+    action: "Debug_Tips",
+    keywords: ["debugger"]
   },
   {
-    id: "help-center",
-    title: "Help Center",
-    description: "View FAQ and recent sidebar activity",
-    category: "support",
-    action: "openHelpCenter",
-    keywords: ["help", "faq", "support", "activity"]
-  }
-    */
+    id: "Python_Tips",
+    title: "Python Tips Page",
+    description: "Tips for using python",
+    category: "tool",
+    action: "Python_Tips",
+    keywords: ["python"]
+  },
+    {
+    id: "VS_Shortcuts",
+    title: "Vscode Shortcuts Page",
+    description: "Shortcuts for using vscode",
+    category: "tool",
+    action: "VS_Shortcuts",
+    keywords: ["vscode"]
+  },
+      {
+    id: "TextSetting",
+    title: "TextSetting",
+    description: "Important text setting",
+    category: "tool",
+    action: "TextSetting",
+    keywords: ["Setting"]
+  },
+
 ];
 
 module.exports = sidebarItems;

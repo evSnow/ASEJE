@@ -13,6 +13,7 @@ const { SidebarProvider} = require('./source/SidebarProvider');
 const { registerDebugSuite } = require('./source/DebugSuite');
 const { registerPythonHoverProvider, setHoverStatus } = require('./source/pythonHoverProvider');
 const { registerReferenceCommands } = require('./source/Reference');
+const {showDebuggingTipsCommands, showPythonTipsCommands, showVsShortcutsTipsCommands,showQuickGuideCommands} = require('./source/pages')
 const {pickSoundCommand} = require('./source/audioTrigger');
 
 
@@ -61,6 +62,10 @@ function activate(context) {
   registerPythonHoverProvider(context);
 
   registerReferenceCommands(context);
+  showDebuggingTipsCommands(context);
+  showPythonTipsCommands(context);
+  showVsShortcutsTipsCommands(context);
+  //showQuickGuideCommands(context);
  const sidebarProvider = new SidebarProvider(context.extensionUri, context);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('aseje.sidebarView', sidebarProvider, {

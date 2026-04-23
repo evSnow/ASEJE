@@ -206,20 +206,9 @@
       </ul>
     </div>
 
-    <div class="actions">
-      <button class="btn btn-outline" id="backBtn">Back to Home</button>
-    </div>
+
   </div>
 
-  <script>
-    const vscode = acquireVsCodeApi();
 
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => {
-        vscode.postMessage({ command: 'goHome', action: 'goHome' });
-      });
-    }
-  </script>
 </body>
 </html>

@@ -290,13 +290,14 @@ class SidebarProvider {
 
 const actionList = {
   showReference: "aseje.reference",
-  openDebugHelp: "aseje.showDebugHelp",
   toggleBeginnerMode: "aseje.toggleBeginnerMode",
   createStarterProject: "aseje.createStarterProject",
-  openMediaTools: "aseje.openMediaTools",
-  openHelpCenter: "aseje.openHelpCenter",
   showWalkthrough: "aseje.showWalkthrough",
-  playSound: "audio.playSound"
+  playSound: "audio.playSound",
+  Debug_Tips: "aseje.showDebuggingTips",
+  Python_Tips: "aseje.pyTips",
+  VS_Shortcuts: "aseje.vscodeShort",
+  TextSetting: "aseje.textSetting"
 };
     // Listen for messages sent from the webview script.
     webviewView.webview.onDidReceiveMessage(async (message) => {
