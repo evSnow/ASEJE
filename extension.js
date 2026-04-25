@@ -163,8 +163,6 @@ sidebarProvider.setHoverToggleCallback((value) => {
 
   context.subscriptions.push(
     templateDisposable,
-    helloWorldDisposable,
-    toggleModeDisposable
   );
 
   // Log any time a debug session starts. This is helpful for understanding
