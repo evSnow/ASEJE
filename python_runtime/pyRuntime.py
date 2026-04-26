@@ -14,30 +14,22 @@ class PyRuntime(bdb.Bdb):
         self.frame_list = {}
         
     def user_line(self, frame):
-        filename=self.target_file
+        filename = os.path.abspath(frame.f_code.co_filename)
         line = frame.f_lineno #current line
         self.curFrame=frame
         currentStack = self.stack_creation(frame)
         
         # Stop on first line to test if work and send a response
-        if self.first_stop:
-            self.first_stop = False
-            #print('hi')
-            ev={"event": "stopped", "reason": "entry", "line": 1, "stack": currentStack}
-            print(json.dumps(ev), flush=True)
-            #print('ters')
-            self.wait_for_command(frame)
-            return
-        
-        # function stop at breakpoint hit and send a response
-        if line in self.breakpoints_loc.get(filename, []):
-            print(json.dumps({"event": "stopped", "reason": "breakpoint", "line": line, "stack": currentStack}), flush=True)
-            self.wait_for_command(frame)
-            return
-        if self.should_stop:
-            self.should_stop = False
-            print(json.dumps({"event": "stopped", "reason": "step", "line": line, "stack": currentStack}), flush=True)
-            self.wait_for_command(frame)
+        currentStack = self.stack_creation(frame)
+
+        print(json.dumps({
+            "event": "stopped",
+            "reason": "breakpoint",
+            "line": line,
+            "stack": currentStack
+        }), flush=True)
+
+        self.wait_for_command(frame)
     
     def wait_for_command(self, frame):
         while True:
@@ -80,7 +72,7 @@ class PyRuntime(bdb.Bdb):
                     lines = [int(x) for x in choice.get("lines", [])]   #get the lines or empty break[pint] to put in lines
                     self.breakpoints_loc[file_path] = lines   #used for commenting what happend and why it stop
                     
-                    self.clear_all_breaks()  #clear previous breakpoint and nextline set new one
+            
                     for bp_line in lines:
                         self.set_break(file_path, bp_line)
                 

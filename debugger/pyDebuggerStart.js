@@ -19,7 +19,20 @@ const {
 
 const fs = require('fs');
 const path = require('path');
-const { spawn } = require('child_process');
+const { execSync, spawn } = require('child_process');
+
+function getPython() {
+  const command = ['python3', 'python', 'py'];
+
+  for (const current of command) {
+    try {
+      execSync(`${current} --version`, { stdio: 'ignore' });
+      return current;
+    } catch {}
+  }
+
+  return null;
+}
 
 // Directory where we store debugger logs.
 const Logs = path.join(__dirname, '..', 'logs');
@@ -153,7 +166,8 @@ class pyDebugSe extends LoggingDebugSession {
         log('Launch: Runtime files:' + programPath);
 
         // Spawn Python process that will coordinate debugging.
-        this.py_program = spawn('python3', [programPath, program]);
+        const choice=getPython();
+        this.py_program = spawn(choice, [programPath, program]);
 
         // If the process fails to start at all.
         this.py_program.on('error', err => {

@@ -19,6 +19,27 @@ const {pickSoundCommand} = require('./source/audioTrigger');
 
 const path = require('path');
 const fs = require('fs');
+
+const { execSync  } = require('child_process');
+
+function checkPython() {
+  try {
+    execSync ('python3 --version', { stdio: 'ignore' });
+    return true;
+  } catch {
+        try {
+          execSync ('python --version', { stdio: 'ignore' });
+          return true;
+        } catch {
+              try {
+                execSync ('py --version', { stdio: 'ignore' });
+                return true;
+              } catch {
+                  return false;
+  }
+  }
+  }
+}
 // Variable to track the current mode state (kept here for possible future use).
 // let isBeginnerMode = false;
 
@@ -127,7 +148,14 @@ sidebarProvider.setHoverToggleCallback((value) => {
      */
     createDebugAdapterDescriptor(_session) {
       console.log('QQQQQ');
+    const pythonExist = checkPython(); // <-- ADD THIS
 
+    if (!pythonExist) {
+      vscode.window.showErrorMessage(
+        "Python is not installed. Please install Python in terminal."
+      );
+      throw new Error("Python not found"); 
+    }
       // Build the full path to our debug adapter entry file.
       const adapterPath = path.join(__dirname, 'debugger', 'pyDebuggerStart.js');
 
