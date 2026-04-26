@@ -63,6 +63,10 @@ function showGuidedWalkthrough(context) {
       panel.title = 'ASEJE Manual';
       panel.webview.html = getWebviewContent(context, 'manual.html');
     }
+    if (message.command === 'openTips') {
+      panel.title = 'VS Code Tips';
+      panel.webview.html = getWebviewContent(context, 'Tips.html');
+    }
   });
 }
 

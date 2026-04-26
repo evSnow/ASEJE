@@ -158,9 +158,7 @@
 <body>
 
 <div class="container">
-  <div class="nav-header">
-    <button class="btn-back" id="goHomeBtn">← Back</button>
-  </div>
+
 
   <header class="hero-section">
     <h1>Tips and Tricks</h1>
@@ -199,24 +197,9 @@
        You can also download new themes from the extention marketplace!
       </div>
     </div>
-
-    
-
-  <button class="btn-finish" id="finishBtn">Return Home</button>
 </div>
 
 <script>
-  const vscode = acquireVsCodeApi();
-
-  const returnHome = () => {
-    vscode.postMessage({ 
-      command: 'go_Home', 
-      action: 'openWalkthrough' 
-    });
-  };
-
-  document.getElementById('goHomeBtn').addEventListener('click', returnHome);
-  document.getElementById('finishBtn').addEventListener('click', returnHome);
 </script>
 
 </div>
